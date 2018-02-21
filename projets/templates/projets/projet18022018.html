@@ -1,0 +1,256 @@
+{% extends "projets/projetbase.html" %}
+{% load static %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'css/projet.css' %}" />{% endblock %}
+
+{% block title %}
+    Journal - {{ projet.titre }}
+{% endblock %}
+
+{% block nav-afficher_projet %}{% endblock %}
+
+{% block header %}
+    <h1>Journal - {{ projet.titre }}</h1>
+    <p> {{ projet.description }} <span id="sauvegarde" style="display:none">Sauvegardé</span></p>
+{% endblock %}
+
+{% block content %}
+    {% load static %}
+    {% csrf_token %}
+    <input type="hidden" id="slug" value={{ projet.slug }}/>
+    {{ formset.management_form }}
+    <table width="100%">
+        {% for page_journal in liste_page_journal reversed %}
+        <tr>
+            <td  class="page_journal">
+                <table width="100%">
+                    <tr>
+                        {% if page_journal.journal_form %}
+                        <td  valign="top">
+                            <table width="100%" class="journal_entree_table{% if forloop.first %} premiere_entre{% endif %}" >
+                                <tr>
+                                    <td class="date">
+                                        {{ page_journal.journal_form.non_field_errors }}
+                                        {{ page_journal.date }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="container">
+                                        {{ page_journal.journal_form.texte.errors }}
+                                        {{ page_journal.journal_form.journal_id.errors }}
+                                        {{ page_journal.journal_form.texte }}
+                                        {{ page_journal.journal_form.journal_id }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td> 
+                        {% endif %}
+                        {% if forloop.first and page_journal.journal_form %}
+                    </tr>
+                    <tr>
+                        {% endif %}
+                        {% if page_journal.liste_todo or forloop.first%}                
+                        <td valign="top">
+                            <table width="100%" class="todo_entree_table">
+                                {% if not page_journal.journal_form %}
+                                <tr>
+                                    <td class="date">
+                                        {{ page_journal.date }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <td>
+                                        Taches : <span class="sauvegarde_todo" style="display:none">Sauvegardé</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%">
+                                        {% if forloop.first %}
+                                            <tr>
+                                                <td class="container checkbox_container">
+                                                    <img  type="image" src="{% static "img/add_button.png" %}" id="add_todo" alt="Ajouter" />
+                                                </td>
+                                                <td id="add_todo_form" class="container">
+                                                    {{ first_todo_form.texte.errors }}
+                                                    {{ first_todo_form.texte }}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                        {% for todo_form in page_journal.liste_todo %}
+                                            <tr>
+                                                <td class="container checkbox_container">
+                                                    {{ todo_form.realisee }}
+                                                </td>
+                                                <td class="container">
+                                                    {{ todo_form.non_field_errors }}
+                                                    {{ todo_form.texte.errors }}
+                                                    {{ todo_form.todo_id.errors }}
+                                                    {{ todo_form.realisee.errors }}
+                                                    {{ todo_form.texte }}
+                                                    {{ todo_form.todo_id }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </table>    
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>   
+                        {% endif %}
+                    </tr>
+                </table>
+            </td>       
+        </tr>           
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/autosize.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/afficher_journal.js' %}"></script>
+    <script>        
+        function saveTextarea(){
+            var parent_tr = $(this).closest("tr")
+            var texte = parent_tr.find(".journal_entree_texte").val();
+            var id = parent_tr.find(".journal_entree_id").attr("value");
+
+            $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
+            $.ajax({
+                url: '/journal/projets/' + $('#slug').val() + 'maj-journal',
+                data: {
+                    'id': id,
+                    'texte': texte,
+                },
+                dataType: 'json',
+                method: 'POST',
+                success: function(data){
+                    $('.error').remove();
+                    if(data.success){
+                        if(data.nouveau_journal){
+                            $(".premiere_entre").find(".journal_entree_id").attr('value',data.id);
+                        }
+                        $('#sauvegarde').fadeIn('slow', function(){$('#sauvegarde').fadeOut('slow');});
+                    }
+                    else{
+                        $('#id_form-' + form_id + '-id').parent().prepend("<p id='id_form-" + form_id +
+                            "-error' class='error'>" + data.form_errors + "</p>");
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    var data = jQuery.parseJSON(jqXHR.responseText);
+                    $('.error').remove();
+                    $('nav').append("<p class='error'>" + 
+                        "<span style='color:red'>Erreur " + jqXHR.status + " : " + data.message + "</span>" + 
+                        "<br/>" +
+                        "<span style='color:red'>" + data.explanation + "</span>" + 
+                        "</p>"
+                    );        
+                }
+            });
+        }
+
+        $(".journal_typewatch").typeWatch( {
+            callback: saveTextarea,
+            wait: 500,
+            highlight: false,
+            allowSubmit: false,
+            captureLength: 1,
+        });
+    
+        function maj_todo(){
+            var parent_tr = $(this).closest("tr")
+            var realisee = parent_tr.find(".todo_entree_checkbox").prop('checked');
+            var texte = parent_tr.find(".todo_entree_texte").val();
+            var id = parent_tr.find(".todo_entree_id").attr("value");
+            if(texte != ''){
+                $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
+                $.ajax({
+                    url: '/journal/projets/' + $('#slug').val() + 'maj-todo',
+                    data: {
+                        'todo_id': id,
+                        'texte': texte,
+                        'realisee': realisee,
+                    },
+                    dataType: 'json',
+                    method: 'POST',
+                    success: function(data){
+                        $('.error').remove();
+                        if(data.success){
+                            if(data.nouvelle_tache){
+                                //On cherche la celule d'ajout d'une tache
+                                var parent_tr = $('#add_todo').closest("tr");
+                                //On retire son texte
+                                parent_tr.find(".todo_entree_texte").val('');
+                                //On ajoute des <div> au formulaire retourné pour pouvoir naviguer dedans avec jquery
+                                out_form_str = '<div>' + data.out_form + '</div>'
+                                //On ajoute correctement le formulaire de retour en dessous de l'ajout de tache
+                                var new_checkbox = $(".todo_entree_checkbox",out_form_str).clone().wrap('<div>').parent().html()
+                                var new_textearea = $(".todo_entree_texte",out_form_str).clone().wrap('<div>').parent().html()
+                                var new_id = $(".todo_entree_id",out_form_str).clone().wrap('<div>').parent().html()
+                                parent_tr.after(
+                                    "<tr><td>" + 
+                                    new_checkbox + 
+                                    "</td><td>" +
+                                    new_textearea +
+                                    new_id +
+                                    "</td></tr>"
+                                );
+                                var jqry_textearea = $('.todo_entree_id[value = ' + data.id +']').closest("tr").find(".todo_entree_texte");
+                                autosize(jqry_textearea);
+                                $(jqry_textearea).typeWatch( {
+                                    callback: maj_todo,
+                                    wait: 500,
+                                    highlight: false,
+                                    allowSubmit: false,
+                                    captureLength: 1,
+                                });
+                            }
+                            else{
+                                //On recherche le div de sauvegarde à faire clignoter
+                                save_todo = $(".todo_entree_id[value = " + data.id + "]").closest("table").parent().closest("table").find(".sauvegarde_todo");
+                                save_todo.fadeIn('slow', function(){
+                                    save_todo = $(".todo_entree_id[value = " + data.id + "]").closest("table").parent().closest("table").find(".sauvegarde_todo");
+                                    save_todo.fadeOut('slow');
+                                });
+                            }
+                        }
+                        else{
+                            error_todo = $(".todo_entree_id[value = " + data.id + "]").closest("table").parent();
+                            error_todo.prepend("<p id='maj_todo-error' class='error'>" + data.form_errors + "</p>");
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        var data = jQuery.parseJSON(jqXHR.responseText);
+                        $('.error').remove();
+                        //Ajout de l'erreur dans le bandeau de naviguation
+                        $('nav').append("<span class='error'>" +
+                            "<span style='color:red'>Erreur " + jqXHR.status + " : " + data.message + "</span>" +
+                            "<br/>" +
+                            "<span style='color:red'>" + data.explanation + "</span>" + 
+                            "</span>"
+                        );
+                    }
+                });
+            }    
+        }
+        
+        $('#add_todo').click( maj_todo );
+        
+        $(document).on('change','.todo_entree_checkbox', maj_todo); 
+        
+        $(".todo_typewatch").typeWatch( {
+            callback: maj_todo,
+            wait: 500,
+            highlight: false,
+            allowSubmit: false,
+            captureLength: 1,
+        });
+    </script>
+{% endblock %}
+
+   
+

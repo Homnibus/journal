@@ -1,0 +1,19 @@
+{% extends "projets/base.html" %}
+
+{% block title %}Projet journal{% endblock %}
+
+{% block header %}<h1>Journal</h1>{% endblock %}
+
+{% block content %}
+    {% for projet in derniers_projets %}
+        <div class="projet">
+            <h3><p><a href="{% url 'afficher_projet' slug=projet.slug %}">{{ projet.titre }}</a></h3> 
+            <p>Dernière maj {{ projet.date_update | date:'Y-m-d H:i' }}</p>
+        </div>
+    {% empty %}
+        <p>Aucun projet.</p>
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'nouveau_projet' %}">Nouveau projet</a>
+    {% endif %}
+{% endblock %}

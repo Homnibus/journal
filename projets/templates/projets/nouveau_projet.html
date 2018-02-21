@@ -1,0 +1,18 @@
+{% extends "projets/base.html" %}
+
+{% block title %}Nouveau Projet{% endblock %}
+
+{% block nav %}<a href="{% url 'accueil' %}">Tout les projets</a>{% endblock %}
+
+{% block header %}<h1>Création d'un Projet</h1>{% endblock %}
+
+{% block content %}
+    {% if projet != None %}Projet {{ projet.titre }} créé !{% endif %}
+    <form action="{% url "nouveau_projet" %}" method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

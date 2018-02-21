@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+   
+   {% load static %}
+   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+   <link rel="stylesheet" type="text/css" href="{% static 'css/navigation.css' %}" />
+   {% block css %}{% endblock %}
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>{% block title %}Projet journal{% endblock %}</title>
+
+</head>
+
+<body>
+  <div class="nav-filler"></div>
+  <nav>
+    <div class="left-menu">
+      {% block nav %}{% endblock %}
+    </div>
+    <div class="filler"></div>
+    <div class="right-menu">
+    {% if user.is_authenticated %}
+        <a href="{% url 'deconnexion' %}">Deconnexion</a>
+    {% else %}
+      {% block nav-connexion %}<a href="{% url 'connexion' %}">Connexion</a>{% endblock %}  
+    {% endif %}
+    </div>
+  </nav>
+  
+  <header>
+      {% block header %}{% endblock %}
+  </header>
+
+     {% block content %}{% endblock %}
+
+<footer><p align="center">&copy; Créé par Homnibus</p></footer>
+
+{% block script %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+{% extends "projets/projetbase.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/contact_liste.css' %}" />
+{% endblock %}
+
+{% block title %}
+    Main courante - {{ projet.titre }}
+{% endblock %}
+
+{% block nav-afficher_main_courante %}current{% endblock %}
+
+{% block header %}
+<div class="project-info">
+  <input type="hidden" id="slug" value={{ projet.slug }}/>
+  {% csrf_token %}
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="general-info">
+  <article>
+    <div class="header">
+      <h1 class="header__title">Main courante - {{ projet.titre }}</h1>
+      <div class="header__subtitle">{{ projet.description }} </div>
+      {% if main_courante != None %}
+      <h2>{{ main_courante.date_update }}</h2>
+      {% endif %}  
+      <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+    </div>  
+    <div class="entry">
+      <form action="{% url 'afficher_main_courante' slug=projet.slug %}" method="post" class="auto_save_form">
+      <div class="content">
+        {{ form.non_field_errors }}
+        <div class="content">
+          {{ form.texte.errors }}
+          {{ form.texte }}
+        </div>
+    </form>
+    </div>  
+  </article>
+</section>    
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static "js/autosize.min.js" %}"></script>
+    <script src="{% static "js/jquery.typewatch.min.js" %}"></script>
+    <script src="{% static "js/afficher_main_courante.js" %}"></script>
+{% endblock %}
