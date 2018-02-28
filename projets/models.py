@@ -60,10 +60,12 @@ class Main_Courante(models.Model):
     def save(self, *args, **kwargs):
         """Surcharge de la fonction save pour generer automatiquement la date de realisation"""
         # Dans le cas ou l'objet n'exite pas on ajoute manuellement la date de creation
-        if self.id is None:
+        if self.projet is None:
             self.date_creation = get_current_timestamp()
         #Dans tout les cas on met a jour la date de maj
         self.date_update = get_current_timestamp()
+        #Et on met a jours la date de maj du projet
+        self.projet.save();
         super(Main_Courante, self).save(*args, **kwargs)
     
     def __str__(self):
@@ -89,10 +91,12 @@ class Contact_Liste(models.Model):
     def save(self, *args, **kwargs):
         """Surcharge de la fonction save pour generer automatiquement la date de realisation"""
         # Dans le cas ou l'objet n'exite pas on ajoute manuellement la date de creation
-        if self.id is None:
+        if self.projet is None:
             self.date_creation = get_current_timestamp()
         #Dans tout les cas on met a jour la date de maj
         self.date_update = get_current_timestamp()
+        #Et on met a jours la date de maj du projet
+        self.projet.save();
         super(Contact_Liste, self).save(*args, **kwargs)
     
     def __str__(self):
@@ -118,6 +122,8 @@ class Journal_Entree(models.Model):
             self.date_creation = get_current_timestamp()
         #Dans tout les cas on met a jour la date de maj
         self.date_update = get_current_timestamp()
+        #Et on met a jours la date de maj du projet
+        self.projet.save();
         super(Journal_Entree, self).save(*args, **kwargs)
     
     def __str__(self):
@@ -155,6 +161,8 @@ class TODO_Entree(models.Model):
             self.date_realisee = get_current_timestamp()
         #Dans tout les cas on met a jour la date de maj
         self.date_update = get_current_timestamp()
+        #Et on met a jours la date de maj du projet
+        self.projet.save();
         super(TODO_Entree, self).save(*args, **kwargs)
 
     def __str__(self):

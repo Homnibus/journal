@@ -73,28 +73,34 @@ class Page_Journal():
         self.task_list = []
         self.journal_entry = None
         self.new_task = None
-        
-        
-def accueil(request):
-    """Affiche la page d'accueil."""
-    if request.user.is_authenticated:
-        projet = Projet.objects.filter(createur=request.user)
-    else:
-        projet = []
-
-    return render(request, 'projets/accueil.html', {'derniers_projets': projet})
-
-
+       
 @login_required
 def creer_projet(request):
     """Affiche un projet pour creation."""
-    form = ProjetForm(request.POST or None)
-    if form.is_valid():
-        projet = form.save(commit=False)
-        projet.createur = request.user
-        projet.save()
-
-    return render(request, 'projets/nouveau_projet.html',{'form':form,'projet':projet})
+    http_status = Http_status()
+    return_data = {}
+    
+    try:
+        if request.method == 'GET' or request.method == 'POST':
+            form = ProjetForm(request.POST or None)
+            return_data.update({'form':form})
+            if form.is_valid():
+                projet = form.save(commit=False)
+                projet.createur = request.user
+                projet.save()
+                return_data.update({'projet':projet})
+            return render(
+                request,
+                'projets/nouveau_codex.html',
+                return_data
+            )
+        else:
+            raise_SuspiciousOperation(http_status)    
+    except Exception as ex:
+        #Retourne l'erreur sous la forme d'une page ou d'un dico json
+        return afficher_erreur(request,ex,http_status)
+    return HttpResponseForbidden()
+        
 
 
 @login_required
@@ -193,7 +199,7 @@ def afficher_projet(request,slug):
                 ##Envoie de la réponse http
                 return render(
                     request,
-                    'projets/projet.html',
+                    'projets/codex.html',
                     return_data
                 )
             except Exception as ex:
@@ -287,7 +293,6 @@ def maj_todo(request,slug):
     try:
         #Récuperation du projet a affichier
         projet = recuperer_projet(slug,request.user,http_status)
-
         if request.method == 'POST' and request.is_ajax():
             try:
                 #Boolean qui défini si on est sur une nouvelle tache
@@ -361,7 +366,7 @@ def afficher_main_courante(request,slug):
         if request.method == 'GET':
             main_courante = Main_Courante.objects.filter(projet=projet).first()
             form = Main_CouranteForm(instance=main_courante)
-            return render(request, 'projets/main_courante.html', {'projet':projet,'form':form,'main_courante':main_courante})    
+            return render(request, 'projets/codex_info.html', {'projet':projet,'form':form,'main_courante':main_courante})    
         else:
             raise_SuspiciousOperation(http_status)
     except Exception as ex:
@@ -375,11 +380,11 @@ def maj_main_courante(request,slug):
     """ Modifier la main courante d'un projet."""
     http_status = Http_status()
     return_data = {}
-
+    
     try:
         #Récuperation du projet a affichier et des droits
         projet = recuperer_projet(slug,request.user,http_status)
-
+        
         if request.method == 'POST' and request.is_ajax():
             form = Main_CouranteForm(request.POST)
             if form.is_valid():
@@ -416,7 +421,7 @@ def afficher_contact_liste(request,slug):
             #TODO : Ajouter la gestion d'erreur lors de plusieurs main courantes
             contact_liste = Contact_Liste.objects.filter(projet=projet).first()
             form = Contact_ListeForm(instance=contact_liste)    
-            return render(request, 'projets/contact_liste.html', {'projet':projet,'form':form,'contact_liste':contact_liste})
+            return render(request, 'projets/codex_contacts.html', {'projet':projet,'form':form,'contact_liste':contact_liste})
         else:
             raise_SuspiciousOperation(http_status)        
     except Exception as ex:
@@ -456,3 +461,21 @@ def maj_contact_liste(request,slug):
         return afficher_erreur(request,ex,http_status)
     return HttpResponseForbidden()
     
+    
+@login_required
+def afficher_derniers_projets(request):
+    """ Afficher les derniers projets du user."""
+    http_status = Http_status()
+    return_data = {}
+
+    try:
+        if request.method == 'GET':
+            projet = Projet.objects.filter(createur=request.user).order_by('-date_update')#[:8]
+            return_data = {'derniers_projets': projet}
+            return render(request, 'projets/accueil.html', return_data)
+        else:
+            raise_SuspiciousOperation(http_status)
+    except Exception as ex:
+        #Retourne l'erreur sous la forme d'une page ou d'un dico json
+        return afficher_erreur(request,ex,http_status)
+    return HttpResponseForbidden()

@@ -1,5 +1,0 @@
-{% extends "projets/base.html" %}
-
-{% block nav %}
-    <a href="{% url 'accueil' %}"clas="{% block nav-accueil %}{% endblock %}">Tout les projets</a><a href="{% url 'afficher_projet' slug=projet.slug %}" class="{% block nav-afficher_projet %}{% endblock %}">Journal</a><a href="{% url 'afficher_contact_liste' slug=projet.slug %}" class="{% block nav-afficher_contact_liste %}{% endblock %}">Contacts</a><a href="{% url 'afficher_main_courante' slug=projet.slug %}" class="{% block nav-afficher_main_courante %}{% endblock %}">Main courante</a>
-{% endblock %}

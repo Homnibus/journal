@@ -1,19 +1,43 @@
-{% extends "projets/base.html" %}
+{% extends "projets/accueil_navigation.html" %}
+{% load static %}
 
-{% block title %}Projet journal{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/derniers_projets.css' %}" />
+{% endblock %}
 
-{% block header %}<h1>Journal</h1>{% endblock %}
+{% block title %}
+    Derniers projets
+{% endblock %}
+
+{% block nav-accueil %}current{% endblock %}
 
 {% block content %}
+<section class="derniers-projets">
+  <article>
+    <div class="header">
+      <h1 class="header__title">Codex les plus recents</h1>
+      <div class="header__subtitle">Trouvez tout vos codex dans l'onget "Codex"</div>
+    </div>
+    <div class="projets">
     {% for projet in derniers_projets %}
+      <a href="{% url 'afficher_projet' slug=projet.slug %}">
         <div class="projet">
-            <h3><p><a href="{% url 'afficher_projet' slug=projet.slug %}">{{ projet.titre }}</a></h3> 
-            <p>Dernière maj {{ projet.date_update | date:'Y-m-d H:i' }}</p>
+          <div class="titre">
+            {{ projet.titre|title }}
+          </div>
+          <div class="filler"></div>
+          <div class="date">
+            {{ projet.date_update }}
+          </div>
         </div>
-    {% empty %}
-        <p>Aucun projet.</p>
+      </a>
     {% endfor %}
-    {% if user.is_authenticated %}
-        <p><a href="{% url 'nouveau_projet' %}">Nouveau projet</a>
-    {% endif %}
+    </div>
+  </article>
+</section>    
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
 {% endblock %}

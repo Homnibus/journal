@@ -8,6 +8,9 @@ body {
 	font-family: arial, helvetica,  sans-serif;
 	font-size: 1em; /* equiv 14px */
 	line-height: 1.5; /* adapt to your design */
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-attachment: fixed;  
 }
 
 /* font-sizing for content */

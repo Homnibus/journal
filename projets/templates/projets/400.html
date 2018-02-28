@@ -1,25 +1,15 @@
-<!DOCTYPE html>
+{% extends "projets/base_template.html" %}
 
-<html lang="fr">
+{% block title %}Erreur {{ status }}{% endblock %}
 
-<head>
+{% block header %}
+<h1 align="center">Erreur {{ status }}: {{ message }} </h1>
+{% endblock %}
 
-   <title>Erreur {{ status }}</title>
-
-</head>
-
-<body>
-
-    <header><h1 align="center">Erreur {{ status }}: {{ message }} </h1></header>
-
-   <section id="content">
-        <p align="center">{{ explanation }}</p>
-        <br/>
-        <br/>        
-   </section>
-
-<footer><p align="center">&copy; Créé par Homnibus</p></footer>
-
-</body>
-
-</html>
+{% block content %}
+  <section>
+    <p align="center">{{ explanation }}</p>
+    <br/>
+    <br/>        
+  </section>
+{% endblock %}

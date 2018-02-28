@@ -1,5 +1,5 @@
 from django.forms import (Form, ModelForm, Textarea, BaseModelFormSet, CharField, PasswordInput, HiddenInput
-    , CheckboxInput, IntegerField, CharField, BooleanField)
+    , CheckboxInput, IntegerField, CharField, BooleanField, Widget)
                           
 from .models import Projet, Main_Courante, Contact_Liste, Journal_Entree, TODO_Entree
 
@@ -8,6 +8,9 @@ class ProjetForm(ModelForm):
     class Meta:
         model = Projet
         fields=('titre','description',)
+        widgets = {
+            'description': Textarea(attrs={'rows': 3,'style':'resize:none;'}),
+        }
 
         
 class Main_CouranteForm(ModelForm):

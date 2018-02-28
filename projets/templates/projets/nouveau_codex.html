@@ -1,0 +1,36 @@
+{% extends "projets/accueil_navigation.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/nouveau_codex.css' %}" />
+{% endblock %}
+
+{% block title %}Nouveau Codex{% endblock %}
+
+{% block nouveau-codex %}current{% endblock %}
+
+{% block content %}
+<section class="derniers-projets">
+  <article>
+    <div class="main-header">
+      <h1 class="main-header__title">Creation d'un nouveau Codex</h1>
+      <div class="main-header__subtitle">Donnez un titre et une courte description à votre Codex !</div>
+    </div>
+    {% if projet != None %}Projet {{ projet.titre }} créé !{% endif %}
+    <form class="nouveau-codex" action="{% url "nouveau_projet" %}" method="post">
+      {% csrf_token %}
+      <div class="content-header">
+        <h2 class="content-header__title">Titre</h2>
+      </div>
+      {{ form.titre }}
+      <div class="content-header">
+        <h2 class="content-header__title">Description</h2>
+      </div>
+      {{ form.description }}
+      <div class="submit-button">
+        <input type="submit" value="Sauvegarder" />
+      </div>
+    </form>
+  </article>
+</section>   
+{% endblock %}

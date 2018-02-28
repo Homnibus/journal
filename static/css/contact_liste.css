@@ -30,7 +30,6 @@ section .header .header__subtitle {
   margin-bottom: .5em;
 }
 
-
 section textarea {
   padding: 0.5em;
   box-shadow: 0 0.1em 0.2em 0 rgba(0,0,0,0.16),0 0.1em 0.5em 0 rgba(0,0,0,0.12);
@@ -51,6 +50,9 @@ section .entry {
 
 section .entry > * { margin: .4em; }
 
+section .info {
+  display: flex;
+}
 
 section .save-info {
   line-height: 1.15em;  

@@ -1,4 +1,4 @@
-{% extends "projets/projetbase.html" %}
+{% extends "projets/codex_navigation.html" %}
 {% load static %}
 
 {% block css %}
@@ -22,21 +22,21 @@
 <section class="general-info">
   <article>
     <div class="header">
-      <h1 class="header__title">Main courante - {{ projet.titre }}</h1>
+      <h1 class="header__title">Main courante - {{ projet.titre|title }}</h1>
       <div class="header__subtitle">{{ projet.description }} </div>
-      {% if main_courante != None %}
-      <h2>{{ main_courante.date_update }}</h2>
-      {% endif %}  
-      <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+      <div class="info">
+        {% if main_courante != None %}
+        <h2>{{ main_courante.date_update }}</h2>
+        {% endif %}  
+        <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+      </div>
     </div>  
     <div class="entry">
       <form action="{% url 'afficher_main_courante' slug=projet.slug %}" method="post" class="auto_save_form">
       <div class="content">
         {{ form.non_field_errors }}
-        <div class="content">
-          {{ form.texte.errors }}
-          {{ form.texte }}
-        </div>
+        {{ form.texte.errors }}
+        {{ form.texte }}
     </form>
     </div>  
   </article>
@@ -48,5 +48,6 @@
     <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
     <script src="{% static "js/autosize.min.js" %}"></script>
     <script src="{% static "js/jquery.typewatch.min.js" %}"></script>
+    <script src="{% static "js/basic.js" %}"></script>
     <script src="{% static "js/afficher_main_courante.js" %}"></script>
 {% endblock %}

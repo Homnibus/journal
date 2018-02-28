@@ -7,7 +7,8 @@ from . import views
 urlpatterns = [
 url(r'^connexion$', auth_views.login, {'template_name': 'projets/connexion.html'}, name='connexion'),
 url(r'^deconnexion$', auth_views.logout, {'template_name': 'projets/deconnexion.html'}, name='deconnexion'),
-url(r'^accueil$', views.accueil, name='accueil'),	
+url(r'^accueil$', views.afficher_derniers_projets, name='accueil'),	
+url(r'^derniers-projets$', views.afficher_derniers_projets, name='afficher_derniers_projets'),	
 url(r'^nouveau-projet$', views.creer_projet, name='nouveau_projet'),
 url(r'^projets/(?P<slug>.+)/afficher$', views.afficher_projet, name='afficher_projet'),
 url(r'^projets/(?P<slug>.+)/maj-journal$', views.maj_journal, name='maj_journal'),
