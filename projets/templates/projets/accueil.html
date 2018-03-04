@@ -5,39 +5,35 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/derniers_projets.css' %}" />
 {% endblock %}
 
-{% block title %}
-    Derniers projets
-{% endblock %}
+{% block title %}Derniers Codex{% endblock %}
 
 {% block nav-accueil %}current{% endblock %}
 
+{% block header %}
+<h1>Codex les plus recents</h1>
+<h4>Trouvez tout vos codex dans l'onget "Codex"</h4>
+{% endblock %}
+
 {% block content %}
-<section class="derniers-projets">
-  <article>
-    <div class="header">
-      <h1 class="header__title">Codex les plus recents</h1>
-      <div class="header__subtitle">Trouvez tout vos codex dans l'onget "Codex"</div>
-    </div>
-    <div class="projets">
-    {% for projet in derniers_projets %}
-      <a href="{% url 'afficher_projet' slug=projet.slug %}">
-        <div class="projet">
-          <div class="titre">
-            {{ projet.titre|title }}
-          </div>
-          <div class="filler"></div>
-          <div class="date">
-            {{ projet.date_update }}
-          </div>
+<section class="derniers-codex">
+  {% for projet in derniers_projets %}
+  <article class="codex">
+    <a href="{% url 'afficher_projet' slug=projet.slug %}">
+      <div class="codex-flex-content">
+        <div class="titre">
+          {{ projet.titre|title }}
         </div>
-      </a>
-    {% endfor %}
-    </div>
+        <div class="filler"></div>
+        <div class="date">
+          {{ projet.date_update }}
+        </div>
+      </div>  
+    </a>
   </article>
-</section>    
+  {% endfor %}
+</section>
 {% endblock %}
 
 {% block script %}
-    {% load static %}
-    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 {% endblock %}

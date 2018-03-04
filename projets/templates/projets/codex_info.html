@@ -1,17 +1,13 @@
 {% extends "projets/codex_navigation.html" %}
 {% load static %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/contact_liste.css' %}" />
-{% endblock %}
-
-{% block title %}
-    Main courante - {{ projet.titre }}
-{% endblock %}
+{% block title %}Informations générales{% endblock %}
 
 {% block nav-afficher_main_courante %}current{% endblock %}
 
 {% block header %}
+<h1>Informations générales - {{ projet.titre|title }}</h1>
+<h4>{{ projet.description }}</h4>
 <div class="project-info">
   <input type="hidden" id="slug" value={{ projet.slug }}/>
   {% csrf_token %}
@@ -20,34 +16,24 @@
 
 {% block content %}
 <section class="general-info">
-  <article>
-    <div class="header">
-      <h1 class="header__title">Main courante - {{ projet.titre|title }}</h1>
-      <div class="header__subtitle">{{ projet.description }} </div>
-      <div class="info">
-        {% if main_courante != None %}
-        <h2>{{ main_courante.date_update }}</h2>
-        {% endif %}  
-        <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
-      </div>
-    </div>  
-    <div class="entry">
-      <form action="{% url 'afficher_main_courante' slug=projet.slug %}" method="post" class="auto_save_form">
-      <div class="content">
-        {{ form.non_field_errors }}
-        {{ form.texte.errors }}
-        {{ form.texte }}
-    </form>
-    </div>  
-  </article>
-</section>    
+  <header>
+    {% if main_courante != None %}
+    <h2>{{ main_courante.date_update }}</h2>
+    {% endif %}
+    <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+  </header>
+  <form action="{% url 'afficher_main_courante' slug=projet.slug %}" method="post" class="auto_save_form">
+    {{ form.non_field_errors }}
+    {{ form.texte.errors }}
+    {{ form.texte }}
+  </form>
+</section>
 {% endblock %}
 
 {% block script %}
-    {% load static %}
-    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
-    <script src="{% static "js/autosize.min.js" %}"></script>
-    <script src="{% static "js/jquery.typewatch.min.js" %}"></script>
-    <script src="{% static "js/basic.js" %}"></script>
-    <script src="{% static "js/afficher_main_courante.js" %}"></script>
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/autosize.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/basic.js' %}"></script>
+    <script src="{% static 'js/afficher_main_courante.js' %}"></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "projets/base_template.html" %}
 
 {% block nav %}
-    <a href="{% url 'afficher_projet' slug=projet.slug %}" class="{% block nav-afficher_projet %}{% endblock %}">Journal</a>
+    <a href="{% url 'afficher_projet' slug=projet.slug %}" class="{% block nav-afficher_projet %}{% endblock %}">Codex</a>
     <a href="{% url 'afficher_contact_liste' slug=projet.slug %}" class="{% block nav-afficher_contact_liste %}{% endblock %}">Contacts</a>
-    <a href="{% url 'afficher_main_courante' slug=projet.slug %}" class="{% block nav-afficher_main_courante %}{% endblock %}">Main courante</a>
+    <a href="{% url 'afficher_main_courante' slug=projet.slug %}" class="{% block nav-afficher_main_courante %}{% endblock %}">Infos</a>
 {% endblock %}

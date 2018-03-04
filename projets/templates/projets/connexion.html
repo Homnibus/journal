@@ -1,10 +1,7 @@
 {% extends "projets/base_template.html" %}
 
-{% block title %}
-    Connexion
-{% endblock %}
+{% block title %}Connexion{% endblock %}
 
-{% block nav %}<a href="{% url 'accueil' %}">Accueil</a> {% endblock %}
 {% block nav-connexion %}{% endblock %}
 
 {% block header %}
@@ -18,7 +15,7 @@
 
     {% if user.is_authenticated %}
         Vous êtes déjà connecté, {{ user.username }} !
-        <br/> <br/>
+        <br><br>
     {% else %}
         <form method="post" action="{% url 'connexion' %}">
             {% csrf_token %}

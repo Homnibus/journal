@@ -1,17 +1,13 @@
 {% extends "projets/codex_navigation.html" %}
 {% load static %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/contact_liste.css' %}" />
-{% endblock %}
-
-{% block title %}
-    Contacts - {{ projet.titre }}
-{% endblock %}
+{% block title %}Contacts{% endblock %}
 
 {% block nav-afficher_contact_liste %}current{% endblock %}
 
 {% block header %}
+<h1>Contacts - {{ projet.titre|title }}</h1>
+<h4>{{ projet.description }}</h4>
 <div class="project-info">
   <input type="hidden" id="slug" value={{ projet.slug }}/>
   {% csrf_token %}
@@ -20,32 +16,21 @@
 
 {% block content %}
 <section class="contact-list">
-  <article>
-    <div class="header">
-      <h1 class="header__title">Contacts - {{ projet.titre|title }}</h1>
-      <div class="header__subtitle">{{ projet.description }} </div>
-      <div class="info">
-        {% if contact_liste != None %}
-        <h2>{{ contact_liste.date_update }}</h2>
-        {% endif %}  
-        <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
-      </div>
-    </div>  
-    <div class="entry">
-      <form action="{% url 'afficher_contact_liste' slug=projet.slug %}" method="post" class="auto_save_form">
-        {{ form.non_field_errors }}
-        <div class="content">
-          {{ form.texte.errors }}
-          {{ form.texte }}
-        </div>
-      </form>
-    </div>  
-  </article>
+  <header>
+    {% if contact_liste != None %}
+    <h2>{{ contact_liste.date_update }}</h2>
+    {% endif %}  
+    <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+  </header>  
+  <form action="{% url 'afficher_contact_liste' slug=projet.slug %}" method="post" class="auto_save_form">
+    {{ form.non_field_errors }}
+    {{ form.texte.errors }}
+    {{ form.texte }}
+  </form>
 </section>
 {% endblock %}
 
 {% block script %}
-    {% load static %}
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>

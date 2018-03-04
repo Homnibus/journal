@@ -13,7 +13,7 @@ function saveTextarea(){
         success: function(data){  
           if(data.success){
             hide_error();
-            $('#derniere_maj').text(data.date_update);
+            $('.general-info h2').text(data.date_update);
             $('#sauvegarde').fadeIn("slow", function(){$('#sauvegarde').fadeOut("slow");});
           }
         },

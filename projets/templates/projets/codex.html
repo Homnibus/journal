@@ -2,16 +2,16 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/projet.css' %}" />
+<link rel="stylesheet" href="{% static 'css/projet.css' %}" />
 {% endblock %}
 
-{% block title %}
-    Journal - {{ projet.titre }}
-{% endblock %}
+{% block title %}{{ projet.titre|truncatechars:14 }}{% endblock %}
 
 {% block nav-afficher_projet %}current{% endblock %}
 
 {% block header %}
+<h1>Codex - {{ projet.titre|title}}</h1>
+<h4>{{ projet.description }}</h4>
 <div class="project-info">
   <input type="hidden" id="slug" value={{ projet.slug }}/>
   {% csrf_token %}
@@ -19,84 +19,74 @@
 {% endblock %}
 
 {% block content %}
-<section class="today-entry">
-  <article>
-    <div class="header">
-      <h1 class="header__title">Journal - {{ projet.titre|title}}</h1>
-      <div class="header__subtitle">{{ projet.description }}</div>
-    </div>
-    
-    <div class="journal-entry">
-      <div class="header">
-        <h2 class="header__title">{{ today_entry.date }}</h2>
-        <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>          
-      </div>
-      <div class="content">
-        {{ today_entry.journal_entry.non_field_errors }}
-        {{ today_entry.journal_entry.texte.errors }}
-        {{ today_entry.journal_entry.journal_id.errors }}
-        {{ today_entry.journal_entry.texte }}
-        {{ today_entry.journal_entry.journal_id }}
-      </div>
-    </div>  
-    
-    <div class="task-list">
-      <div class="header">
-        <h2 class="header__title">Tâches</h2>
-        <div class="save-info" style="display:none">Sauvegardé</div>
-      </div>
-      <div class="content">
-        <div class="new-task">
-          <img class="add-item-button" id="add_todo" type="image" src="{% static "img/add_button.png" %}" alt="Ajouter" />
-          {{ today_entry.new_task.texte.errors }}
-          {{ today_entry.new_task.texte }}
-        </div>
-        {% for task_entry in today_entry.task_list reversed%}
-        <div class="entry">
-          {{ task_entry.realisee }}
-          {{ task_entry.non_field_errors }}
-          {{ task_entry.texte.errors }}
-          {{ task_entry.todo_id.errors }}
-          {{ task_entry.realisee.errors }}
-          {{ task_entry.texte }}
-          {{ task_entry.todo_id }}
-        </div>
+<section class="codex-page today-page">
+  <section class="page-entry">
+    <header>
+      <h2>{{ today_entry.date }}</h2>
+      <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+    </header>  
+    {{ today_entry.journal_entry.non_field_errors }}
+    {{ today_entry.journal_entry.texte.errors }}
+    {{ today_entry.journal_entry.journal_id.errors }}
+    {{ today_entry.journal_entry.texte }}
+    {{ today_entry.journal_entry.journal_id }}
+  </section>
+
+  <section class="page-tasks">
+    <header>
+    <h2>Tâches</h2>
+    <div class="save-info" style="display:none">Sauvegardé</div>
+    </header>
+    <section class="task new-task">
+      <img class="add-item-button" id="add_todo" src="{% static 'img/add_button.png' %}"
+           alt="Ajouter" />
+      {{ today_entry.new_task.texte.errors }}
+      {{ today_entry.new_task.texte }}
+    </section>
+    <section class="task-list old-tasks">
+      {% for task_entry in today_entry.task_list reversed%}
+      <article class="task">
+        {{ task_entry.realisee }}
+        {{ task_entry.non_field_errors }}
+        {{ task_entry.texte.errors }}
+        {{ task_entry.todo_id.errors }}
+        {{ task_entry.realisee.errors }}
+        {{ task_entry.texte }}
+        {{ task_entry.todo_id }}
+      </article>
       {% endfor %}
-      </div>
-    </div>
-  </article>  
+    </section>
+  </section>
 </section>
 
-<section class="older-entry">
+<section class="old-pages">
   {% for entry in older_entry  reversed %}
-  <article>
-    <div class="journal-entry">
-      <div class="header">
-        <h2 class="header__title">{{ entry.date }}</h2>
+  <article class="codex-page">
+    <section class="page-entry">
+      <header>
+        <h2>{{ entry.date }}</h2>
         <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
-        <div class="ligne"></div>        
-      </div>
+        <div class="ligne"></div>
+      </header>
       {% if entry.journal_entry %}
-      <div class="content">
         {{ entry.journal_entry.non_field_errors }}
         {{ entry.journal_entry.texte.errors }}
         {{ entry.journal_entry.journal_id.errors }}
         {{ entry.journal_entry.texte }}
         {{ entry.journal_entry.journal_id }}
-      </div>
       {% endif %}
-    </div>  
-    
+    </section>
+
     {% if entry.task_list %}
-    <div class="task-list">
-      <div class="header">
-        <h2 class="header__title">Tâches</h2>
+    <section class="page-tasks">
+      <header>
+        <h2>Tâches</h2>
         <div class="save-info" style="display:none">Sauvegardé</div>
         <div class="ligne"></div>
-      </div>
-      <div class="content">
+      </header>
+      <section class="task-list">
         {% for task_entry in entry.task_list %}
-        <div class="entry">
+        <article class="task">
           {{ task_entry.realisee }}
           {{ task_entry.non_field_errors }}
           {{ task_entry.texte.errors }}
@@ -104,10 +94,10 @@
           {{ task_entry.realisee.errors }}
           {{ task_entry.texte }}
           {{ task_entry.todo_id }}
-        </div>
+        </article>
       {% endfor %}
-      </div>
-    </div>
+      </section>
+    </section>
     {% endif %}
   </article>
   {% endfor %}
@@ -121,7 +111,3 @@
     <script src="{% static 'js/basic.js' %}"></script>
     <script src="{% static 'js/afficher_journal.js' %}"></script>
 {% endblock %}
-
-   
-
-

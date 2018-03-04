@@ -1,7 +1,7 @@
-$(".older-entry .journal-entry:not(:has(.content))").parent("article").css("flex-direction", "column");
+$(".old-pages .page-entry:not(:has(.journal_entree_id))").closest(".codex-page").css("flex-direction", "column");
 
 function saveTextarea(){
-    var parent_div = $(this).closest(".content")
+    var parent_div = $(this).closest(".page-entry")
     var texte = parent_div.find(".journal_entree_texte").val();
     var id = parent_div.find(".journal_entree_id").attr("value");
 
@@ -18,12 +18,12 @@ function saveTextarea(){
             hide_error();
             if(data.success){
                 if(data.nouveau_journal){
-                    $(".today-entry").find(".journal_entree_id").attr('value',data.id);
+                    $(".today-page").find(".journal_entree_id").attr('value',data.id);
                 }
                 //$('.today-entry .journal-entry .save-info').fadeIn('slow', function(){$('.today-entry .journal-entry .save-info').fadeOut('slow');});
-                save_journal = $(".journal_entree_id[value = " + data.id + "]").closest(".journal-entry").find(".save-info");
+                save_journal = $(".journal_entree_id[value = " + data.id + "]").closest(".page-entry").find(".save-info");
                 save_journal.fadeIn('slow', function(){
-                    save_journal = $(".journal_entree_id[value = " + data.id + "]").closest(".journal-entry").find(".save-info");
+                    save_journal = $(".journal_entree_id[value = " + data.id + "]").closest(".page-entry").find(".save-info");
                     save_journal.fadeOut('slow');
                 });
             }
@@ -47,7 +47,7 @@ $(".journal_typewatch").typeWatch( {
 });
 
 function maj_todo(){
-    var parent_div = $(this).parent();
+    var parent_div = $(this).parent(".task");
     var realisee = parent_div.find(".todo_entree_checkbox").prop('checked');
     var texte = parent_div.find(".todo_entree_texte").val();
     var id = parent_div.find(".todo_entree_id").attr("value");
@@ -67,23 +67,23 @@ function maj_todo(){
                 if(data.success){
                     if(data.nouvelle_tache){
                         //On retire le texte du formulaire initial
-                        $(".today-entry .task-list .new-task .todo_entree_texte").val('');
+                        $('.new-task .todo_entree_texte').val('');
                         //On cherche la celule d'ajout d'une tache
-                        var parent_div = $('.today-entry .task-list .new-task');
+                        var parent_div = $('.today-page .old-tasks');
                         //On ajoute des <div> au formulaire retourné pour pouvoir naviguer dedans avec jquery
                         out_form_str = '<div>' + data.out_form + '</div>'
                         //On ajoute correctement le formulaire de retour en dessous de l'ajout de tache
-                        var new_checkbox = $(".todo_entree_checkbox",out_form_str).clone().wrap('<div>').parent().html()
-                        var new_textearea = $(".todo_entree_texte",out_form_str).clone().wrap('<div>').parent().html()
-                        var new_id = $(".todo_entree_id",out_form_str).clone().wrap('<div>').parent().html()
-                        parent_div.after(
-                            "<div class='entry'>" +
+                        var new_checkbox = $('.todo_entree_checkbox',out_form_str).clone().wrap('<div>').parent().html()
+                        var new_textearea = $('.todo_entree_texte',out_form_str).clone().wrap('<div>').parent().html()
+                        var new_id = $('.todo_entree_id',out_form_str).clone().wrap('<div>').parent().html()
+                        parent_div.append(
+                            '<article class="task">' +
                             new_checkbox + 
                             new_textearea +
                             new_id +
-                            "</div>"
+                            '</article>'
                         );
-                        var jqry_textearea = $('.todo_entree_id[value = ' + data.id +']').closest("div").find(".todo_entree_texte");
+                        var jqry_textearea = $('.todo_entree_id[value = ' + data.id +']').closest('article').find('.todo_entree_texte');
                         autosize(jqry_textearea);
                         $(jqry_textearea).typeWatch( {
                             callback: maj_todo,
@@ -95,9 +95,9 @@ function maj_todo(){
                     }
                     else{
                         //On recherche le div de sauvegarde à faire clignoter
-                        save_todo = $(".todo_entree_id[value = " + data.id + "]").closest(".task-list").find(".save-info");
+                        save_todo = $(".todo_entree_id[value = " + data.id + "]").closest(".page-tasks").find(".save-info");
                         save_todo.fadeIn('slow', function(){
-                            save_todo = $(".todo_entree_id[value = " + data.id + "]").closest(".task-list").find(".save-info");
+                            save_todo = $(".todo_entree_id[value = " + data.id + "]").closest(".page-tasks").find(".save-info");
                             save_todo.fadeOut('slow');
                         });
                     }
@@ -114,11 +114,11 @@ function maj_todo(){
     }    
 }
 
-$('#add_todo').click( maj_todo );
+$('.add-item-button').click( maj_todo );
 
 $(document).on('change','.todo_entree_checkbox', maj_todo); 
 
-$(".entry .todo_entree_texte").typeWatch( {
+$(".todo_entree_texte").typeWatch( {
     callback: maj_todo,
     wait: 500,
     highlight: false,
@@ -126,4 +126,4 @@ $(".entry .todo_entree_texte").typeWatch( {
     captureLength: 1,
 });
 
-autosize($('textarea'));
+// autosize($('textarea'));

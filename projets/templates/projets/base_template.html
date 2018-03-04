@@ -5,41 +5,39 @@
 <head>
    {% load static %}
    <meta charset="UTF-8">
-   <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
-   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
-   <link rel="stylesheet" type="text/css" href="{% static 'css/navigation.css' %}" />
-   {% block css %}{% endblock %}
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>{% block title %}Projet journal{% endblock %}</title>
-
+   <title>ResCodex - {% block title %}{% endblock %}</title>
+   <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+   <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+   <link rel="stylesheet" href="{% static 'css/navigation.css' %}" />
+   {% block css %}{% endblock %}
 </head>
 
-<body background="{% static 'img/background.png' %}">
-  <div class="nav-filler"></div>
+<body style="background-image:url('{% static 'img/background.png' %}');background-repeat:no-repeat;background-position:right bottom;background-attachment:fixed;">
   <nav>
     <div class="menu">
-      <a href="{% url 'accueil' %}"class="{% block nav-accueil %}{% endblock %}">
-        <img class="accueil" type="image" src="{% static 'img/home.jpeg' %}" alt="Ajouter" />
+      <a href="{% url 'accueil' %}" class="{% block nav-accueil %}{% endblock %}">
+        <img class="accueil" src="{% static 'img/home.jpeg' %}" alt="Ajouter"
+             style="width:1.4em;height:1.4em;" />
       </a>
       {% block nav %}{% endblock %}
       <div class="filler"></div>
       {% if user.is_authenticated %}
         <a href="{% url 'deconnexion' %}">Deconnexion</a>
       {% else %}
-      {% block nav-connexion %}<a href="{% url 'connexion' %}">Connexion</a>{% endblock %}  
+        {% block nav-connexion %}
+        <a href="{% url 'connexion' %}">Connexion</a>
+        {% endblock %}
       {% endif %}
     </div>
   </nav>
-  
+  <div class="nav-filler"></div>
   <header>
-      {% block header %}{% endblock %}
+  {% block header %}{% endblock %}
   </header>
-
-     {% block content %}{% endblock %}
-
-<footer><p align="center">&copy; Créé par Homnibus</p></footer>
-
-{% block script %}{% endblock %}
+  {% block content %}{% endblock %}
+  <div class="footer-filler"></div>
+  <footer>&copy; Créé par Homnibus</footer>
+  {% block script %}{% endblock %}
 </body>
-
 </html>
