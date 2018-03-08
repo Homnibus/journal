@@ -66,7 +66,7 @@ class TODO_EntreeForm(ModelForm):
         model = TODO_Entree
         fields = ('texte','realisee')
         widgets = {
-            'texte': Textarea(attrs={'rows': 1,'style':'resize:none;','class':'todo_entree_texte todo_typewatch'}),
+            'texte': Textarea(attrs={'rows': 1,'style':'resize:none;','class':'todo_entree_texte'}),
             'realisee': CheckboxInput(attrs={'class':'todo_entree_checkbox'},)
         }
     

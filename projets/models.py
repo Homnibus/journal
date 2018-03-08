@@ -60,7 +60,7 @@ class Main_Courante(models.Model):
     def save(self, *args, **kwargs):
         """Surcharge de la fonction save pour generer automatiquement la date de realisation"""
         # Dans le cas ou l'objet n'exite pas on ajoute manuellement la date de creation
-        if self.projet is None:
+        if self.date_creation is None:
             self.date_creation = get_current_timestamp()
         #Dans tout les cas on met a jour la date de maj
         self.date_update = get_current_timestamp()
@@ -91,7 +91,7 @@ class Contact_Liste(models.Model):
     def save(self, *args, **kwargs):
         """Surcharge de la fonction save pour generer automatiquement la date de realisation"""
         # Dans le cas ou l'objet n'exite pas on ajoute manuellement la date de creation
-        if self.projet is None:
+        if self.date_creation is None:
             self.date_creation = get_current_timestamp()
         #Dans tout les cas on met a jour la date de maj
         self.date_update = get_current_timestamp()

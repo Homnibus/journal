@@ -76,7 +76,7 @@ function maj_todo(){
                         var new_checkbox = $('.todo_entree_checkbox',out_form_str).clone().wrap('<div>').parent().html()
                         var new_textearea = $('.todo_entree_texte',out_form_str).clone().wrap('<div>').parent().html()
                         var new_id = $('.todo_entree_id',out_form_str).clone().wrap('<div>').parent().html()
-                        parent_div.append(
+                        parent_div.prepend(
                             '<article class="task">' +
                             new_checkbox + 
                             new_textearea +
@@ -118,7 +118,7 @@ $('.add-item-button').click( maj_todo );
 
 $(document).on('change','.todo_entree_checkbox', maj_todo); 
 
-$(".todo_entree_texte").typeWatch( {
+$(".task:not(.new-task) .todo_entree_texte").typeWatch( {
     callback: maj_todo,
     wait: 500,
     highlight: false,

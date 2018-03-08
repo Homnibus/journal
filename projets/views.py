@@ -3,7 +3,7 @@ import json
 import logging
 from datetime import date,datetime,time
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.forms import modelformset_factory
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -89,11 +89,8 @@ def creer_projet(request):
                 projet.createur = request.user
                 projet.save()
                 return_data.update({'projet':projet})
-            return render(
-                request,
-                'projets/nouveau_codex.html',
-                return_data
-            )
+                return redirect('afficher_projet', slug=projet.slug)
+            return render( request, 'projets/nouveau_codex.html', return_data)
         else:
             raise_SuspiciousOperation(http_status)    
     except Exception as ex:

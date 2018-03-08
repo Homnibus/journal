@@ -175,11 +175,15 @@ body > script {display: none !important;}
 /* ----------------------------- */
 
 /* global page display */
-html {height: 100%;}
+html {
+  min-height: 100%;
+  display: flex; 
+  flex-direction: column;
+}
 body {
+  flex: 1;
   display: flex;  
   flex-direction: column;
-  height: 100%;  
 }
 section, article, header {
   display: flex;
