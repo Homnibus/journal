@@ -1,6 +1,10 @@
 {% extends "projets/codex_navigation.html" %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/main_courante.css' %}" />
+{% endblock %}
+
 {% block title %}Informations générales{% endblock %}
 
 {% block nav-afficher_main_courante %}current{% endblock %}

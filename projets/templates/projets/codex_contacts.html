@@ -1,6 +1,11 @@
 {% extends "projets/codex_navigation.html" %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/contact_liste.css' %}" />
+{% endblock %}
+
+
 {% block title %}Contacts{% endblock %}
 
 {% block nav-afficher_contact_liste %}current{% endblock %}
