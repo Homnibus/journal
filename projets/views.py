@@ -468,10 +468,41 @@ def afficher_derniers_projets(request):
     try:
         if request.method == 'GET':
             projet = Projet.objects.filter(createur=request.user).order_by('-date_update')#[:8]
-            return_data = {'derniers_projets': projet}
+            return_data.update({'derniers_projets': projet})
             return render(request, 'projets/accueil.html', return_data)
         else:
             raise_SuspiciousOperation(http_status)
+    except Exception as ex:
+        #Retourne l'erreur sous la forme d'une page ou d'un dico json
+        return afficher_erreur(request,ex,http_status)
+    return HttpResponseForbidden()
+    
+@login_required
+def afficher_taches(request,slug):
+    """Affiche la liste des taches d'un codex"""
+    http_status = Http_status()
+    return_data = {}
+    
+    try:
+        #Récuperation du projet a affichier et des droits
+        projet = recuperer_projet(slug,request.user,http_status)
+        return_data.update({'projet': projet})
+
+        if request.method == 'GET':
+            #Récupération de la liste des taches
+            tache_liste = TODO_Entree.objects.filter(
+                projet=projet,
+            ).order_by('realisee','date_creation')
+            #Creation d'une liste de formulaire
+            tache_form_liste = []
+            for tache_courante in tache_liste:
+                tache_form_liste.append(TODO_EntreeForm(instance=tache_courante))
+            #Ajout de la liste de formulaire au résulat
+            return_data.update({'task_form_list':tache_form_liste})
+            
+            return render(request, 'projets/codex_taches.html', return_data)
+        else:
+            raise_SuspiciousOperation(http_status)        
     except Exception as ex:
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
         return afficher_erreur(request,ex,http_status)

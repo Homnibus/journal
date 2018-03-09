@@ -17,6 +17,7 @@ url(r'^projets/(?P<slug>.+)/main-courante$', views.afficher_main_courante, name=
 url(r'^projets/(?P<slug>.+)/maj-main-courante$', views.maj_main_courante, name='maj_main_courante'),
 url(r'^projets/(?P<slug>.+)/contact$', views.afficher_contact_liste, name='afficher_contact_liste'),
 url(r'^projets/(?P<slug>.+)/maj-contact$', views.maj_contact_liste, name='maj_contact_liste'),
+url(r'^projets/(?P<slug>.+)/taches$', views.afficher_taches, name='afficher_taches'),
 ]
 
 

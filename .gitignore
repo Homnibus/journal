@@ -1,2 +1,4 @@
 *.pyc
 *.pyc
+*.pyc
+projets/__pycache__/forms.cpython-36.pyc

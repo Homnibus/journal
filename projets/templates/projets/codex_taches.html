@@ -1,0 +1,48 @@
+{% extends "projets/codex_navigation.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/codex_taches.css' %}" />
+{% endblock %}
+
+{% block title %}Tâches{% endblock %}
+
+{% block nav-taches %}current{% endblock %}
+
+{% block header %}
+<h1>Taches - {{ projet.titre|title }}</h1>
+<h4>{{ projet.description }}</h4>
+<div class="project-info">
+  <input type="hidden" id="slug" value={{ projet.slug }}/>
+  {% csrf_token %}
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="codex-tasks">
+  <table>
+    <tr>
+      <th>Réalisée</th>
+      <th>Tache <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></th>
+      <th>Date réalisation</th>
+      <th>Date creation</th>
+    </tr>
+    {% for task in task_form_list %}
+      <tr>
+        <td>{{ task.todo_id }}{{ task.realisee }}</td>
+        <td>{{ task.texte }}</td>
+        <td>Une date</td>
+        <td>Une autre date</td>
+      </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/autosize.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/basic.js' %}"></script>
+    <script>autosize(document.querySelectorAll('textarea'));</script>
+{% endblock %}
