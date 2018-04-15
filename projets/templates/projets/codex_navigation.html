@@ -1,8 +1,8 @@
 {% extends "projets/base_template.html" %}
 
 {% block nav %}
-    <a href="{% url 'afficher_projet' slug=projet.slug %}" class="{% block nav-afficher_projet %}{% endblock %}">Codex</a>
-    <a href="{% url 'afficher_contact_liste' slug=projet.slug %}" class="{% block nav-afficher_contact_liste %}{% endblock %}">Contacts</a>
-    <a href="{% url 'afficher_main_courante' slug=projet.slug %}" class="{% block nav-afficher_main_courante %}{% endblock %}">Infos</a>
-    <a href="{% url 'afficher_taches' slug=projet.slug %}" class="{% block nav-taches %}{% endblock %}">Taches</a>
+    <a href="{% url 'afficher_codex' slug=codex.slug %}" class="{% block nav-afficher_codex %}{% endblock %}">Codex</a>
+    <a href="{% url 'afficher_taches' slug=codex.slug %}" class="{% block nav-taches %}{% endblock %}">Taches</a>
+    <a href="{% url 'afficher_contact_liste' slug=codex.slug %}" class="{% block nav-afficher_contact_liste %}{% endblock %}">Contacts</a>
+    <a href="{% url 'afficher_main_courante' slug=codex.slug %}" class="{% block nav-afficher_main_courante %}{% endblock %}">Infos</a>
 {% endblock %}

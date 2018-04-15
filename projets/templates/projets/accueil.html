@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/derniers_projets.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/derniers_codex.css' %}" />
 {% endblock %}
 
 {% block title %}Derniers Codex{% endblock %}
@@ -16,16 +16,16 @@
 
 {% block content %}
 <section class="derniers-codex">
-  {% for projet in derniers_projets %}
+  {% for codex in derniers_codex %}
   <article class="codex">
-    <a href="{% url 'afficher_projet' slug=projet.slug %}">
+    <a href="{% url 'afficher_codex' slug=codex.slug %}">
       <div class="codex-flex-content">
         <div class="titre">
-          {{ projet.titre|title }}
+          {{ codex.titre|title }}
         </div>
         <div class="filler"></div>
         <div class="date">
-          {{ projet.date_update }}
+          {{ codex.date_update }}
         </div>
       </div>  
     </a>

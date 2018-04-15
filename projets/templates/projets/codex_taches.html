@@ -10,32 +10,55 @@
 {% block nav-taches %}current{% endblock %}
 
 {% block header %}
-<h1>Taches - {{ projet.titre|title }}</h1>
-<h4>{{ projet.description }}</h4>
+<h1>Taches - {{ codex.titre|title }}</h1>
+<h4>{{ codex.description }}</h4>
 <div class="project-info">
-  <input type="hidden" id="slug" value={{ projet.slug }}/>
+  <input type="hidden" id="slug" value={{ codex.slug }}/>
   {% csrf_token %}
 </div>
 {% endblock %}
 
 {% block content %}
 <section class="codex-tasks">
-  <table>
-    <tr>
-      <th>Réalisée</th>
-      <th>Tache <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></th>
-      <th>Date réalisation</th>
-      <th>Date creation</th>
-    </tr>
-    {% for task in task_form_list %}
+  <div>
+    <table>
       <tr>
-        <td>{{ task.todo_id }}{{ task.realisee }}</td>
-        <td>{{ task.texte }}</td>
-        <td>Une date</td>
-        <td>Une autre date</td>
+        <th>Réalisée</th>
+        <th>Tache <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></th>
+        <th>Date réalisation</th>
+        <th>Date creation</th>
       </tr>
-    {% endfor %}
-  </table>
+      {% for task in task_list %}
+        <tr class="task">
+          <td>{{ task.form.todo_id }}{{ task.form.realisee }}</td>
+          <td>{{ task.form.texte }}</td>
+          <td>
+            {% if task.model.date_realisee %}
+            {{ task.model.date_realisee }}
+            {% else %}
+            - 
+            {% endif %}
+          </td>
+          <td>{{ task.model.date_creation }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="pagination">
+  {% if task_list.has_previous %}
+    <a href="{% url 'afficher_taches' slug=codex.slug page_number=task_list.previous_page_number %}" class="next">Précédent</a> -
+  {% endif %}
+  {% for page in paginator_range %}
+    {% if page == task_list.number %}
+      <a href="{% url 'afficher_taches' slug=codex.slug page_number=page %}" class="current">{{page}}</a> -
+    {% else %}
+      <a href="{% url 'afficher_taches' slug=codex.slug page_number=page %}">{{page}}</a> -
+    {% endif %}
+  {% endfor %}
+  {% if task_list.has_next %}
+  <a href="{% url 'afficher_taches' slug=codex.slug page_number=task_list.next_page_number %}" class="next">Suivant</a>
+  {% endif %}
+  </div>
 </section>
 {% endblock %}
 
@@ -44,5 +67,5 @@
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
     <script src="{% static 'js/basic.js' %}"></script>
-    <script>autosize(document.querySelectorAll('textarea'));</script>
+    <script src="{% static 'js/codex_taches.js' %}"></script>
 {% endblock %}

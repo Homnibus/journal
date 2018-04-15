@@ -2,18 +2,22 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/projet.css' %}" />
+<link rel="stylesheet" href="{% static 'css/codex.css' %}" />
 {% endblock %}
 
-{% block title %}{{ projet.titre|truncatechars:14 }}{% endblock %}
+{% block meta %}
+<meta http-equiv="Cache-control" content="no-store">
+{% endblock %}
 
-{% block nav-afficher_projet %}current{% endblock %}
+{% block title %}{{ codex.titre|truncatechars:14 }}{% endblock %}
+
+{% block nav-afficher_codex %}current{% endblock %}
 
 {% block header %}
-<h1>Codex - {{ projet.titre|title}}</h1>
-<h4>{{ projet.description }}</h4>
+<h1>Codex - {{ codex.titre|title}}</h1>
+<h4>{{ codex.description }}</h4>
 <div class="project-info">
-  <input type="hidden" id="slug" value={{ projet.slug }}/>
+  <input type="hidden" id="slug" value={{ codex.slug }}/>
   {% csrf_token %}
 </div>
 {% endblock %}
@@ -109,5 +113,5 @@
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
     <script src="{% static 'js/basic.js' %}"></script>
-    <script src="{% static 'js/afficher_journal.js' %}"></script>
+    <script src="{% static 'js/codex.js' %}"></script>
 {% endblock %}

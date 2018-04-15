@@ -10,10 +10,10 @@
 {% block nav-afficher_main_courante %}current{% endblock %}
 
 {% block header %}
-<h1>Informations générales - {{ projet.titre|title }}</h1>
-<h4>{{ projet.description }}</h4>
+<h1>Informations générales - {{ codex.titre|title }}</h1>
+<h4>{{ codex.description }}</h4>
 <div class="project-info">
-  <input type="hidden" id="slug" value={{ projet.slug }}/>
+  <input type="hidden" id="slug" value={{ codex.slug }}/>
   {% csrf_token %}
 </div>
 {% endblock %}
@@ -26,7 +26,7 @@
     {% endif %}
     <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
   </header>
-  <form action="{% url 'afficher_main_courante' slug=projet.slug %}" method="post" class="auto_save_form">
+  <form action="{% url 'afficher_main_courante' slug=codex.slug %}" method="post" class="auto_save_form">
     {{ form.non_field_errors }}
     {{ form.texte.errors }}
     {{ form.texte }}

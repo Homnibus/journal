@@ -206,7 +206,7 @@ body > footer {
 }
 
 /* section */
-body > section > * { 
+body > section > * {
   margin-right: .4em;
   margin-left: .4em;
   margin-top: .4em;
@@ -246,11 +246,50 @@ textarea {
 }
 
 /* ligne */
-section .ligne {
+.ligne {
   width:100%;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 0.8em;
   border-top: 1px solid #2F4752;
   border-bottom: 1px solid #79B5D1;
+}
+
+/* pagination */
+div.pagination {
+  text-align: center;
+  padding-top: .4em;
+}
+
+.pagination a{
+  font-size: 1em;
+  line-height: 1.2em;
+}
+
+.pagination a.next { color: black; }
+.pagination a.current {
+  color: black;
+  border-bottom: 2px solid #79B5D1;
+}
+
+.pagination a:link {
+  color: black;
+  text-decoration: none;
+}
+.pagination a:visited {
+  color: #2F4752;
+  text-decoration: none;
+}
+.pagination a.current:visited,
+.pagination a.next:visited {
+  color: black;
+}
+.pagination a:hover {
+  color: #4D7385;
+  text-decoration: none;
+  border-bottom: 2px solid #79B5D1;
+}
+.pagination a:active,.pagination a:focus{
+  color: #2F4752;
+  text-decoration: none;
 }

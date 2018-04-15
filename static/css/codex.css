@@ -1,0 +1,37 @@
+/* old-pages */
+/* reste du margin de body > section */ 
+.old-pages > * { margin: 0; }
+.old-pages .codex-page { margin-top: .8em; }
+.old-pages .codex-page > section {
+  flex:1; 
+  margin: .4em;
+}
+.old-pages .codex-page { flex-direction: row; }
+
+/* articles */
+article { display:flex; }
+.task { flex-direction: row; }
+.task-list .task { margin-top: .8em; }
+.old-pages .task:first-child { margin: 0; }
+
+/* todo_entree_checkbox */
+.todo_entree_checkbox { margin-right: .8em; }
+
+/* header */
+.codex-page header { flex-direction: row; }
+.codex-page h2 { white-space: nowrap; }
+
+/* add button */
+section .add-item-button {
+  font-size: 1em;
+  width: 21px;
+  max-width: 21px;
+  height: auto;
+  margin: auto;
+  margin-right: .8em;
+}
+
+/* Partie pour mobile*/
+@media only screen and (max-width: 480px) {
+  .old-pages .codex-page { flex-direction: column; }
+}

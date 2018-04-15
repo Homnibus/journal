@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Projet(models.Model):
     """ Objet de base du journal qui relie l'ensemble des pages d'un journal """
-    titre = models.CharField(max_length=80)
+    titre = models.CharField(max_length=80, blank=False)
     createur = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
