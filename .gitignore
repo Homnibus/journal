@@ -1,2 +1,3 @@
+*.pyc
 *.log
 passenger_wsgi.py
