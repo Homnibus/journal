@@ -1,12 +1,3 @@
 *.pyc
-*.pyc
-*.pyc
-projets/__pycache__/forms.cpython-36.pyc
-logs/django_request.log
-logs/mylog.log
-*.pyc
-*.pyc
-projets/__pycache__/urls.cpython-36.pyc
+*.log
 passenger_wsgi.py
-*.pyc
-*.pyc
