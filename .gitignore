@@ -8,3 +8,5 @@ logs/mylog.log
 *.pyc
 projets/__pycache__/urls.cpython-36.pyc
 passenger_wsgi.py
+*.pyc
+*.pyc
