@@ -15,46 +15,107 @@ from ..commun.codex import recuperer_codex, Page_Journal
 
 
 def get_today_page(codex, aujourdhui):
-    """Ajout de la page de journal du jour"""
-    #Initialisation de la page du jours et ajout de la date
+    """Retourne la Page d'aujourd'hui"""
+    #Initialisation de la Page et ajout de la date
     page_du_jour = Page_Journal(date=aujourdhui);
-    #Récupération l'entre de journal du jour(on genere une entre vide si elle n'existe pas)
-    entre_du_jour = Journal_Entree.objects.filter(
+    
+    #Récupération de la Note du jour (on genere une entre vide si elle n'existe pas)
+    note_du_jour = Journal_Entree.objects.filter(
         projet=codex,
         date_creation__range=[
             datetime.combine(aujourdhui, time.min),
             datetime.combine(aujourdhui, time.max)
         ]
     ).first()                    
-    if entre_du_jour is None:
-        entre_du_jour = Journal_Entree(projet=codex)
-    #Ajout de l'entre de journal du jour sous la forme de formulaire
-    page_du_jour.journal_entry = Journal_EntreeForm(instance=entre_du_jour)
-    #Ajout de la tache vide pour création
+    if note_du_jour is None:
+        note_du_jour = Journal_Entree(projet=codex)
+    
+    #Ajout de la Note sous la forme de formulaire
+    page_du_jour.journal_entry = Journal_EntreeForm(instance=note_du_jour)
+    #Ajout de la Tache vide pour la création de nouvelle Taches
     page_du_jour.new_task = TODO_EntreeForm();
-    #Récupération des taches du jour
-    taches_du_jour = list(TODO_Entree.objects.filter(
+    #Récupération des Taches du jour
+    liste_taches_du_jour = list(TODO_Entree.objects.filter(
         projet=codex,
         date_creation__range=[
             datetime.combine(aujourdhui, time.min),
             datetime.combine(aujourdhui, time.max)
         ]
     ).order_by('date_creation'))
-    #Ajout des taches à la page courante sous la forme de formulaire
-    for tache in taches_du_jour:
+    #Ajout des Taches à la Page sous la forme de formulaire
+    for tache in liste_taches_du_jour:
         page_du_jour.task_list.append(TODO_EntreeForm(instance=tache))
-    #On retourne la page ainsi formé
+    
+    #On retourne la Page ainsi formé
     return page_du_jour
+
+    
+def get_pages_before_today(codex,aujourdhui):
+    """Extraction des Pages plus veilles qu'aujourd'hui sous forme de liste"""
+    #Initialsiation de la liste des Pages
+    liste_old_pages = []
+    
+    #Récupération de toutes les Notes du codex qui datent d'avant aujourd'hui
+    liste_old_notes = list(Journal_Entree.objects.filter(
+        projet=codex,
+        date_creation__lt=datetime.combine(aujourdhui, time.min)
+    ).order_by('date_creation'))
+    notes_conteur = 0
+    
+    #Récupération de toutes les Taches du Codex qui datent d'avant aujourd'hui
+    liste_old_taches = TODO_Entree.objects.filter(
+        projet=codex,
+        date_creation__lt=datetime.combine(aujourdhui, time.min)
+    ).order_by('date_creation')
+    taches_conteur = 0
+    
+    #Appareillage des Notes et des Taches en fonction de leur date de création
+    while taches_conteur < len(liste_old_taches) or notes_conteur < len(liste_old_notes):
+    
+        #Calcul de la date min entre Note et Tache
+        if taches_conteur >= len(liste_old_taches):
+            current_date = liste_old_notes[notes_conteur].date_creation.date()
+        elif notes_conteur >= len(liste_old_notes):
+            current_date = liste_old_taches[taches_conteur].date_creation.date()
+        else:
+            current_date = min(
+                liste_old_notes[notes_conteur].date_creation,
+                liste_old_taches[taches_conteur].date_creation
+            ).date()
+        
+        #Initialisation d'une Page avec la date calculé
+        current_page = Page_Journal(date=current_date)
+        page_est_seule = True
+        
+        #Ajout de la Note à la Page
+        while notes_conteur < len(liste_old_notes) and liste_old_notes[notes_conteur].date_creation.date() == current_date:
+            #TODO :Ajouter la gestion des erreurs lorsque l'on a deux entree de journal pour une même date
+            if page_est_seule == False:
+                print("ERREUR")
+            current_page.journal_entry = Journal_EntreeForm(instance=liste_old_notes[notes_conteur])
+            notes_conteur += 1
+            page_est_seule = False                     
+        
+        #Ajout des Taches à la Page
+        while taches_conteur < len(liste_old_taches) and liste_old_taches[taches_conteur].date_creation.date() == current_date:
+            current_page.task_list.append(TODO_EntreeForm(instance=liste_old_taches[taches_conteur]))
+            taches_conteur += 1                                    
+        
+        #Ajout de la page à la liste de page final
+        liste_old_pages.append(current_page)
+    
+    #On retourne la liste de Pages ainsi formé
+    return liste_old_pages
 
     
 @login_required
 def afficher_codex(request,slug):
-    """Afficher les entrees d'un codex."""
+    """Affiche les Pages d'un Codex."""
     http_status = Http_status()
     return_data = {}
 
     try:
-        #Récuperation du codex a affichier
+        #Récuperation des infos de base du Codex a affichier
         codex = recuperer_codex(slug,request.user,http_status)
         return_data.update({'codex':codex})
 
@@ -62,58 +123,18 @@ def afficher_codex(request,slug):
             try:
                 #On cherche la date du jour en BDD car les prochaines comparaisons sont faite avec des dates générés par la BDD
                 aujourdhui = get_current_timestamp()
-                ##Recupération de la page de journal du jour
-                page_du_jour = get_today_page(codex, aujourdhui)
-                #Ajout de la page de jour au données que l'on retourne
-                return_data.update({'today_entry':page_du_jour})            
-                ##Ajout des anciennes pages de journal                
-                #Initialsiation de la liste des pages
-                liste_page_journal = []
-                #Récupération des entrees                
-                dernieres_journal_entree = list(Journal_Entree.objects.filter(
-                    projet=codex,
-                    date_creation__lt=datetime.combine(aujourdhui, time.min)
-                ).order_by('date_creation'))
-                journal_conteur = 0
-                #Récupération des taches
-                dernieres_todo_entree = TODO_Entree.objects.filter(
-                    projet=codex,
-                    date_creation__lt=datetime.combine(aujourdhui, time.min)
-                ).order_by('date_creation')
-                todo_conteur = 0                
-                #Generation de la liste des "pages" du journal
-                while todo_conteur < len(dernieres_todo_entree) or journal_conteur < len(dernieres_journal_entree):
-                    #Calcul de la date  min entre journal et tache
-                    if todo_conteur >= len(dernieres_todo_entree):
-                        current_date = dernieres_journal_entree[journal_conteur].date_creation.date()
-                    elif journal_conteur >= len(dernieres_journal_entree):
-                        current_date = dernieres_todo_entree[todo_conteur].date_creation.date()
-                    else:
-                        current_date = min(
-                            dernieres_journal_entree[journal_conteur].date_creation,
-                            dernieres_todo_entree[todo_conteur].date_creation
-                        ).date()                        
-                    #Initialisation de la page courante avec la date calculé
-                    current_page_journal = Page_Journal(date=current_date)
-                    journal_est_seul = True                    
-                    #Ajout de l'entree de journal à la page courante
-                    while journal_conteur < len(dernieres_journal_entree) and dernieres_journal_entree[journal_conteur].date_creation.date() == current_date:
-                        #TODO :Ajouter la gestion des erreurs lorsque l'on a deux entree de journal pour une même date
-                        if journal_est_seul == False:
-                            print("ERREUR")
-                        current_page_journal.journal_entry = Journal_EntreeForm(instance=dernieres_journal_entree[journal_conteur])
-                        journal_conteur += 1
-                        journal_est_seul = False                     
-                    #Ajout des taches  à la page courante    
-                    while todo_conteur < len(dernieres_todo_entree) and dernieres_todo_entree[todo_conteur].date_creation.date() == current_date:
-                        current_page_journal.task_list.append(TODO_EntreeForm(instance=dernieres_todo_entree[todo_conteur]))
-                        todo_conteur += 1                                    
-                    #Ajout de la page à la liste de page final
-                    liste_page_journal.append(current_page_journal)
-                #Ajout au données qui sont retourné
-                return_data.update({'older_entry':liste_page_journal})
                 
-                ##Envoie de la réponse http
+                #Recupération de la Page d'aujourd'hui
+                page_du_jour = get_today_page(codex, aujourdhui)
+                #Ajout de la Page du jour aux données que l'on retourne
+                return_data.update({'today_entry':page_du_jour})            
+                
+                #Ajout des anciennes Pages
+                liste_old_pages = get_pages_before_today(codex,aujourdhui)
+                #Ajout au données qui sont retourné
+                return_data.update({'older_entry':liste_old_pages})
+                
+                #Envoie de la réponse http
                 return render(
                     request,
                     'projets/codex.html',

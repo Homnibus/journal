@@ -11,8 +11,8 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist, SuspiciousOperation
 from django.core.paginator import Paginator
 
-from ..models import Projet, Main_Courante, Contact_Liste, Journal_Entree, TODO_Entree, get_current_timestamp
-from ..forms import (ProjetForm, Main_CouranteForm, Contact_ListeForm, Journal_EntreeForm, TODO_EntreeForm)
+from ..models import Projet, Main_Courante, Journal_Entree, TODO_Entree, get_current_timestamp
+from ..forms import (ProjetForm, Main_CouranteForm, Journal_EntreeForm, TODO_EntreeForm)
 from ..commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
 from ..commun.codex import recuperer_codex
 
@@ -73,62 +73,7 @@ def maj_main_courante(request,slug):
         return afficher_erreur(request,ex,http_status)
     return HttpResponseForbidden()
 
-    
-@login_required
-def afficher_contact_liste(request,slug):
-    """Affiche la liste de contact d'un codex"""
-    http_status = Http_status()
-    return_data = {}
-    
-    try:
-        #Récuperation du codex a affichier et des droits
-        codex = recuperer_codex(slug,request.user,http_status)
 
-        if request.method == 'GET':
-            #TODO : Ajouter la gestion d'erreur lors de plusieurs main courantes
-            contact_liste = Contact_Liste.objects.filter(projet=codex).first()
-            form = Contact_ListeForm(instance=contact_liste)    
-            return render(request, 'projets/codex_contacts.html', {'codex':codex,'form':form,'contact_liste':contact_liste})
-        else:
-            raise_SuspiciousOperation(http_status)        
-    except Exception as ex:
-        #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
-    return HttpResponseForbidden()
-
-    
-@login_required
-def maj_contact_liste(request,slug):
-    """Affiche la liste de contact d'un codex"""
-    http_status = Http_status()
-    return_data = {}
-    
-    try:
-        #Récuperation du codex a affichier et des droits
-        codex = recuperer_codex(slug,request.user,http_status)
-
-        if request.method == 'POST' and request.is_ajax():
-            form = Contact_ListeForm(request.POST)
-            if form.is_valid():
-                #TODO : Ajouter la gestion d'erreur lors d'un formulaire non valide
-                #       (a voir dans quel ca ça arrive)
-                contact_liste, created = Contact_Liste.objects.update_or_create(
-                    projet=codex,
-                    defaults={'projet':codex,'texte':form.save(commit=False).texte}
-                )
-                return_data.update({
-                    'success': True,
-                    'date_update': contact_liste.date_update.strftime('%Y-%m-%d %H:%M')
-                })
-                return JsonResponse(return_data)
-        else:
-            raise_SuspiciousOperation(http_status)        
-    except Exception as ex:
-        #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
-    return HttpResponseForbidden()
-    
-    
 @login_required
 def afficher_derniers_codex(request):
     """ Afficher les derniers codexs du user."""
@@ -197,3 +142,60 @@ def afficher_taches(request,slug,page_number=1):
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
         return afficher_erreur(request,ex,http_status)
     return HttpResponseForbidden()
+
+    
+        
+@login_required
+def afficher_taches_toutes(request,page_number=1,sort_by=None,sort_way=None):
+    """Affiche la liste des taches de tout les codex"""
+    http_status = Http_status()
+    return_data = {}
+    
+    try:
+        if request.method == 'GET':
+            #Récupération de la liste des taches
+            tache_model_liste = TODO_Entree.objects.select_related()
+            #Trie de la liste
+            sort_arg = []
+            if sort_by in ['realisee','texte','projet__titre','date_realisee','date_creation']:
+                if sort_way == 'desc':
+                    sort_arg.append('-' + sort_by)
+                else :    
+                    sort_arg.append(sort_by)
+            sort_arg.extend(['realisee','date_creation'])
+            tache_model_liste = tache_model_liste.order_by(*sort_arg)
+            #On passe les paramètres de trie à la vue
+            return_data.update({'sort_by':sort_by,'sort_way':sort_way})
+            #Creation d'une liste de formulaire
+            tache_liste = []
+            for model_courant in tache_model_liste:
+                tache = Tache(model=model_courant)
+                tache.form = TODO_EntreeForm(instance=model_courant)
+                tache_liste.append(tache)
+            #Creation de l'objet paginator
+            paginator = Paginator(tache_liste,10)
+            #Creation de la page
+            try:
+                page = paginator.page(page_number)
+            #Si on est sur une page qui n'existe pas ou qui est vide, on retourne la dernière page par defaut
+            except EmptyPage:
+                page = paginator.page(paginator.num_pages)
+            #Ajout de la page au resultat
+            return_data.update({'task_list':page})
+            #Creation du paginator_range pour pouvoir naviguer plus facilement 
+            paginator_range = range(1,paginator.num_pages+1)
+            #Ajout du range au resultat
+            return_data.update({'paginator_range':paginator_range})
+            return render(request, 'projets/codex_taches_toutes.html', return_data)
+        else:
+            raise_SuspiciousOperation(http_status)        
+    except Exception as ex:
+        #Retourne l'erreur sous la forme d'une page ou d'un dico json
+        return afficher_erreur(request,ex,http_status)
+    return HttpResponseForbidden()
+
+    
+    
+    
+    
+    

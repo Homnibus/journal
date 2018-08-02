@@ -71,38 +71,7 @@ class Main_Courante(models.Model):
     def __str__(self):
         return ('Main courante pour ' + str(self.projet.titre))
 
-        
-class Contact_Liste(models.Model):
-    """ Objet qui permet d'inscrire les contacts d'un projet """
-    projet = models.OneToOneField(
-        Projet,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-    texte = models.TextField(blank=True)
-    date_creation = models.DateTimeField(
-        editable=False,
-        verbose_name='Date de creation'
-    )
-    date_update = models.DateTimeField(
-        verbose_name='Date de mise a jour'
-    )
-    
-    def save(self, *args, **kwargs):
-        """Surcharge de la fonction save pour generer automatiquement la date de realisation"""
-        # Dans le cas ou l'objet n'exite pas on ajoute manuellement la date de creation
-        if self.date_creation is None:
-            self.date_creation = get_current_timestamp()
-        #Dans tout les cas on met a jour la date de maj
-        self.date_update = get_current_timestamp()
-        #Et on met a jours la date de maj du projet
-        self.projet.save();
-        super(Contact_Liste, self).save(*args, **kwargs)
-    
-    def __str__(self):
-        return ('Contact pour ' + str(self.projet.titre))
 
-        
 class Journal_Entree(models.Model):
     """ Objet qui permet d'inscrire les realisation du jour """
     projet =  models.ForeignKey(Projet, on_delete=models.CASCADE)

@@ -6,7 +6,7 @@ function maj_todo(){
     if(texte != ''){
         $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
         $.ajax({
-            url: '/journal/projets/' + $('#slug').val() + 'maj-todo',
+            url: '/projets/' + $('#slug').val() + '/maj-todo',
             data: {
                 'todo_id': id,
                 'texte': texte,

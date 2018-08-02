@@ -7,7 +7,7 @@ function saveTextarea(){
 
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
     $.ajax({
-        url: '/journal/projets/' + $('#slug').val() + 'maj-journal',
+        url: '/projets/' + $('#slug').val() + 'maj-journal',
         data: {
             'id': id,
             'texte': texte,
@@ -47,14 +47,14 @@ $(".journal_typewatch").typeWatch( {
 });
 
 function maj_todo(){
-    var parent_div = $(this).parent(".task");
+    var parent_div = $(this).closest(".task");
     var realisee = parent_div.find(".todo_entree_checkbox").prop('checked');
     var texte = parent_div.find(".todo_entree_texte").val();
     var id = parent_div.find(".todo_entree_id").attr("value");
     if(texte != ''){
         $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
         $.ajax({
-            url: '/journal/projets/' + $('#slug').val() + 'maj-todo',
+            url: '/projets/' + $('#slug').val() + 'maj-todo',
             data: {
                 'todo_id': id,
                 'texte': texte,
@@ -77,14 +77,17 @@ function maj_todo(){
                         var new_textearea = $('.todo_entree_texte',out_form_str).clone().wrap('<div>').parent().html()
                         var new_id = $('.todo_entree_id',out_form_str).clone().wrap('<div>').parent().html()
                         parent_div.prepend(
-                            '<article class="task">' +
-                            new_checkbox + 
-                            new_textearea +
+                            '<article class="task">' +                            
                             new_id +
+                            '<div class="disp-todo_entree_checkbox">' +
+                            new_checkbox + 
+                            '</div>' +
+                            '<div class="disp-todo_entree_texte">' +
+                            new_textearea +
+                            '</div>' +
                             '</article>'
                         );
                         var jqry_textearea = $('.todo_entree_id[value = ' + data.id +']').closest('article').find('.todo_entree_texte');
-                        autosize(jqry_textearea);
                         $(jqry_textearea).typeWatch( {
                             callback: maj_todo,
                             wait: 500,

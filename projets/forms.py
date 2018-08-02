@@ -1,7 +1,7 @@
 from django.forms import (Form, ModelForm, Textarea, BaseModelFormSet, CharField, PasswordInput, HiddenInput
     , CheckboxInput, IntegerField, CharField, BooleanField, Widget)
                           
-from .models import Projet, Main_Courante, Contact_Liste, Journal_Entree, TODO_Entree
+from .models import Projet, Main_Courante, Journal_Entree, TODO_Entree
 
 
 class ProjetForm(ModelForm):
@@ -21,16 +21,7 @@ class Main_CouranteForm(ModelForm):
             'texte': Textarea(attrs={'rows': 3,'style':'resize:none;'}),
         }
 
-        
-class Contact_ListeForm(ModelForm):
-    class Meta:
-        model = Contact_Liste
-        fields=('texte',)
-        widgets = {
-            'texte': Textarea(attrs={'rows': 3,'style':'resize:none;'}),
-        }
 
-        
 class Journal_EntreeForm(ModelForm):
     
     journal_id = IntegerField(widget=HiddenInput(attrs={'class':'journal_entree_id'}), required=False)
@@ -39,7 +30,7 @@ class Journal_EntreeForm(ModelForm):
         model = Journal_Entree
         fields = ('texte',)
         widgets = {
-            'texte': Textarea(attrs={'rows': 3,'style':'resize:none;','class':'journal_entree_texte journal_typewatch'})
+            'texte': Textarea(attrs={'rows': 3,'class':'journal_entree_texte journal_typewatch'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -66,7 +57,7 @@ class TODO_EntreeForm(ModelForm):
         model = TODO_Entree
         fields = ('texte','realisee')
         widgets = {
-            'texte': Textarea(attrs={'rows': 1,'style':'resize:none;','class':'todo_entree_texte'}),
+            'texte': Textarea(attrs={'rows': 1,'class':'todo_entree_texte'}),
             'realisee': CheckboxInput(attrs={'class':'todo_entree_checkbox'},)
         }
     

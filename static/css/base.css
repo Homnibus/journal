@@ -205,14 +205,6 @@ body > footer {
   padding-bottom: .4em;
 }
 
-/* section */
-body > section > * {
-  margin-right: .4em;
-  margin-left: .4em;
-  margin-top: .4em;
-}
-body > section > *:last-child { margin-bottom: .4em; }
-
 /* header */
 body > header { margin-top: .8em; }
 header { margin-bottom: .4em; }
@@ -223,8 +215,9 @@ h4 {
   border-bottom: 1px solid #2F4752; 
 }
 
-/* textarea */
-textarea {
+/* textarea et input*/
+textarea, 
+input {
   padding: 0.5em;
   box-shadow: 0 .1em .2em 0 rgba(0,0,0,.16),0 .1em .5em 0 rgba(0,0,0,.12);
   border: none;

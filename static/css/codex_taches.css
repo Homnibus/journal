@@ -10,17 +10,52 @@ table {
   width: 100%;
 }
 
-th {
+table a.sort_down {
+    background-color: #4D7385;
+    color: white;
+    border-bottom: 2px solid #79B5D1;
+}
+
+table a.sort_up {
+    background-color: #4D7385;
+    color: white;
+    border-top: 2px solid #79B5D1;
+}
+
+table a {
     background-color: #4D7385;
     color: white;
 }
 
+table a:link {
+  color: white;
+  text-decoration: none;
+}
+table a:visited {
+  color: white;
+  text-decoration: none;
+}
+table a:hover {
+  color: #2F4752;
+  text-decoration: none;
+}
+table a:active,nav a:focus{
+  color: white;
+  text-decoration: none;
+}
+
+
+th {
+  background-color: #4D7385;
+  color: white;
+}
+
 th, td {
-    text-align: center;
+  text-align: center;
 }
 
 tr {
-   background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 tr:nth-child(even) {

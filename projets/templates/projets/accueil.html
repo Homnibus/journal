@@ -11,7 +11,12 @@
 
 {% block header %}
 <h1>Codex les plus recents</h1>
-<h4>Trouvez tout vos codex dans l'onget "Codex"</h4>
+<h4>
+  <div class="titre">Recherche :</div>
+  <div class="disp-codex-search">
+    <input class="codex-search" maxlength="256" placeholder="Titre du codex" title="Rechercher un codex" autocomplete="off" type="search">
+  </div>
+</h4>
 {% endblock %}
 
 {% block content %}
@@ -36,4 +41,6 @@
 
 {% block script %}
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/accueil.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,80 @@
+{% extends "projets/accueil_navigation.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/codex_taches.css' %}" />
+{% endblock %}
+
+{% block title %}Tâches{% endblock %}
+
+{% block nav-taches %}current{% endblock %}
+
+{% block header %}
+<h1> Toutes les Taches </h1>
+{% csrf_token %}
+{% endblock %}
+
+{% block content %}
+<section class="codex-tasks">
+  <div>
+    <table> 
+      <tr>
+        <th>
+          {% include "projets/table_titre.html" with titre='Réalisée' sort_by_value='realisee' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+        <th>
+          {% include "projets/table_titre.html" with titre='Tache' sort_by_value='texte' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+          <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+        </th>
+        <th>
+          {% include "projets/table_titre.html" with titre='Codex' sort_by_value='projet__titre' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+        <th>
+          {% include "projets/table_titre.html" with titre='Date réalisation' sort_by_value='date_realisee' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+        <th>
+          {% include "projets/table_titre.html" with titre='Date creation' sort_by_value='date_creation' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+      </tr>
+      {% for task in task_list %}
+        <tr class="task">
+          <td>{{ task.form.todo_id }}{{ task.form.realisee }}</td>
+          <td>{{ task.form.texte }}</td>
+          <td>{{ task.model.projet.titre }}</td>
+          <td>
+            {% if task.model.date_realisee %}
+            {{ task.model.date_realisee }}
+            {% else %}
+            - 
+            {% endif %}
+          </td>
+          <td>{{ task.model.date_creation }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="pagination">
+  {% if task_list.has_previous %}
+    <a href="{% url 'afficher_taches_toutes' page_number=task_list.previous_page_number %}" class="next">Précédent</a> -
+  {% endif %}
+  {% for page in paginator_range %}
+    {% if page == task_list.number %}
+      <a href="{% url 'afficher_taches_toutes' page_number=page %}" class="current">{{page}}</a> -
+    {% else %}
+      <a href="{% url 'afficher_taches_toutes' page_number=page %}">{{page}}</a> -
+    {% endif %}
+  {% endfor %}
+  {% if task_list.has_next %}
+  <a href="{% url 'afficher_taches_toutes' page_number=task_list.next_page_number %}" class="next">Suivant</a>
+  {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/autosize.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/basic.js' %}"></script>
+    <script src="{% static 'js/codex_taches.js' %}"></script>
+{% endblock %}

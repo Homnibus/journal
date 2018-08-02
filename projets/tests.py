@@ -1,4 +1,5 @@
 from time import sleep
+from datetime import date
 
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
@@ -6,7 +7,8 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
-from .models import Projet, Main_Courante, Contact_Liste, Journal_Entree, TODO_Entree
+from .models import Projet, Main_Courante, Journal_Entree, TODO_Entree, get_current_timestamp
+from .views.codex import get_today_page
 
 # Create your tests here.
 
@@ -86,40 +88,7 @@ class ModelMain_CouranteTest(TestCase):
     def test_maj(self):
         """ Test d'une mise à jour """
 
-class ModelContact_ListeTest(TestCase):
-
-    def setUp(self):
-        # Every test needs access to the request factory.
-        self.factory = RequestFactory()
-        self.user = User.objects.create_user(username='zamour', email='zamour@zamour.com', password='top_secret')
-        self.codex = Projet.objects.create(titre='codex 1',createur=self.user,description='description 1')
-        self.codex.save()
-        self.contact1 = Contact_Liste.objects.create(projet=self.codex,texte='texte 1')
-        self.contact1.save()
-         
-    def test_creation(self):
-        """ Test la creation d'un model Contact_Liste """
-        contact = self.contact1
         
-        self.assertIsNotNone(contact)
-        self.assertIsNotNone(contact.date_creation)
-        self.assertIsNotNone(contact.date_update)
-        self.assertGreaterEqual(contact.date_update, contact.date_creation)
-        self.assertIs(contact.projet,self.codex)
-        self.assertEqual(contact.texte,'texte 1')
-        with self.assertRaises(ObjectDoesNotExist):
-            Contact_Liste.objects.create(projet=None)
-        
-        
-    def test_creation_bis(self):
-        """ Test la creation d'un deuxième model Contact_Liste pour un projet donné """
-        
-        with self.assertRaises(IntegrityError):
-            Contact_Liste.objects.create(projet=self.codex)
-
-    def test_maj(self):
-        """ Test d'une mise à jour """
-
 class ModelJournal_EntreeTest(TestCase):
 
     def setUp(self):
@@ -128,25 +97,7 @@ class ModelJournal_EntreeTest(TestCase):
         self.user = User.objects.create_user(username='zamour', email='zamour@zamour.com', password='top_secret')
         self.codex = Projet.objects.create(titre='codex 1',createur=self.user,description='description 1')
         self.codex.save()
-        self.contact1 = Journal_Entree.objects.create(projet=self.codex,texte='texte 1')
-        self.contact1.save()
-         
-    def test_creation(self):
-        """ Test la creation d'un model Journal_Entree """
-        contact = self.contact1
-        
-        self.assertIsNotNone(contact)
-        self.assertIsNotNone(contact.date_creation)
-        self.assertIsNotNone(contact.date_update)
-        self.assertGreaterEqual(contact.date_update, contact.date_creation)
-        self.assertIs(contact.projet,self.codex)
-        self.assertEqual(contact.texte,'texte 1')
-        with self.assertRaises(ObjectDoesNotExist):
-            Journal_Entree.objects.create(projet=None)
-        
-    def test_maj(self):
-        """ Test d'une mise à jour """
-        
+                 
 class ModelTODO_EntreeTest(TestCase):
 
     def setUp(self):
@@ -155,25 +106,61 @@ class ModelTODO_EntreeTest(TestCase):
         self.user = User.objects.create_user(username='zamour', email='zamour@zamour.com', password='top_secret')
         self.codex = Projet.objects.create(titre='codex 1',createur=self.user,description='description 1')
         self.codex.save()
-        self.contact1 = TODO_Entree.objects.create(projet=self.codex,texte='texte 1')
-        self.contact1.save()
          
     def test_creation(self):
         """ Test la creation d'un model TODO_Entree """
-        contact = self.contact1
+
+# ---
+# Test de la classe codex
+# ---
+
+class codexTest(TestCase):
+    
+    def setUp(self):
+        # Every test needs access to the request factory.
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(username='zamour', email='zamour@zamour.com', password='top_secret')        
+        self.client.login(username='zamour', password='top_secret')
+        self.codex1 = Projet.objects.create(titre='codex 1',createur=self.user,description='description 1')
+        self.codex1.save()
+        self.codex2 = Projet.objects.create(titre='codex 2',createur=self.user,description='description 2')
+        self.codex2.save()
+
+    def test_get_today_page_existe(self):
+        # Test de récupération d'une Page vierge si la page du jour existe
+        nouvelle_page = Journal_Entree.objects.create(projet=self.projet1,texte='texte 1')
+        nouvelle_page.save()
+        aujourdhui = get_current_timestamp()
+        page_du_jour = get_today_page(self.codex1, aujourdhui)
         
-        self.assertIsNotNone(contact)
-        self.assertIsNotNone(contact.date_creation)
-        self.assertIsNotNone(contact.date_update)
-        self.assertGreaterEqual(contact.date_update, contact.date_creation)
-        self.assertIs(contact.projet,self.codex)
-        self.assertEqual(contact.texte,'texte 1')
-        with self.assertRaises(ObjectDoesNotExist):
-            TODO_Entree.objects.create(projet=None)
+        self.assertEqual(page_du_jour,nouvelle_page)
+        #Ajouter le test sur les taches
         
-    def test_maj(self):
-        """ Test d'une mise à jour """
+    def test_get_today_page_not_existe(self):
+        # Test de récupération d'une Page vierge si la page du jour n'existe pas
+        aujourdhui = date(9999, 12, 30)
+        page_du_jour = get_today_page(self.codex2, aujourdhui)
+
+        self.assertEqual(page_du_jour.date,aujourdhui)
+        self.assertIsNone(page_du_jour.texte)
+    
+    def test_get_existe(self):
+        # Test d'affichage d'un codex qui existe
+        reponse = self.client.get(reverse('afficher_codex',kwargs={'slug': 'codex-1'}))
+        self.assertEqual(reponse.status_code, 200)
+
+    def test_get_not_existe(self):
+        # Test d'affichage d'un codex qui n'existe pas
+        reponse = self.client.get(reverse('afficher_codex',kwargs={'slug': 'codex 1'}))
+        self.assertEqual(reponse.status_code, 404)
         
+    def test_securite(self):
+        # Test de récupération d'un codex sans être connecté
+        self.client.logout()
+        
+        reponse = self.client.get(reverse('afficher_codex',kwargs={'slug': 'codex-1'}))
+        
+        self.assertRedirects(reponse, reverse('connexion')+"?next="+reverse('afficher_codex',kwargs={'slug': 'codex-1'}), status_code=302, target_status_code=200)
         
 # ---
 # Test des vues
@@ -233,6 +220,16 @@ class Viewafficher_codexTest(TestCase):
         self.client.login(username='zamour', password='top_secret')
         self.codex1 = Projet.objects.create(titre='codex 1',createur=self.user,description='description 1')
         self.codex1.save()
+    
+    def test_get_today_page_not_existe(self):
+        # Test de récupération d'une Page vierge si la page du jour n'existe pas
+        today = date(9999, 12, 30)
+        page_du_jour = get_today_page(self.codex1, today)
+        self.assertEqual(page_du_jour.date,today)
+        print(page_du_jour.journal_entry)
+        #self.assertIsNone(page_du_jour.journal_entry.texte)
+    
+    
     
     def test_get_existe(self):
         # Test d'affichage d'un codex qui existe

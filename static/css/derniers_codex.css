@@ -1,5 +1,20 @@
-/* codex */
+/* search box */
+body > header > h4 {
+  display: flex;
+  align-items: center;
+  padding-bottom: .6em;
+}
 
+body > header > h4 .titre{
+ padding-right: 0.5em;
+ white-space: nowrap;
+}
+
+.disp-codex-search{
+  width: 16em;
+}
+
+/* codex */
 .derniers-codex {
   flex-direction: row;
   flex-wrap: wrap;
