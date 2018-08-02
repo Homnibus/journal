@@ -1,26 +1,20 @@
-from django.conf.urls import url
-from django.contrib.auth import views as auth_views
-
+from django.urls import path
 from . import views
 
-
 urlpatterns = [
-url(r'^connexion$', auth_views.login, {'template_name': 'projets/connexion.html'}, name='connexion'),
-url(r'^deconnexion$', auth_views.logout, {'template_name': 'projets/deconnexion.html'}, name='deconnexion'),
-url(r'^accueil$', views.afficher_derniers_codex, name='accueil'),	
-url(r'^derniers-codex$', views.afficher_derniers_codex, name='afficher_derniers_codex'),	
-url(r'^nouveau-codex$', views.creer_codex, name='nouveau_codex'),
-url(r'^taches$', views.afficher_taches_toutes, name='afficher_taches_toutes'),
-url(r'^taches/(?P<page_number>\d+)$', views.afficher_taches_toutes, name='afficher_taches_toutes'),
-url(r'^taches/(?P<page_number>\d+)/(?P<sort_by>\w+)$', views.afficher_taches_toutes, name='afficher_taches_toutes'),
-url(r'^taches/(?P<page_number>\d+)/(?P<sort_by>\w+)/(?P<sort_way>\w+)$', views.afficher_taches_toutes, name='afficher_taches_toutes'),
-url(r'^projets/(?P<slug>.+)/codex$', views.afficher_codex, name='afficher_codex'),
-url(r'^projets/(?P<slug>.+)/maj-journal$', views.maj_journal, name='maj_journal'),
-url(r'^projets/(?P<slug>.+)/maj-todo$', views.maj_todo, name='maj_todo'),
-url(r'^projets/(?P<slug>.+)/main-courante$', views.afficher_main_courante, name='afficher_main_courante'),
-url(r'^projets/(?P<slug>.+)/maj-main-courante$', views.maj_main_courante, name='maj_main_courante'),
-url(r'^projets/(?P<slug>.+)/taches$', views.afficher_taches, name='afficher_taches'),
-url(r'^projets/(?P<slug>.+)/taches/(?P<page_number>\d+)$', views.afficher_taches, name='afficher_taches'),
+path('derniers-codex/', views.afficher_derniers_codex, name='afficher_derniers_codex'),	
+path('nouveau-codex/', views.creer_codex, name='nouveau_codex'),
+path('taches/', views.afficher_taches_toutes, name='afficher_taches_toutes'),
+path('taches/<int:page_number>/', views.afficher_taches_toutes, name='afficher_taches_toutes'),
+path('taches/<int:page_number>/<str:sort_by>/', views.afficher_taches_toutes, name='afficher_taches_toutes'),
+path('taches/<int:page_number>/<str:sort_by>/<str:sort_way>/', views.afficher_taches_toutes, name='afficher_taches_toutes'),
+path('<slug:slug>/codex', views.afficher_codex, name='afficher_codex'),
+path('<slug:slug>/maj-journal', views.maj_journal, name='maj_journal'),
+path('<slug:slug>/maj-todo', views.maj_todo, name='maj_todo'),
+path('<slug:slug>/main-courante', views.afficher_main_courante, name='afficher_main_courante'),
+path('<slug:slug>/maj-main-courante', views.maj_main_courante, name='maj_main_courante'),
+path('<slug:slug>/taches', views.afficher_taches, name='afficher_taches'),
+path('<slug:slug>/taches/<int:page_number>/', views.afficher_taches, name='afficher_taches'),
 ]
 
 
