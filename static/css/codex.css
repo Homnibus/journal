@@ -62,7 +62,9 @@
 
 /* Partie pour mobile*/
 @media only screen and (max-width: 480px) {
-  .old-pages .codex-page { flex-direction: column; }
-  .old-pages .codex-page .page-entry { margin-right: 0em; }
-  .old-pages .codex-page .page-tasks { margin-top: .4em; }
+  .old-pages .codex-page:not(.disp-column) { flex-direction: column; }
+  .old-pages .codex-page:not(.disp-column) .page-entry {
+    margin-right: 0em;
+    margin-bottom: 0.4em;
+  }
 }
