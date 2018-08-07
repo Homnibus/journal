@@ -4,15 +4,24 @@
 /* old-pages */
 /*.old-pages > * { margin: 0; }*/
 .old-pages .codex-page > section { flex:1; }
-.old-pages .codex-page { flex-direction: row; }
+.old-pages .codex-page:not(.disp-column) { flex-direction: row; }
 .old-pages .codex-page { margin-top: 1.4em; }
-.old-pages .codex-page .page-entry { margin-right: .8em; }
+.old-pages .codex-page:not(.disp-column) .page-entry { margin-right: .8em; }
 
 /* articles */
-article { display:flex; }
 .task { flex-direction: row; }
 .task-list .task { margin-top: .8em; }
 .old-pages .task:first-child { margin: 0; }
+
+/* edit pen */
+.edit-pen {
+  font-size: 1.5em;
+  line-height: 0.66;
+  margin-left: .3em;
+}
+.edit-pen:hover {
+ color: #79B5D1;
+}
 
 
 /* display div */

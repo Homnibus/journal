@@ -10,10 +10,11 @@ function jq_contains_words(search_words,text_to_search)
         return false;
     }
     return_value = true;
+    search_words_list = search_words.split(" ");
     //Recherche de la liste des mots dans le texte
-    for (word_id in search_words)
+    for (word_id in search_words_list)
     {
-        return_value = return_value && text_to_search.toLowerCase().indexOf(search_words[word_id].toLowerCase()) !== -1;
+        return_value = return_value && text_to_search.toLowerCase().indexOf(search_words_list[word_id].toLowerCase()) !== -1;
     }
     //On retourne la valeur
     return return_value;

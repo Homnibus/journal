@@ -1,7 +1,5 @@
-$(".old-pages .page-entry:not(:has(.journal_entree_id))").closest(".codex-page").css("flex-direction", "column");
-
 function saveTextarea(){
-    var parent_div = $(this).closest(".page-entry")
+    var parent_div = $(this).closest(".page-entry");
     var texte = parent_div.find(".journal_entree_texte").val();
     var id = parent_div.find(".journal_entree_id").attr("value");
 
@@ -130,3 +128,41 @@ $(".task:not(.new-task) .todo_entree_texte").typeWatch( {
 });
 
 autosize($('.today-page .journal_entree_texte'));
+
+function enable_edit_page()
+{
+    var parent_div = $(this).closest('.page-entry').find('.journal_entree_texte');
+    var div_content = parent_div.text();
+    var editableText = $('<textarea class="journal_entree_texte journal_typewatch" />');
+    editableText.val(div_content);
+    parent_div.replaceWith(editableText);
+    editableText.focus();
+    editableText.get(0).setSelectionRange(0, 0);
+    editableText.typeWatch( {
+        callback: saveTextarea,
+        wait: 500,
+        highlight: false,
+        allowSubmit: false,
+        captureLength: 1,
+    });
+    //setup the blur event for this new textarea
+    editableText.blur(disable_edit_page);
+    //setup autosize
+    autosize(editableText);
+    //hide the pencil
+    $(this).hide();
+}
+
+function disable_edit_page() {
+    //Before disabling the texarea, we save it
+    saveTextarea.call(this);
+    var html_content = $(this).val();
+    var viewableText = $('<div class="journal_entree_texte disabled-textarea"/>');
+    viewableText.text(html_content);
+    $(this).replaceWith(viewableText);
+    //show the pencil again
+    viewableText.closest('.page-entry').find('.edit-pen').show(); 
+}
+
+
+$('.page-entry .edit-pen').click( enable_edit_page );

@@ -75,10 +75,10 @@
 
 <section class="old-pages">
   {% for entry in older_entry  reversed %}
-  <article class="codex-page">
+  <article class="codex-page{% if not entry.journal_entry or not entry.task_list %} disp-column{% endif %}">
     <section class="page-entry">
       <header>
-        <h2>{{ entry.date }}</h2>
+        <h2>{{ entry.date }}</h2>{% if entry.journal_entry %}<button class="edit-pen div-like-button">&#128393;</button>{% endif %}
         <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
         <div class="ligne"></div>
       </header>
@@ -88,7 +88,7 @@
         {{ entry.journal_entry.journal_id.errors }}
         {{ entry.journal_entry.journal_id }}
         <div class="disp-journal_entree_texte">
-          {{ entry.journal_entry.texte }}
+          <div class="journal_entree_texte disabled-textarea">{{ entry.journal_entry.texte.value }}</div>
         </div>
       {% endif %}
     </section>
