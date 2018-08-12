@@ -25,8 +25,8 @@ body > header > h4 .titre{
 .codex a {
   word-wrap: break-word;
   display: block;
-  width: 11em;
-  height: 11em;
+  width: 8.75em;
+  height: 8.75em;
   padding: 0.5em;
   margin: 0.5em;
   background-color: #d7e1e5;
@@ -41,7 +41,7 @@ body > header > h4 .titre{
   height:100%;
 }
 .codex-flex-content .filler { flex: 1; }
-.codex-flex-content .titre { font-size: 1.6em; }
+.codex-flex-content .titre { font-size: 1.5em; }
 .codex-flex-content .date { text-align: right; }
  
 /* link box intercation */

@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.views.decorators.cache import never_cache
 
 from ..forms import ProjetForm
 from ..commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
 
 @login_required
+@never_cache
 def creer_codex(request):
     """Affiche un codex pour creation."""
     http_status = Http_status()

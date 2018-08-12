@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
+from django.views.decorators.cache import never_cache
 
 from ..models import Projet, Journal_Entree, TODO_Entree, get_current_timestamp
 from ..forms import Journal_EntreeForm, TODO_EntreeForm
@@ -109,6 +110,7 @@ def get_pages_before_today(codex,aujourdhui):
 
     
 @login_required
+@never_cache
 def afficher_codex(request,slug):
     """Affiche les Pages d'un Codex."""
     http_status = Http_status()

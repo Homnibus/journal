@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist, SuspiciousOperation
 from django.core.paginator import Paginator
+from django.views.decorators.cache import never_cache
 
 from ..models import Projet, Main_Courante, Journal_Entree, TODO_Entree, get_current_timestamp
 from ..forms import (ProjetForm, Main_CouranteForm, Journal_EntreeForm, TODO_EntreeForm)
@@ -21,6 +22,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
         
 @login_required
+@never_cache
 def afficher_main_courante(request,slug):
     """ Afficher la main courante d'un codex."""
     http_status = Http_status()
@@ -99,6 +101,7 @@ class Tache():
         self.model = model
     
 @login_required
+@never_cache
 def afficher_taches(request,slug,page_number=1):
     """Affiche la liste des taches d'un codex"""
     http_status = Http_status()
@@ -146,6 +149,7 @@ def afficher_taches(request,slug,page_number=1):
     
         
 @login_required
+@never_cache
 def afficher_taches_toutes(request,page_number=1,sort_by=None,sort_way=None):
     """Affiche la liste des taches de tout les codex"""
     http_status = Http_status()
@@ -193,9 +197,3 @@ def afficher_taches_toutes(request,page_number=1,sort_by=None,sort_way=None):
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
         return afficher_erreur(request,ex,http_status)
     return HttpResponseForbidden()
-
-    
-    
-    
-    
-    
