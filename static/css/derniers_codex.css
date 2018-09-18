@@ -41,8 +41,11 @@ body > header > h4 .titre{
   height:100%;
 }
 .codex-flex-content .filler { flex: 1; }
-.codex-flex-content .titre { font-size: 1.5em; }
-.codex-flex-content .date { text-align: right; }
+.codex-flex-content .titre { font-size: 1.4em; }
+.codex-flex-content .date { 
+  text-align: right; 
+  font-size: 0.9em;
+}
  
 /* link box intercation */
 .codex a:link,

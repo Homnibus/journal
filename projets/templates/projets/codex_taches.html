@@ -20,26 +20,26 @@
 
 {% block content %}
 <section class="codex-tasks">
-  <div>
-    <table>
+  <div class="result">
+    <table class="result-list">
       <tr>
         <th>Réalisée</th>
-        <th>Tache <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></th>
+        <th class="max-width">Tache <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></th>
         <th>Date réalisation</th>
-        <th>Date creation</th>
+        <th>Date création</th>
       </tr>
       {% for task in task_list %}
         <tr class="task">
-          <td>{{ task.form.todo_id }}{{ task.form.realisee }}</td>
-          <td>{{ task.form.texte }}</td>
+         <td>{{ task.form.todo_id }}{{ task.form.realisee }}</td>
+          <td class="task-texte">{{ task.form.texte.value|capfirst }}</td>
           <td>
             {% if task.model.date_realisee %}
-            {{ task.model.date_realisee }}
+            {{ task.model.date_realisee|date:"d/m/Y H:i" }}
             {% else %}
-            - 
+            -
             {% endif %}
           </td>
-          <td>{{ task.model.date_creation }}</td>
+          <td>{{ task.model.date_creation|date:"d/m/Y H:i" }}</td>
         </tr>
       {% endfor %}
     </table>

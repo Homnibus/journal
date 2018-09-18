@@ -14,7 +14,9 @@
    {% block meta %}{% endblock %}
 </head>
 
-<body style="background-image:url('{% static 'img/background.png' %}');background-repeat:no-repeat;background-position:right bottom;background-attachment:fixed;">
+<body>
+  <div class=backgroud style="background-image:url('{% static 'img/background.png' %}');background-repeat:no-repeat;background-position:calc(100% - 1.4em) calc(100% - .4em);width:100%;height:100vh;position:fixed;z-index:-1">
+  </div>
   <nav>
     <div class="menu">
       <a href="{% url 'accueil' %}" class="{% block nav-accueil %}{% endblock %}">

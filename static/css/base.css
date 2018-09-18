@@ -107,7 +107,6 @@ ol {
 	padding-left: 2em;
 }
 code, 
-pre,
 samp {
 	white-space: pre-wrap;
 	font-family: consolas, 'DejaVu Sans Mono', courier, monospace;
@@ -217,8 +216,7 @@ h4 {
 
 /* textarea et input*/
 textarea, 
-input,
-.disabled-textarea {
+input {
   padding: 0.45em;
   box-shadow: 0 .1em .2em 0 rgba(0,0,0,.16),0 .1em .5em 0 rgba(0,0,0,.12);
   border: 1px solid white; 

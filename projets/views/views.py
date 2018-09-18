@@ -29,7 +29,7 @@ def afficher_main_courante(request,slug):
     return_data = {}
 
     try:
-        #Récuperation du codex a affichier et des droits
+        #Récuperation du codex a affichier et des droitsf
         codex = recuperer_codex(slug,request.user,http_status)
 
         if request.method == 'GET':

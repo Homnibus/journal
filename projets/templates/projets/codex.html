@@ -75,7 +75,7 @@
 
 <section class="old-pages">
   {% for entry in older_entry  reversed %}
-  <article class="codex-page{% if not entry.journal_entry or not entry.task_list %} disp-column{% endif %}">
+  <article class="codex-page">
     <section class="page-entry">
       <header>
         <h2>{{ entry.date }}</h2>{% if entry.journal_entry %}<button class="edit-pen div-like-button">&#128393;</button>{% endif %}
@@ -88,7 +88,7 @@
         {{ entry.journal_entry.journal_id.errors }}
         {{ entry.journal_entry.journal_id }}
         <div class="disp-journal_entree_texte">
-          <div class="journal_entree_texte disabled-textarea">{{ entry.journal_entry.texte.value }}</div>
+          <pre class="journal_entree_texte disabled-textarea">{{ entry.journal_entry.texte.value|capfirst }}</pre>
         </div>
       {% endif %}
     </section>
@@ -96,7 +96,7 @@
     {% if entry.task_list %}
     <section class="page-tasks">
       <header>
-        <h2>Tâches</h2>
+        <h2>Tâches</h2><button class="edit-pen div-like-button">&#128393;</button>
         <div class="save-info" style="display:none">Sauvegardé</div>
         <div class="ligne"></div>
       </header>
@@ -112,7 +112,7 @@
             {{ task_entry.realisee }}
           </div>
           <div class="disp-todo_entree_texte">
-            {{ task_entry.texte }}
+            <div class="todo_entree_texte disabled-textarea">{{ task_entry.texte.value|capfirst }}</div>
           </div>
         </article>
       {% endfor %}
