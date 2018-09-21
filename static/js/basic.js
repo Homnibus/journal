@@ -3,7 +3,6 @@ function hide_error() {
     $('.nav-filler').removeAttr('style');
 }
 
-
 function show_error(jqXHR, exception) {
     hide_error();
     var data = jQuery.parseJSON(jqXHR.responseText);
@@ -13,4 +12,14 @@ function show_error(jqXHR, exception) {
         "</div>"
     );
     $('.nav-filler').css('margin-top','+=1em');
+}
+
+function get_text(element) {
+    var text =  '';
+    if (element.is('textarea')) {
+        text = element.val();
+    } else {
+        text = element.text();        
+    }
+    return text
 }
