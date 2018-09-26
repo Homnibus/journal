@@ -2,8 +2,10 @@
 .today-page .page-tasks { margin-top: .4em; }
 
 /* old-pages */
-.old-pages .codex-page {
+.old-pages .codex-page:not(.flex-column) {
   flex-direction: row;
+}
+.old-pages .codex-page {
   flex-wrap:wrap;
   margin-top: 1.5em;
   margin-right: -.6em;
@@ -22,45 +24,44 @@
 .task-list .task { margin-top: .8em; }
 .old-pages .task:first-child { margin: 0; }
 
-/*Article content padding*/
-.old-pages .disp-journal_entree_texte .disabled-textarea{
-  font-family: arial;
-  padding-left: .5em;
-  padding-right: .2em;
-}
-.old-pages .disp-journal_entree_texte{
+/* gestion du contour */
+.disp-journal_entree_texte,
+.task-list,
+.new-task{
   padding-left: .2em;
   padding-right: .2em;
 }
 
-/*Text Box */
-.old-pages .disp-journal_entree_texte .disabled-textarea,
-.old-pages article.task {
+.old-pages .journal_entree_texte,
+.old-pages .task{
   border: 1px solid rgba(0,0,0,.16);
-  padding-top: .2em;
-  padding-bottom: .2em;
-  font-size: .9em;
   background: white;
-}
-.old-pages article.task,
-.task-list {
-  padding-right: .2em;
-  padding-left: .2em;
+  box-shadow: 0 0 0 0;
 }
 
 /*Text Box decoration*/
 .old-pages .codex-page:nth-child(odd) .disp-journal_entree_texte .disabled-textarea,
+.old-pages .codex-page:nth-child(odd) .disp-journal_entree_texte textarea,
 .old-pages .codex-page:nth-child(odd) article.task {
   border-left: .4em solid #4D7385;
 }
 .old-pages .codex-page:nth-child(even) .disp-journal_entree_texte .disabled-textarea,
+.old-pages .codex-page:nth-child(even) .disp-journal_entree_texte textarea,
 .old-pages .codex-page:nth-child(even) article.task {
   border-left: .4em solid #f0f3f5;
 }
 
-/*Text padding*/
-.disabled-textarea{ 
-  padding-left: .3em;
+.old-pages .disp-journal_entree_texte textarea:focus{
+  border: 1px solid #2F4752; 
+  box-shadow: 0 .1em .2em 0 #4D7385,0 .1em .5em 0 #79B5D1;
+}
+
+/* gestion du text */
+.old-pages .journal_entree_texte,
+.old-pages .todo_entree_texte{ 
+  font-size: .9em;
+  font-family: arial;
+  padding: .2em .2em .2em .5em; 
   width: 100%;
 }
 
@@ -78,11 +79,6 @@
 .disp-todo_entree_texte,
 .disp-journal_entree_texte { flex: 1; }
 
-/* display todo_entree_checkbox */
-/* display add-item-button */
-.disp-todo_entree_checkbox,
-.disp-add-item-button { margin-right: .4em; }
-
 /* header */
 .codex-page header { flex-direction: row; }
 .codex-page h2 { white-space: nowrap; }
@@ -97,7 +93,10 @@
   margin-left: .2em;
   margin-right: .2em;
 }
-.todo_entree_checkbox { box-shadow: none; }
+.todo_entree_checkbox { 
+  box-shadow: none; 
+  margin: 0 .6em 0 .6em;
+}
 
 /* edit pen */
 .edit-pen {

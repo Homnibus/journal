@@ -75,7 +75,7 @@
 
 <section class="old-pages">
   {% for entry in older_entry  reversed %}
-  <article class="codex-page">
+  <article class="codex-page{% if not entry.journal_entry and entry.task_list %} flex-column{% endif %} ">
     <section class="page-entry">
       <header>
         <h2>{{ entry.date }}</h2>{% if entry.journal_entry %}<button class="edit-pen div-like-button">&#128393;</button>{% endif %}

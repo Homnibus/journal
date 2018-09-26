@@ -139,7 +139,7 @@ li ol {
 }
 
 /* HTML5 tags */
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+aside, details, figcaption, figure, footer, hgroup, nav{
 	display: block;
 }
 
@@ -226,6 +226,7 @@ input {
           box-sizing: border-box;
   font-size: .8em;
  	font-family: sans-serif, arial, helvetica;    
+  resize: none;
 }
 
 .disabled-textarea { 

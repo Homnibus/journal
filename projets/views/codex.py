@@ -223,71 +223,145 @@ def maj_journal(request,slug):
         return afficher_erreur(request,ex,http_status)
     return HttpResponseForbidden()
 
-
-@login_required
-def maj_todo(request,slug):
-    """Met à jour les todo d'un codex."""
-    http_status = Http_status()
+    
+def post_tache(codex,form,http_status=Http_status()):
+    """Crée une tache d'un codex."""
     return_data = {}
 
+    try:
+        if form.is_valid():
+        
+            form_todo_entree = form.save(commit=False)
+            #Si la tache est vide, on ne la crée pas
+            if(form_todo_entree.texte and not form_todo_entree.texte.isspace()):
+                #Création de la tache
+                todo_entree = TODO_Entree(projet=codex,texte=form_todo_entree.texte,realisee=form_todo_entree.realisee)
+                todo_entree.save()
+
+                #Récupération du html d'un nouveau formulaire avec les données mises à jours pour affichage
+                # et ajout aux données à retourner
+                out_form = '<table>' + str(TODO_EntreeForm(instance=todo_entree)) + '</table>'                       
+
+                #Preparation des données à retourner
+                return_data.update({'success': True,'out_form': out_form,'id':todo_entree.id})
+            else:
+                return_data.update({
+                    'success': False,
+                })
+        #Si le formulaire n'est pas valide, on retourne une erreur
+        else:
+            form_errors = str(form.non_field_errors) + str(form.texte.errors)
+            return_data.update({
+                'success': False,
+                'form_errors':form_errors
+            })
+    except Exception as ex:
+        raise
+    return return_data
+    
+def put_tache(codex,form,http_status=Http_status()):
+    """Met à jour une tache d'un codex."""
+    return_data = {}
+
+    try:
+        if form.is_valid():
+            #Récupération des infos du formulaire
+            form_todo_entree = form.save(commit=False)
+            #Récupération de la tache (si elle n'existe pas ça léve une erreur qui est géré)
+            print(form_todo_entree.id)
+            todo_entree = TODO_Entree.objects.get(id=form_todo_entree.id)
+            #Maj de la tache
+            todo_entree.texte = form_todo_entree.texte
+            todo_entree.realisee = form_todo_entree.realisee
+            todo_entree.save()
+ 
+            #Preparation des données à retourner
+            return_data.update({'success': True, 'id':todo_entree.id})
+                        
+        #Si le formulaire n'est pas valide, on retourne une erreur
+        else:
+            form_errors = str(form.non_field_errors) + str(form.texte.errors)
+            return_data.update({
+                'success': False,
+                'form_id': request.POST.get('form_id'),
+                'id': todo_entree.id,
+                'form_errors':form_errors
+            })
+    except ObjectDoesNotExist:
+        http_status.status = 404
+        http_status.message = "La tache n'existe pas."
+        http_status.explanation = "La tache que vous voulez mettre à jour n'existe pas."
+        raise
+    except Exception as ex:
+        raise
+    return return_data
+    
+def delete_tache(codex,form,http_status=Http_status()):
+    """Supprime une tache d'un codex."""
+    return_data = {}
+
+    try:
+        if form.is_valid():
+            #Récupération de l'id
+            form_todo_entree = form.save(commit=False)
+            id = form_todo_entree.id
+            TODO_Entree.objects.filter(id=id).delete()
+
+            #Preparation des données à retourner
+            return_data.update({'success': True, 'id':id})
+                
+        #Si le formulaire n'est pas valide, on retourne une erreur
+        else:
+            form_errors = str(form.non_field_errors) + str(form.texte.errors)
+            return_data.update({
+                'success': False,
+                'form_id': request.POST.get('form_id'),
+                'id': todo_entree.id,
+                'form_errors':form_errors
+            })
+    except ObjectDoesNotExist:
+        http_status.status = 404
+        http_status.message = "La tache n'existe pas."
+        http_status.explanation = "La tache que vous voulez accéder n'existe pas."
+        raise
+    except Exception as ex:
+        raise    
+    return return_data
+
+@login_required
+def rest_tache(request,slug):
+    """Actions REST sur les taches d'un codex."""
+    http_status = Http_status()
+    return_data = {}
+    
     try:
         #Récuperation du codex a affichier
         codex = recuperer_codex(slug,request.user,http_status)
         if request.method == 'POST' and request.is_ajax():
-            try:
-                #Boolean qui défini si on est sur une nouvelle tache
-                nouvelle_tache = False
-                #Récupération du formulaire
-                form = TODO_EntreeForm(request.POST)
-
-                if form.is_valid():
-                    #Récupération de l'id
-                    form_todo_entree = form.save(commit=False)
-                    id = form_todo_entree.id
-                    #Si nous n'avons pas d'id, c'est que c'est une nouvelle entree à creer
-                    if id is None or id == '':
-                        nouvelle_tache = True
-
-                    #Récupération de la tache de base
-                    if nouvelle_tache:
-                        todo_entree = TODO_Entree(projet=codex)
-                    else:
-                        todo_entree =TODO_Entree.objects.get(id=id)
-                    #Maj de la tache
-                    todo_entree.texte = form_todo_entree.texte
-                    todo_entree.realisee = form_todo_entree.realisee
-                    todo_entree.save()
-
-                    #Récupération du html d'un nouveau formulaire avec les données mises à jours pour affichage
-                    # et ajout aux données à retourner
-                    if nouvelle_tache:
-                        out_form = '<table>' + str(TODO_EntreeForm(instance=todo_entree)) + '</table>'                       
-                        return_data['out_form'] = out_form
-
-                    #Preparation des données à retourner
-                    return_data.update({'success': True, 'id':todo_entree.id, 'nouvelle_tache':nouvelle_tache})
-                        
-                #Si le formulaire n'est pas valide, on retourne une erreur
-                else:
-                    form_errors = str(form.non_field_errors) + str(form.texte.errors)
-                    return_data.update({
-                        'success': False,
-                        'form_id': request.POST.get('form_id'),
-                        'id': todo_entree.id,
-                        'nouvelle_tache':nouvelle_tache,
-                        'form_errors':form_errors
-                    })
-                return JsonResponse(return_data)
-            except ObjectDoesNotExist:
-                http_status.status = 404
-                http_status.message = "La tache n'existe pas."
-                http_status.explanation = "La tache que vous voulez accéder n'existe pas."
-                raise
-            except Exception as ex:
-                raise    
+            #Récupération du formulaire
+            form = TODO_EntreeForm(request.POST)
+            return_data = post_tache(codex,form,http_status)
+        elif request.method == 'PUT' and request.is_ajax():
+            #Récupération du formulaire
+            request.method = "POST"
+            request._load_post_and_files()
+            request.method = "PUT"
+            form = TODO_EntreeForm(request.POST)
+            return_data = put_tache(codex,form,http_status)
+        elif request.method == 'DELETE' and request.is_ajax():
+            #Récupération du formulaire
+            request.method = "POST"
+            request._load_post_and_files()
+            request.method = "DELETE"
+            form = TODO_EntreeForm(request.POST)
+            return_data = delete_tache(codex,form,http_status)
         else:
             raise_SuspiciousOperation(http_status)
+        #On renvoi la réponse
+        return JsonResponse(return_data)
     except Exception as ex:
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
         return afficher_erreur(request,ex,http_status)
     return HttpResponseForbidden()
+        
+    

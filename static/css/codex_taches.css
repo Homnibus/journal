@@ -1,9 +1,5 @@
-/* textarea */
-table textarea {
-  box-shadow: none;
-  background-color: rgba(0, 0, 0, 0);
-}
- 
+h4 { display: flex; }
+
 div.result {
   margin-top: 0.2em;
   overflow-x: auto;
@@ -48,7 +44,7 @@ table a:active,nav a:focus{
 }
 
 th {
-  background-color: #2F4752;
+  background-color: #4D7385;
   color: white;
   text-transform: uppercase;
   font-weight: 525;

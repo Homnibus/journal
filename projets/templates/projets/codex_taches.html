@@ -11,7 +11,7 @@
 
 {% block header %}
 <h1>Taches - {{ codex.titre|title }}</h1>
-<h4>{{ codex.description }}</h4>
+<h4>{{ codex.description }}<div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></h4>
 <div class="project-info">
   <input type="hidden" id="slug" value={{ codex.slug }}/>
   {% csrf_token %}
@@ -24,12 +24,12 @@
     <table class="result-list">
       <tr>
         <th>Réalisée</th>
-        <th class="max-width">Tache <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div></th>
+        <th class="max-width">Tache</th>
         <th>Date réalisation</th>
         <th>Date création</th>
       </tr>
       {% for task in task_list %}
-        <tr class="task">
+      <tr class="task">
          <td>{{ task.form.todo_id }}{{ task.form.realisee }}</td>
           <td class="task-texte">{{ task.form.texte.value|capfirst }}</td>
           <td>
