@@ -1,3 +1,5 @@
+task_hash_tab = {}
+
 function saveTextarea(){
     var parent_div = $(this).closest(".page-entry");
     var texte = parent_div.find(".journal_entree_texte").val();
@@ -76,6 +78,10 @@ function enable_edit_task()
     task_list.each(function(index){
         var parent_div = $(this)
         var div_content = parent_div.text();
+        var id = parent_div.closest('.task').find('.todo_entree_id').attr('value');
+        console.log("id :" + id);
+        task_hash_tab[id] = div_content.hashCode();
+        console.log("hash :" + div_content.hashCode());
         var editableText = $('<textarea class="todo_entree_texte todo_typewatch" />');
         editableText.val(div_content);
         parent_div.replaceWith(editableText);
@@ -94,6 +100,7 @@ function enable_edit_task()
 }
 
 function post_tache(){
+    //Creation d'une nouvelle Tache
     var parent_div = $(this).closest('.task');
     var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
     var texte = get_text(parent_div.find('.todo_entree_texte'));
@@ -163,6 +170,7 @@ function post_tache(){
 }
 
 function put_tache(parent_div,realisee,texte,id){
+    //Mise à jour d'une nouvelle Tache
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
     $.ajax({
         url: '/projets/' + $('#slug').val() + 'rest-tache',
@@ -170,10 +178,11 @@ function put_tache(parent_div,realisee,texte,id){
             'todo_id': id,
             'texte': texte,
             'realisee': realisee,
+            'hash': task_hash_tab[id],
         },
         dataType: 'json',
         method: 'PUT',
-        success: function(data) {
+        success: data => {
             hide_error();
             if(data.success){
                 //On recherche le div de sauvegarde à faire clignoter
@@ -182,6 +191,8 @@ function put_tache(parent_div,realisee,texte,id){
                     save_todo = $('.todo_entree_id[value = ' + data.id + ']').closest('.page-tasks').find('.save-info');
                     save_todo.fadeOut('slow');
                 });
+                console.log(texte);
+                task_hash_tab[data.id] = texte.hashCode();
             }
             else{
                 error_todo = $('.todo_entree_id[value = ' + data.id + ']').closest('table').parent();
@@ -195,6 +206,7 @@ function put_tache(parent_div,realisee,texte,id){
 }
 
 function delete_tache(parent_div,id){
+    //Supprime une Tache
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
     $.ajax({
         url: '/projets/' + $('#slug').val() + 'rest-tache',

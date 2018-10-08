@@ -268,7 +268,6 @@ def put_tache(codex,form,http_status=Http_status()):
             #Récupération des infos du formulaire
             form_todo_entree = form.save(commit=False)
             #Récupération de la tache (si elle n'existe pas ça léve une erreur qui est géré)
-            print(form_todo_entree.id)
             todo_entree = TODO_Entree.objects.get(id=form_todo_entree.id)
             #Maj de la tache
             todo_entree.texte = form_todo_entree.texte
@@ -328,6 +327,12 @@ def delete_tache(codex,form,http_status=Http_status()):
         raise    
     return return_data
 
+def java_string_hashcode(s):
+    h = 0
+    for c in s:
+        h = (31 * h + ord(c)) & 0xFFFFFFFF
+    return ((h + 0x80000000) & 0xFFFFFFFF) - 0x80000000    
+    
 @login_required
 def rest_tache(request,slug):
     """Actions REST sur les taches d'un codex."""
@@ -347,6 +352,10 @@ def rest_tache(request,slug):
             request._load_post_and_files()
             request.method = "PUT"
             form = TODO_EntreeForm(request.POST)
+            print(request.POST["hash"])
+            print(request.POST["todo_id"])
+            print(TODO_Entree.objects.get(id=request.POST["todo_id"]).texte)
+            print(java_string_hashcode(TODO_Entree.objects.get(id=request.POST["todo_id"]).texte))
             return_data = put_tache(codex,form,http_status)
         elif request.method == 'DELETE' and request.is_ajax():
             #Récupération du formulaire

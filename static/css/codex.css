@@ -90,8 +90,8 @@
   max-width: 21px;
   height: auto;
   margin: auto;
-  margin-left: .2em;
-  margin-right: .2em;
+  margin-left: .2m;
+  margin-right: .5em;
 }
 .todo_entree_checkbox { 
   box-shadow: none; 
