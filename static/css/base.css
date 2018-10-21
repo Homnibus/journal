@@ -240,6 +240,19 @@ input:focus {
   box-shadow: 0 .1em .2em 0 #4D7385,0 .1em .5em 0 #79B5D1;
 }
 
+/* textarea et input on error */
+
+textarea.textarea-error {
+  border: 1px solid #d72833; 
+  box-shadow: 0 .1em .2em 0 rgba(0,0,0,.16),0 .1em .5em 0 rgba(0,0,0,.12);
+}
+
+textarea.textarea-error:focus{
+  border: 1px solid #d72833; 
+  box-shadow: 0 .1em .2em 0 #6c141a,0 .1em .5em 0 #e77e85;
+}
+
+
 
 /* save-info */
 .save-info {

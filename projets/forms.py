@@ -30,7 +30,7 @@ class Journal_EntreeForm(ModelForm):
         model = Journal_Entree
         fields = ('texte',)
         widgets = {
-            'texte': Textarea(attrs={'rows': 3,'class':'journal_entree_texte journal_typewatch','placeholder':'Notes du jour'})
+            'texte': Textarea(attrs={'rows': 3,'class':'journal_entree_texte journal_typewatch','placeholder':'Notes du jour','readonly':''})
         }
 
     def __init__(self, *args, **kwargs):

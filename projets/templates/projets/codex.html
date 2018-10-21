@@ -29,10 +29,10 @@
       <h2>{{ today_entry.date }}</h2>
       <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
     </header>  
-    {{ today_entry.journal_entry.non_field_errors }}
-    {{ today_entry.journal_entry.texte.errors }}
-    {{ today_entry.journal_entry.journal_id.errors }}
-    {{ today_entry.journal_entry.journal_id }}
+      {{ today_entry.journal_entry.non_field_errors }}
+      {{ today_entry.journal_entry.texte.errors }}
+      {{ today_entry.journal_entry.journal_id.errors }}
+      {{ today_entry.journal_entry.journal_id }}
     <div class="disp-journal_entree_texte" >
       {{ today_entry.journal_entry.texte }}
     </div>
@@ -88,7 +88,7 @@
         {{ entry.journal_entry.journal_id.errors }}
         {{ entry.journal_entry.journal_id }}
         <div class="disp-journal_entree_texte">
-          <pre class="journal_entree_texte disabled-textarea">{{ entry.journal_entry.texte.value|capfirst }}</pre>
+          <pre class="journal_entree_texte disabled-textarea">{{ entry.journal_entry.texte.value }}</pre>
         </div>
       {% endif %}
     </section>
@@ -112,7 +112,7 @@
             {{ task_entry.realisee }}
           </div>
           <div class="disp-todo_entree_texte">
-            <div class="todo_entree_texte disabled-textarea">{{ task_entry.texte.value|capfirst }}</div>
+            <div class="todo_entree_texte disabled-textarea">{{ task_entry.texte.value }}</div>
           </div>
         </article>
       {% endfor %}
@@ -129,5 +129,7 @@
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
     <script src="{% static 'js/basic.js' %}"></script>
+    <script src="{% static 'js/rest_pages.js' %}"></script>
+    <script src="{% static 'js/rest_taches.js' %}"></script>
     <script src="{% static 'js/codex.js' %}"></script>
 {% endblock %}

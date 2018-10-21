@@ -40,21 +40,31 @@
 }
 
 /*Text Box decoration*/
-.old-pages .codex-page:nth-child(odd) .disp-journal_entree_texte .disabled-textarea,
-.old-pages .codex-page:nth-child(odd) .disp-journal_entree_texte textarea,
-.old-pages .codex-page:nth-child(odd) article.task {
+.old-pages .codex-page:nth-child(odd) .disp-journal_entree_texte .journal_entree_texte,
+.old-pages .codex-page:nth-child(odd) .task{
   border-left: .4em solid #4D7385;
 }
-.old-pages .codex-page:nth-child(even) .disp-journal_entree_texte .disabled-textarea,
-.old-pages .codex-page:nth-child(even) .disp-journal_entree_texte textarea,
-.old-pages .codex-page:nth-child(even) article.task {
+.old-pages .codex-page:nth-child(even) .disp-journal_entree_texte .journal_entree_texte,
+.old-pages .codex-page:nth-child(even) .task{
   border-left: .4em solid #f0f3f5;
 }
 
-.old-pages .disp-journal_entree_texte textarea:focus{
+.old-pages .task textarea{
+  border: 0; 
+  box-shadow: none;
+}
+
+.old-pages .task textarea:focus{
+  border: 0; 
+  box-shadow: none;
+}
+
+.old-pages .disp-journal_entree_texte textarea:focus,
+.old-pages .task:focus-within{
   border: 1px solid #2F4752; 
   box-shadow: 0 .1em .2em 0 #4D7385,0 .1em .5em 0 #79B5D1;
 }
+
 
 /* gestion du text */
 .old-pages .journal_entree_texte,

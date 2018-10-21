@@ -1,6 +1,8 @@
 function hide_error() {
     $('.error').remove();
+    $('.local-error').remove();
     $('.nav-filler').removeAttr('style');
+    $('.textarea-error').removeClass('textarea-error');
 }
 
 function show_error(jqXHR, exception) {
