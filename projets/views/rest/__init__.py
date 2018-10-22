@@ -1,2 +1,2 @@
-from .taches import *
-from .pages import *
+from .task import *
+from .note import *

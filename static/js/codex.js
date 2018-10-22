@@ -109,8 +109,20 @@ $(document).on('click','.add-item-button:not(.unclickable)',function(){
     post_tache.call(this);
 });
 
-$(document).on('change','.todo_entree_checkbox', put_or_delete_tache);  
+$(document).on('change','.todo_entree_checkbox', put_or_delete_tache);
 
+$(document).on("keypress",'.new-task .todo_entree_texte',
+    function (e) {
+        if (e.ctrlKey && e.keyCode == 13) {
+            e.preventDefault();
+            var add_button = $(this).closest('.task').find('.add-item-button:not(.unclickable)');
+            if(add_button !== null){
+                add_button.addClass('unclickable');
+                post_tache.call(add_button);
+            }
+            // Ctrl-Enter pressed
+        }
+});
 
 $(document).on("keypress",'.journal_entree_texte:not(disabled-textarea)',
     function (e){

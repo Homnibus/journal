@@ -15,7 +15,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Projet, Main_Courante, Journal_Entree, TODO_Entree, get_current_timestamp
 from ..forms import (ProjetForm, Main_CouranteForm, Journal_EntreeForm, TODO_EntreeForm)
 from ..commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
-from ..commun.codex import recuperer_codex
+from ..commun.codex import get_codex_from_slug
 
 # Get an instance of a logger
 logging.basicConfig(level=logging.DEBUG)
@@ -30,7 +30,7 @@ def afficher_main_courante(request,slug):
 
     try:
         #Récuperation du codex a affichier et des droitsf
-        codex = recuperer_codex(slug,request.user,http_status)
+        codex = get_codex_from_slug(slug, request.user, http_status)
 
         if request.method == 'GET':
             main_courante = Main_Courante.objects.filter(projet=codex).first()
@@ -52,7 +52,7 @@ def maj_main_courante(request,slug):
     
     try:
         #Récuperation du codex a affichier et des droits
-        codex = recuperer_codex(slug,request.user,http_status)
+        codex = get_codex_from_slug(slug, request.user, http_status)
         
         if request.method == 'POST' and request.is_ajax():
             form = Main_CouranteForm(request.POST)
@@ -109,7 +109,7 @@ def afficher_taches(request,slug,page_number=1):
     
     try:
         #Récuperation du codex a affichier et des droits
-        codex = recuperer_codex(slug,request.user,http_status)
+        codex = get_codex_from_slug(slug, request.user, http_status)
         return_data.update({'codex': codex})
 
         if request.method == 'GET':

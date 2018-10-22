@@ -12,7 +12,7 @@ from django.views.decorators.cache import never_cache
 from ..models import Projet, Journal_Entree, TODO_Entree, get_current_timestamp
 from ..forms import Journal_EntreeForm, TODO_EntreeForm
 from ..commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
-from ..commun.codex import recuperer_codex, Page_Journal
+from ..commun.codex import get_codex_from_slug, Page_Journal
 
 
 def get_today_page(codex, aujourdhui):
@@ -118,7 +118,7 @@ def afficher_codex(request,slug):
 
     try:
         #Récuperation des infos de base du Codex a affichier
-        codex = recuperer_codex(slug,request.user,http_status)
+        codex = get_codex_from_slug(slug, request.user, http_status)
         return_data.update({'codex':codex})
 
         if request.method == 'GET':
@@ -160,7 +160,7 @@ def maj_journal(request,slug):
 
     try:
         #Récuperation du codex a affichier
-        codex = recuperer_codex(slug,request.user,http_status)
+        codex = get_codex_from_slug(slug, request.user, http_status)
 
         if request.method == 'POST' and request.is_ajax():
             try:

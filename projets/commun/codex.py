@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from ..models import Projet
 from .error import Http_status
 
-def recuperer_codex(slug,user,http_status=Http_status()):
+def get_codex_from_slug(slug, user, http_status=Http_status()):
     """Récupération du codex en cours et gestion des droits"""
     try:
         #Récupération du codex
