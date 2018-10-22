@@ -9,8 +9,8 @@ def get_codex_from_slug(slug, user, http_status=Http_status()):
         #Récupération du codex
         codex = Projet.objects.get(slug=slug)
         #Verification que le codex existe et que le user a le droits de voir le codex
-        if codex.createur != user:
-            raise PermissionDenied
+        #if codex.createur != user:
+        #    raise PermissionDenied
         #Si aucune erreur, on retourne le codex
         return codex
     except ObjectDoesNotExist:
@@ -23,7 +23,7 @@ def get_codex_from_slug(slug, user, http_status=Http_status()):
         http_status.message = "Permission refusée."
         http_status.explanation = "Vous n'avez pas le droits d'accéder à ce codex."
         raise
-    except Exception as ex:
+    except Exception:
         raise
         
 class Page_Journal():

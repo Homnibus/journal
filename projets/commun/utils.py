@@ -1,5 +1,11 @@
 def java_string_hashcode(string):
-    hash = 0
-    for c in string:
-        hash = (31 * hash + ord(c)) & 0xFFFFFFFF
-    return ((hash + 0x80000000) & 0xFFFFFFFF) - 0x80000000    
+    string_hash = 0
+    for char in string:
+        string_hash = (31 * string_hash + ord(char)) & 0xFFFFFFFF
+    return ((string_hash + 0x80000000) & 0xFFFFFFFF) - 0x80000000
+
+
+class JsonResponseContainer:
+    def __init__(self):
+        self.data = {}
+        self.status = 200

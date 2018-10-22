@@ -2,165 +2,237 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 
-from ...commun.codex import get_codex_from_slug
 from ...commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
-from ...commun.utils import java_string_hashcode
+from ...commun.utils import java_string_hashcode, JsonResponseContainer
 from ...forms import TODO_EntreeForm
-from ...models import TODO_Entree
+from ...models import TODO_Entree, Projet
 
 
-def post_task(request, codex_slug, http_status):
+def is_authorized_to_create_task(user, codex):
+    """
+    Indicate if the user is authorized to create the task
+    """
+    if user == codex.createur:
+        return True
+    return False
+
+
+def is_authorized_to_update_task(user, task):
+    """
+    Indicate if the user is authorized to update the task
+    """
+    if user == task.projet.createur:
+        return True
+    return False
+
+
+def is_authorized_to_delete_task(user, task_id):
+    """
+    Indicate if the user is authorized to delete the task
+    """
+    # Get the task from the database
+    task = TODO_Entree.objects.get(id=task_id)
+    if user == task.projet.createur:
+        return True
+    return False
+
+
+def post_task(request, codex_slug):
     """
     Create a new task for the given codex.
     """
-    # Create the output data
-    output_data = {}
-    try:
-        # Get the form
-        form = TODO_EntreeForm(request.POST)
+    # Initialize the output data
+    response = JsonResponseContainer()
 
-        # If the form is not valid, throw an error
-        if not form.is_valid():
-            form_errors = str(form.non_field_errors) + str(form.texte.errors)
-            output_data.update({
-                'success': False,
-                'form_errors': form_errors
-            })
-            return output_data
+    # Get the form
+    form = TODO_EntreeForm(request.POST)
 
-        # Get the task model from the form
-        form_task = form.save(commit=False)
-
-        # If the task text is empty, throw an error
-        if not form_task.texte or form_task.texte.isspace():
-            local_error = "Impossible de créer une tache vide"
-            output_data.update({
-                'success': False,
-                'local_error': local_error
-            })
-            return output_data
-
-        # Get the codex of the task from the slug
-        codex = get_codex_from_slug(codex_slug, request.user, http_status)
-
-        # If all the above test are ok, create the task
-        task = TODO_Entree(
-            projet=codex,
-            texte=form_task.texte,
-            realisee=form_task.realisee
-        )
-        task.save()
-
-        # TODO : change the way this data is returned
-        # Récupération du html d'un nouveau formulaire avec les données mises à jours pour affichage
-        # et ajout aux données à retourner
-        output_form = '<table>' + str(TODO_EntreeForm(instance=task)) + '</table>'
-
-        # Prepare the output data
-        output_data.update({
-            'success': True,
-            'out_form': output_form,
-            'id': task.id
+    # If the form is not valid, throw an error
+    if not form.is_valid():
+        # TODO: review the form validation
+        form_errors = "form validation error"
+        response.data.update({
+            'success': False,
+            'form_errors': form_errors
         })
-        return output_data
+        response.status = 400
+        return response
 
-    except Exception:
-        raise
+    # Get the task model from the form
+    form_task = form.save(commit=False)
+
+    # If the task text is empty, throw an error
+    if not form_task.texte or form_task.texte.isspace():
+        local_error = "Impossible de créer une tache vide"
+        response.data.update({
+            'success': False,
+            'local_error': local_error
+        })
+        response.status = 400
+        return response
+
+    # Get the codex of the task from the slug
+    try:
+        codex = Projet.objects.get(slug=codex_slug)
+    except ObjectDoesNotExist:
+        # TODO : factorise this
+        local_error = "Le codex n'existe pas."
+        response.data.update({
+            'success': False,
+            'local_error': local_error
+        })
+        response.status = 404
+        return response
+
+    # Check if the user has the permission
+    if not is_authorized_to_create_task(request.user, codex):
+        local_error = "L'utilisateur n'est pas authorisé à créer cette tache"
+        response.data.update({
+            'success': False,
+            'local_error': local_error
+        })
+        response.status = 403
+        return response
+
+    # If all the above test are ok, create the task
+    task = TODO_Entree(
+        projet=codex,
+        texte=form_task.texte,
+        realisee=form_task.realisee
+    )
+    task.save()
+
+    # TODO : change the way this data is returned
+    # Récupération du html d'un nouveau formulaire avec les données mises à jours pour affichage
+    # et ajout aux données à retourner
+    output_form = '<table>' + str(TODO_EntreeForm(instance=task)) + '</table>'
+
+    # Prepare the output data
+    response.data.update({
+        'success': True,
+        'out_form': output_form,
+        'id': task.id
+    })
+    return response
 
 
-def put_task(request, http_status):
+def put_task(request):
     """
     Update the given task
     """
-    # Create the output data
-    output_data = {}
+    # Initialize the output data
+    response = JsonResponseContainer()
 
-    try:
-        # Get the form
-        form = TODO_EntreeForm(request.PUT)
+    # Get the form
+    form = TODO_EntreeForm(request.PUT)
 
-        # Get the task id from the request
-        task_id = request.PUT.get('id')
+    # Get the task id from the request
+    task_id = request.PUT.get('id')
 
-        # Get the task hash from the request
-        request_task_hash = request.PUT.get('hash')
+    # Get the task hash from the request
+    request_task_hash = request.PUT.get('hash')
 
-        # If the form is not valid, throw an error
-        if not form.is_valid():
-            form_errors = str(form.non_field_errors) + str(form.texte.errors)
-            output_data.update({
-                'success': False,
-                'id': task_id,
-                'form_errors': form_errors
-            })
-            return output_data
-
-        # Get the task model from the form
-        form_task = form.save(commit=False)
-
-        # Get the task from the database
-        task = TODO_Entree.objects.get(id=task_id)
-
-        # If the task hash of the request doesn't correspond to the task hash of the database, throw an error
-        database_task_hash = str(java_string_hashcode(task.texte))
-        if request_task_hash != database_task_hash:
-            local_error = "Cette page a été modifié depuis la tentative de mise à jour."
-            output_data.update({
-                'success': False,
-                'id': task_id,
-                'local_error': local_error
-            })
-            return output_data
-
-        # If all the above test are ok, update the task
-        task.texte = form_task.texte
-        task.realisee = form_task.realisee
-        task.save()
-
-        # Prepare the output data
-        output_data.update({
-            'success': True,
-            'id': task.id
+    # If the form is not valid, throw an error
+    if not form.is_valid():
+        # TODO : review the validation of the form
+        form_errors = "form validation error"
+        response.data.update({
+            'success': False,
+            'id': task_id,
+            'form_errors': form_errors
         })
-        return output_data
+        response.status = 400
+        return response
 
+    # Get the task model from the form
+    form_task = form.save(commit=False)
+
+    # Get the task from the database
+    try:
+        task = TODO_Entree.objects.get(id=task_id)
     except ObjectDoesNotExist:
-        http_status.status = 404
-        http_status.message = "La tache n'existe pas."
-        http_status.explanation = "La tache que vous voulez mettre à jour n'existe pas."
-        raise
-    except Exception:
-        raise
+        local_error = "La tache que vous voulez modifier n'existe pas."
+        response.data.update({
+            'success': False,
+            'id': task_id,
+            'local_error': local_error
+        })
+        response.status = 404
+        return response
+
+    # If the task hash of the request doesn't correspond to the task hash of the database, throw an error
+    database_task_hash = str(java_string_hashcode(task.texte))
+    if request_task_hash != database_task_hash:
+        local_error = "Cette page a été modifié depuis la tentative de mise à jour."
+        response.data.update({
+            'success': False,
+            'id': task_id,
+            'local_error': local_error
+        })
+        response.status = 400
+        return response
+
+    # Check if the user has the permission
+    if not is_authorized_to_update_task(request.user, task):
+        local_error = "L'utilisateur n'est pas authorisé à modifier cette tache"
+        response.data.update({
+            'success': False,
+            'local_error': local_error
+        })
+        response.status = 403
+        return response
+
+    # If all the above test are ok, update the task
+    task.texte = form_task.texte
+    task.realisee = form_task.realisee
+    task.save()
+
+    # Prepare the output data
+    response.data.update({
+        'success': True,
+        'id': task.id
+    })
+    return response
 
 
-def delete_task(request, http_status):
+def delete_task(request):
     """
     Delete the given note.
     """
-    # Create the output data
-    output_data = {}
+    # Initialize the output data
+    response = JsonResponseContainer()
 
+    # Get the task id from the request
     try:
-        # Get the task id from the request
         task_id = request.DELETE.get("id")
-
-        # Delete the task
-        TODO_Entree.objects.filter(id=task_id).delete()
-
-        # Prepare the output data
-        output_data.update({
-            'success': True,
-            'id': task_id
-        })
-        return output_data
-
     except ObjectDoesNotExist:
-        http_status.status = 404
-        http_status.message = "La tache n'existe pas."
-        http_status.explanation = "La tache que vous voulez accéder n'existe pas."
-        raise
-    except Exception:
-        raise
+        local_error = "La tache que vous voulez supprimer n'existe pas."
+        response.data.update({
+            'success': False,
+            'local_error': local_error
+        })
+        response.status = 404
+        return response
+
+    # Check if the user has the permission
+    if not is_authorized_to_delete_task(request.user, task_id):
+        local_error = "L'utilisateur n'est pas authorisé à supprimer cette tache"
+        response.data.update({
+            'success': False,
+            'local_error': local_error
+        })
+        response.status = 403
+        return response
+
+    # Delete the task
+    TODO_Entree.objects.filter(id=task_id).delete()
+
+    # Prepare the output data
+    response.data.update({
+        'success': True,
+        'id': task_id
+    })
+    return response
 
 
 @login_required
@@ -170,23 +242,23 @@ def rest_task(request, slug):
     """
     # Create the output data
     http_status = Http_status()
-    return_data = {}
+    response = None
 
     try:
         if not request.is_ajax():
             raise_SuspiciousOperation(http_status)
 
         if request.method == 'POST':
-            return_data = post_task(request, slug, http_status)
+            response = post_task(request, slug)
         elif request.method == 'PUT':
-            return_data = put_task(request, http_status)
+            response = put_task(request)
         elif request.method == 'DELETE':
-            return_data = delete_task(request, http_status)
+            response = delete_task(request)
         else:
             raise_SuspiciousOperation(http_status)
 
         # Return the output data
-        return JsonResponse(return_data)
+        return JsonResponse(response.data, status=response.status)
     except Exception as ex:
         # Return the error as a html page or as a JSON dictionary
         return afficher_erreur(request, ex, http_status)
