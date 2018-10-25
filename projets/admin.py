@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Projet,Main_Courante,Journal_Entree,TODO_Entree
+from .models import Projet, Main_Courante, Journal_Entree, TODO_Entree
 
 admin.site.register(Projet)
 admin.site.register(Main_Courante)

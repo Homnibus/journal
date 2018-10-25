@@ -11,7 +11,7 @@
 
 {% block title %}{{ codex.titre|truncatechars:14 }}{% endblock %}
 
-{% block nav-afficher_codex %}current{% endblock %}
+{% block nav-codex %}current{% endblock %}
 
 {% block header %}
 <h1>Codex - {{ codex.titre|title}}</h1>
@@ -29,12 +29,12 @@
       <h2>{{ today_entry.date }}</h2>
       <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
     </header>  
-      {{ today_entry.journal_entry.non_field_errors }}
-      {{ today_entry.journal_entry.texte.errors }}
-      {{ today_entry.journal_entry.journal_id.errors }}
-      {{ today_entry.journal_entry.journal_id }}
+      {{ today_entry.note_form.non_field_errors }}
+      {{ today_entry.note_form.texte.errors }}
+      {{ today_entry.note_form.journal_id.errors }}
+      {{ today_entry.note_form.journal_id }}
     <div class="disp-journal_entree_texte" >
-      {{ today_entry.journal_entry.texte }}
+      {{ today_entry.note_form.texte }}
     </div>
   </section>
 
@@ -44,17 +44,17 @@
     <div class="save-info" style="display:none">Sauvegardé</div>
     </header>
     <section class="task new-task">
-            {{ today_entry.new_task.texte.errors }}
+            {{ today_entry.new_task_form.texte.errors }}
       <div class="disp-add-item-button">
         <img class="add-item-button" id="add_todo" src="{% static 'img/add_button.png' %}"
              alt="Ajouter" />
       </div>
       <div class="disp-todo_entree_texte">
-        {{ today_entry.new_task.texte }}
+        {{ today_entry.new_task_form.texte }}
       </div>
     </section>
     <section class="task-list old-tasks">
-      {% for task_entry in today_entry.task_list reversed%}
+      {% for task_entry in today_entry.tasks_form reversed%}
       <article class="task">
         {{ task_entry.non_field_errors }}
         {{ task_entry.texte.errors }}
@@ -75,25 +75,25 @@
 
 <section class="old-pages">
   {% for entry in older_entry  reversed %}
-  <article class="codex-page{% if not entry.journal_entry and entry.task_list %} flex-column{% endif %} ">
+  <article class="codex-page{% if not entry.note_form and entry.tasks_form %} flex-column{% endif %} ">
     <section class="page-entry">
       <header>
-        <h2>{{ entry.date }}</h2>{% if entry.journal_entry %}<button class="edit-pen div-like-button">&#128393;</button>{% endif %}
+        <h2>{{ entry.date }}</h2>{% if entry.note_form %}<button class="edit-pen div-like-button">&#128393;</button>{% endif %}
         <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
         <div class="ligne"></div>
       </header>
-      {% if entry.journal_entry %}
-        {{ entry.journal_entry.non_field_errors }}
-        {{ entry.journal_entry.texte.errors }}
-        {{ entry.journal_entry.journal_id.errors }}
-        {{ entry.journal_entry.journal_id }}
+      {% if entry.note_form %}
+        {{ entry.note_form.non_field_errors }}
+        {{ entry.note_form.texte.errors }}
+        {{ entry.note_form.journal_id.errors }}
+        {{ entry.note_form.journal_id }}
         <div class="disp-journal_entree_texte">
-          <pre class="journal_entree_texte disabled-textarea">{{ entry.journal_entry.texte.value }}</pre>
+          <pre class="journal_entree_texte disabled-textarea">{{ entry.note_form.texte.value }}</pre>
         </div>
       {% endif %}
     </section>
 
-    {% if entry.task_list %}
+    {% if entry.tasks_form %}
     <section class="page-tasks">
       <header>
         <h2>Tâches</h2><button class="edit-pen div-like-button">&#128393;</button>
@@ -101,7 +101,7 @@
         <div class="ligne"></div>
       </header>
       <section class="task-list">
-        {% for task_entry in entry.task_list %}
+        {% for task_entry in entry.tasks_form %}
         <article class="task">
           {{ task_entry.non_field_errors }}
           {{ task_entry.texte.errors }}
@@ -129,7 +129,7 @@
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
     <script src="{% static 'js/basic.js' %}"></script>
-    <script src="{% static 'js/rest_pages.js' %}"></script>
-    <script src="{% static 'js/rest_taches.js' %}"></script>
+    <script src="{% static 'js/note.js' %}"></script>
+    <script src="{% static 'js/task.js' %}"></script>
     <script src="{% static 'js/codex.js' %}"></script>
 {% endblock %}

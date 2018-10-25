@@ -1,16 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
 
-from ...commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
-from ...commun.utils import java_string_hashcode, JsonResponseContainer
-from ...forms import Journal_EntreeForm
-from ...models import Journal_Entree, get_current_timestamp, Projet
+from projets.commun.error import HttpStatus, render_error, raise_suspicious_operation
+from projets.commun.utils import java_string_hashcode, JsonResponseContainer
+from projets.forms import Journal_EntreeForm
+from projets.models import Journal_Entree, get_current_timestamp, Projet
 
 
 def is_authorized_to_create_note(user, codex):
     """
-    Indicate if the user is authorized to create the note
+    Indicate if the user is authorized to create the note_view
     """
     if user == codex.createur:
         return True
@@ -19,7 +18,7 @@ def is_authorized_to_create_note(user, codex):
 
 def is_authorized_to_update_note(user, note):
     """
-    Indicate if the user is authorized to update the note
+    Indicate if the user is authorized to update the note_view
     """
     if user == note.projet.createur:
         return True
@@ -28,9 +27,9 @@ def is_authorized_to_update_note(user, note):
 
 def is_authorized_to_delete_note(user, note_id):
     """
-    Indicate if the user is authorized to delete the note
+    Indicate if the user is authorized to delete the note_view
     """
-    # Get the task from the database
+    # Get the task_view from the database
     note = Journal_Entree.objects.get(id=note_id)
     if user == note.projet.createur:
         return True
@@ -39,16 +38,16 @@ def is_authorized_to_delete_note(user, note_id):
 
 def post_note(request, codex_slug):
     """
-    Create a new note of the day.
+    Create a new note_view of the day.
     """
     # Initialize the output data
     response = JsonResponseContainer()
 
     # Get the form
-    form = Journal_EntreeForm(request.POST)
+    input_form = Journal_EntreeForm(request.POST)
 
     # If the form is not valid, throw an error
-    if not form.is_valid():
+    if not input_form.is_valid():
         # TODO: review the form validation
         form_errors = "form validation error"
         response.data.update({
@@ -56,9 +55,9 @@ def post_note(request, codex_slug):
             'form_errors': form_errors
         })
         response.status = 400
-        return response
+        return response.get_json_response()
 
-    # Get the codex of the task from the slug
+    # Get the codex of the task_view from the slug
     try:
         codex = Projet.objects.get(slug=codex_slug)
     except ObjectDoesNotExist:
@@ -69,9 +68,9 @@ def post_note(request, codex_slug):
             'local_error': local_error
         })
         response.status = 404
-        return response
+        return response.get_json_response()
 
-    # Check if a note already exist for today
+    # Check if a note_view already exist for today
     today = get_current_timestamp()
     note = Journal_Entree.objects.filter(
         projet=codex,
@@ -80,28 +79,28 @@ def post_note(request, codex_slug):
         date_creation__day=today.day
     ).first()
 
-    # If a note was already created today, throw an error
+    # If a note_view was already created today, throw an error
     if note is not None:
-        local_error = "Une note existe déjà pour ce jour"
+        local_error = "Une note_view existe déjà pour ce jour"
         response.data.update({
             'success': False,
             'local_error': local_error
         })
         response.status = 400
-        return response
+        return response.get_json_response()
 
     # Check if the user has the permission
     if not is_authorized_to_create_note(request.user, codex):
-        local_error = "L'utilisateur n'est pas authorisé à créer cette note"
+        local_error = "L'utilisateur n'est pas authorisé à créer cette note_view"
         response.data.update({
             'success': False,
             'local_error': local_error
         })
         response.status = 403
-        return response
+        return response.get_json_response()
 
-    # If all the above test are ok, create the note
-    request_text = form.save(commit=False).texte
+    # If all the above test are ok, create the note_view
+    request_text = input_form.save(commit=False).texte
     note = Journal_Entree(projet=codex, texte=request_text)
     note.save()
 
@@ -110,27 +109,27 @@ def post_note(request, codex_slug):
         'success': True,
         'id': note.id
     })
-    return response
+    return response.get_json_response()
 
 
 def put_note(request):
     """
-    Update the given note.
+    Update the given note_view.
     """
     # Initialize the output data
     response = JsonResponseContainer()
 
     # Get the form
-    form = Journal_EntreeForm(request.PUT)
+    input_form = Journal_EntreeForm(request.PUT)
 
-    # Get the note id from the request
+    # Get the note_view id from the request
     note_id = request.PUT.get('id')
 
-    # Get the note hash from the request
+    # Get the note_view hash from the request
     request_note_hash = request.PUT.get('hash')
 
     # If the form is not valid, throw an error
-    if not form.is_valid():
+    if not input_form.is_valid():
         # TODO : review the validation of the form
         form_errors = "form validation error"
         response.data.update({
@@ -139,24 +138,24 @@ def put_note(request):
             'form_errors': form_errors
         })
         response.status = 400
-        return response
+        return response.get_json_response()
 
     # Get the text from the form
-    request_text = form.save(commit=False).texte
+    request_text = input_form.save(commit=False).texte
 
-    # Get the note from the database
+    # Get the note_view from the database
     try:
         note = Journal_Entree.objects.get(id=note_id)
     except ObjectDoesNotExist:
-        local_error = "La note n'existe pas."
+        local_error = "La note_view n'existe pas."
         response.data.update({
             'success': False,
             'local_error': local_error
         })
         response.status = 404
-        return response
+        return response.get_json_response()
 
-    # If the note hash of the request doesn't correspond to the note hash of the database, throw an error
+    # If the note_view hash of the request doesn't correspond to the note_view hash of the database, throw an error
     database_note_hash = str(java_string_hashcode(note.texte))
     if request_note_hash != database_note_hash:
         local_error = "Cette page a été modifiée depuis la tentative de mise à jour."
@@ -166,19 +165,19 @@ def put_note(request):
             'local_error': local_error
         })
         response.status = 400
-        return response
+        return response.get_json_response()
 
     # Check if the user has the permission
     if not is_authorized_to_update_note(request.user, note):
-        local_error = "L'utilisateur n'est pas authorisé à modifier cette note"
+        local_error = "L'utilisateur n'est pas authorisé à modifier cette note_view"
         response.data.update({
             'success': False,
             'local_error': local_error
         })
         response.status = 403
-        return response
+        return response.get_json_response()
 
-    # If all the above test are ok, update the note
+    # If all the above test are ok, update the note_view
     note.texte = request_text
     note.save()
 
@@ -187,38 +186,38 @@ def put_note(request):
         'success': True,
         'id': note.id
     })
-    return response
+    return response.get_json_response()
 
 
 def delete_note(request):
     """
-    Delete the given note.
+    Delete the given note_view.
     """
     # Initialize the output data
     response = JsonResponseContainer()
-    # Get the note id from the request
+    # Get the note_view id from the request
     try:
         note_id = request.DELETE.get("id")
     except ObjectDoesNotExist:
-        local_error = "La note n'existe pas."
+        local_error = "La note_view n'existe pas."
         response.data.update({
             'success': False,
             'local_error': local_error
         })
         response.status = 404
-        return response
+        return response.get_json_response()
 
     # Check if the user has the permission
     if not is_authorized_to_delete_note(request.user, note_id):
-        local_error = "L'utilisateur n'est pas authorisé à supprimer cette note"
+        local_error = "L'utilisateur n'est pas authorisé à supprimer cette note_view"
         response.data.update({
             'success': False,
             'local_error': local_error
         })
         response.status = 403
-        return response
+        return response.get_json_response()
 
-    # Delete the note
+    # Delete the note_view
     Journal_Entree.objects.get(id=note_id).delete()
 
     # Prepare the output data
@@ -226,21 +225,21 @@ def delete_note(request):
         'success': True,
         'id': note_id
     })
-    return response
+    return response.get_json_response()
 
 
 @login_required
-def rest_note(request, codex_slug):
+def note_view(request, codex_slug):
     """
-    REST like actions on a note.
+    Manage REST like actions on a note_view.
     """
     # Create the output data
-    http_status = Http_status()
+    http_status = HttpStatus()
     response = None
 
     try:
         if not request.is_ajax():
-            raise_SuspiciousOperation(http_status)
+            raise_suspicious_operation(http_status)
 
         if request.method == 'POST':
             response = post_note(request, codex_slug)
@@ -249,10 +248,10 @@ def rest_note(request, codex_slug):
         elif request.method == 'DELETE':
             response = delete_note(request)
         else:
-            raise_SuspiciousOperation(http_status)
+            raise_suspicious_operation(http_status)
 
         # Return the output data
-        return JsonResponse(response.data, status=response.status)
+        return response
     except Exception as ex:
         # Return the error as a html page or as a JSON dictionary
-        return afficher_erreur(request, ex, http_status)
+        return render_error(request, ex, http_status)

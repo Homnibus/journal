@@ -1,6 +1,6 @@
 {% extends "projets/base_template.html" %}
 
 {% block nav %}
-    <a href="{% url 'nouveau_codex' %}" class="{% block nouveau-codex %}{% endblock %}">Nouveau +</a>
+    <a href="{% url 'new_codex' %}" class="{% block nav-new_codex %}{% endblock %}">Nouveau +</a>
     <a href="{% url 'afficher_taches_toutes' page_number=1 %}" class="{% block nav-taches %}{% endblock %}">Taches</a>
 {% endblock %}

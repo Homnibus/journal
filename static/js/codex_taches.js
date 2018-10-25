@@ -59,7 +59,7 @@ function delete_tache(parent_div,id){
 }
 
 function put_or_delete_tache(){
-    var parent_div = $(this).closest('.task');
+    var parent_div = $(this).closest('.task_view');
     var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
     var texte = get_text(parent_div.find('.todo_entree_texte'));
     var id = parent_div.find('.todo_entree_id').attr('value');

@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
 from .models import Projet, Main_Courante, Journal_Entree, TODO_Entree, get_current_timestamp
-from .views.codex import get_today_page
+from .views.codex_view import get_today_page
 
 # Create your tests here.
 

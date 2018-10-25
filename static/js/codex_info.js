@@ -4,7 +4,7 @@ function saveTextarea(){
     var textarea = $('#id_texte').val();    
     $.ajaxSetup({headers: {"X-CSRFToken": $("[name='csrfmiddlewaretoken']").val()}});
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'maj-main-courante',
+        url: '/projets/' + $('#slug').val() + 'codex-info',
         data: {
             'texte': textarea
         },

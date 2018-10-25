@@ -1,7 +1,7 @@
 {% extends "projets/base_template.html" %}
 
 {% block nav %}
-    <a href="{% url 'afficher_codex' slug=codex.slug %}" class="{% block nav-afficher_codex %}{% endblock %}">Codex</a>
+    <a href="{% url 'codex' codex_slug=codex.slug %}" class="{% block nav-codex %}{% endblock %}">Codex</a>
     <a href="{% url 'afficher_taches' slug=codex.slug %}" class="{% block nav-taches %}{% endblock %}">Taches</a>
-    <a href="{% url 'afficher_main_courante' slug=codex.slug %}" class="{% block nav-afficher_main_courante %}{% endblock %}">Infos</a>
+    <a href="{% url 'codex_info' codex_slug=codex.slug %}" class="{% block nav-codex_info %}{% endblock %}">Infos</a>
 {% endblock %}

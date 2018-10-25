@@ -1,101 +1,22 @@
-import itertools
-import json
 import logging
-from datetime import date,datetime,time
 
-from django.shortcuts import render, redirect
-from django.forms import modelformset_factory
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, JsonResponse
-from django.core.exceptions import PermissionDenied, ObjectDoesNotExist, SuspiciousOperation
 from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden
+from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 
-from ..models import Projet, Main_Courante, Journal_Entree, TODO_Entree, get_current_timestamp
-from ..forms import (ProjetForm, Main_CouranteForm, Journal_EntreeForm, TODO_EntreeForm)
-from ..commun.error import Http_status, afficher_erreur, raise_SuspiciousOperation
 from ..commun.codex import get_codex_from_slug
+from ..commun.error import HttpStatus, render_error, raise_suspicious_operation
+from ..forms import (TODO_EntreeForm)
+from ..models import TODO_Entree
 
 # Get an instance of a logger
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-        
-@login_required
-@never_cache
-def afficher_main_courante(request,slug):
-    """ Afficher la main courante d'un codex."""
-    http_status = Http_status()
-    return_data = {}
-
-    try:
-        #Récuperation du codex a affichier et des droitsf
-        codex = get_codex_from_slug(slug, request.user, http_status)
-
-        if request.method == 'GET':
-            main_courante = Main_Courante.objects.filter(projet=codex).first()
-            form = Main_CouranteForm(instance=main_courante)
-            return render(request, 'projets/codex_info.html', {'codex':codex,'form':form,'main_courante':main_courante})    
-        else:
-            raise_SuspiciousOperation(http_status)
-    except Exception as ex:
-        #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
-    return HttpResponseForbidden()
-
-    
-@login_required
-def maj_main_courante(request,slug):
-    """ Modifier la main courante d'un codex."""
-    http_status = Http_status()
-    return_data = {}
-    
-    try:
-        #Récuperation du codex a affichier et des droits
-        codex = get_codex_from_slug(slug, request.user, http_status)
-        
-        if request.method == 'POST' and request.is_ajax():
-            form = Main_CouranteForm(request.POST)
-            if form.is_valid():
-                #TODO : Ajouter la gestion d'erreur lors d'un formulaire non
-                #       valide (a voir dans quel ca ça arrive)
-                main_courante, created = Main_Courante.objects.update_or_create(
-                    projet=codex,
-                    defaults={'projet':codex,'texte':form.save(commit=False).texte}
-                )
-                return_data.update({
-                    'success': True,
-                    'date_update': main_courante.date_update.strftime('%Y-%m-%d %H:%M')
-                })
-                return JsonResponse(return_data)
-        else:
-            raise_SuspiciousOperation(http_status)
-    except Exception as ex:
-        #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
-    return HttpResponseForbidden()
 
 
-@login_required
-def afficher_derniers_codex(request):
-    """ Afficher les derniers codexs du user."""
-    http_status = Http_status()
-    return_data = {}
-
-    try:
-        if request.method == 'GET':
-            codex = Projet.objects.filter(createur=request.user).order_by('-date_update')#[:8]
-            return_data.update({'derniers_codex': codex})
-            return render(request, 'projets/accueil.html', return_data)
-        else:
-            raise_SuspiciousOperation(http_status)
-    except Exception as ex:
-        #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
-    return HttpResponseForbidden()
-
-        
-class Tache():
+class Tache:
     def __init__(self,model):
         self.form = None
         self.model = model
@@ -104,7 +25,7 @@ class Tache():
 @never_cache
 def afficher_taches(request,slug,page_number=1):
     """Affiche la liste des taches d'un codex"""
-    http_status = Http_status()
+    http_status = HttpStatus()
     return_data = {}
     
     try:
@@ -140,10 +61,10 @@ def afficher_taches(request,slug,page_number=1):
             
             return render(request, 'projets/codex_taches.html', return_data)
         else:
-            raise_SuspiciousOperation(http_status)        
+            raise_suspicious_operation(http_status)
     except Exception as ex:
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
+        return render_error(request, ex, http_status)
     return HttpResponseForbidden()
 
     
@@ -152,7 +73,7 @@ def afficher_taches(request,slug,page_number=1):
 @never_cache
 def afficher_taches_toutes(request,page_number=1,sort_by=None,sort_way=None):
     """Affiche la liste des taches de tout les codex"""
-    http_status = Http_status()
+    http_status = HttpStatus()
     return_data = {}
     
     try:
@@ -192,8 +113,8 @@ def afficher_taches_toutes(request,page_number=1,sort_by=None,sort_way=None):
             return_data.update({'paginator_range':paginator_range})
             return render(request, 'projets/codex_taches_toutes.html', return_data)
         else:
-            raise_SuspiciousOperation(http_status)        
+            raise_suspicious_operation(http_status)
     except Exception as ex:
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
-        return afficher_erreur(request,ex,http_status)
+        return render_error(request, ex, http_status)
     return HttpResponseForbidden()

@@ -1,4 +1,4 @@
-function enable_edit_page()
+function enable_edit_note()
 {
     var parent_div = $(this).closest(".page-entry");
     var texte = get_text(parent_div.find(".journal_entree_texte"));
@@ -6,7 +6,7 @@ function enable_edit_page()
     var id = parent_div.find(".journal_entree_id").attr("value");
     
     //Seting the text hash before it can be modifed
-    update_page_hash(texte,id)
+    update_note_hash(texte,id);
 
     //Replace <div> with <textarea>
     editableText.val(texte);
@@ -18,7 +18,7 @@ function enable_edit_page()
     
     //Set typeWatch
     editableText.typeWatch( {
-        callback: put_or_delete_page,
+        callback: put_or_delete_note,
         wait: 500,
         highlight: false,
         allowSubmit: false,
@@ -26,7 +26,7 @@ function enable_edit_page()
     });
     
     //setup the blur event for this new textarea
-    editableText.blur(disable_edit_page);
+    editableText.blur(disable_edit_note);
     
     //setup autosize
     autosize(editableText);
@@ -35,9 +35,9 @@ function enable_edit_page()
     parent_div.find('.edit-pen').hide();
 }
 
-function disable_edit_page() {
+function disable_edit_note() {
     //Before disabling the texarea, we save it
-    put_or_delete_page.call(this);
+    put_or_delete_note.call(this);
     var html_content = $(this).val();
     var viewableText = $('<pre class="journal_entree_texte disabled-textarea"/>');
     viewableText.text(html_content);
@@ -52,7 +52,7 @@ function enable_edit_task() {
     var task_list = $(this).closest('.page-tasks').find('.task-list .todo_entree_texte');
     task_list.each(function(index){
         console.log(index + ' :: ' + $(this).html());
-        var parent_div = $(this)
+        var parent_div = $(this);
         var texte = get_text(parent_div);
         var id = parent_div.closest('.task').find('.todo_entree_id').attr('value');
         
@@ -69,7 +69,7 @@ function enable_edit_task() {
         
         //setup typeWatch
         editableText.typeWatch( {
-            callback: put_or_delete_tache,
+            callback: put_or_delete_task,
             wait: 500,
             highlight: false,
             allowSubmit: false,
@@ -84,41 +84,41 @@ function enable_edit_task() {
 }
 
 $(document).ready(function(){
-    //Maj of today_page hash after loading page
-    var today_page_id = $(".today-page .journal_entree_id").attr('value');
-    if( today_page_id !== undefined ){
-        page_hash[today_page_id] = $(".journal_entree_id[value = " + today_page_id + "]").closest(".page-entry").find(".journal_entree_texte").val().trim().hashCode();
+    //Maj of today_note hash after loading page
+    var today_note_id = $(".today-page .journal_entree_id").attr('value');
+    if( today_note_id !== undefined ){
+        note_hash[today_note_id] = $(".journal_entree_id[value = " + today_note_id + "]").closest(".page-entry").find(".journal_entree_texte").val().trim().hashCode();
     }
     //When done, we set the textarea editable
     $('.today-page .journal_entree_texte').removeAttr('readonly');
 });
 
 $(document).ready(function(){
-    //Maj of today_task hash after loading page
+    //Maj of today_task hash after loading note
     var today_task_list = $(".today-page .old-tasks");
     enable_edit_task.call(today_task_list);
 });
 
-$(document).on('click','.page-entry .edit-pen',enable_edit_page);
+$(document).on('click','.page-entry .edit-pen',enable_edit_note);
 
 $(document).on('click','.page-tasks .edit-pen',enable_edit_task);
 
 $(document).on('click','.add-item-button:not(.unclickable)',function(){
     // On pose la classe 'unclickable" pour empécher la multi soumission
     $(this).addClass('unclickable');
-    post_tache.call(this);
+    post_task.call(this);
 });
 
-$(document).on('change','.todo_entree_checkbox', put_or_delete_tache);
+$(document).on('change','.todo_entree_checkbox', put_or_delete_task);
 
 $(document).on("keypress",'.new-task .todo_entree_texte',
     function (e) {
-        if (e.ctrlKey && e.keyCode == 13) {
+        if (e.ctrlKey && e.keyCode === 13) {
             e.preventDefault();
             var add_button = $(this).closest('.task').find('.add-item-button:not(.unclickable)');
             if(add_button !== null){
                 add_button.addClass('unclickable');
-                post_tache.call(add_button);
+                post_task.call(add_button);
             }
             // Ctrl-Enter pressed
         }
@@ -127,7 +127,7 @@ $(document).on("keypress",'.new-task .todo_entree_texte',
 $(document).on("keypress",'.journal_entree_texte:not(disabled-textarea)',
     function (e){
         //Si on appuis sur TAB
-        if (e.keyCode == 9) {
+        if (e.keyCode === 9) {
             e.preventDefault();
             var start = this.selectionStart;
             var end = this.selectionEnd;
@@ -147,7 +147,7 @@ $(document).on("keypress",'.journal_entree_texte:not(disabled-textarea)',
 );
 
 $(".journal_typewatch").typeWatch( {
-    callback: post_put_or_delete_page,
+    callback: post_put_or_delete_note,
     wait: 500,
     highlight: false,
     allowSubmit: false,
@@ -155,7 +155,7 @@ $(".journal_typewatch").typeWatch( {
 });
 
 $(".task:not(.new-task) .todo_entree_texte").typeWatch( {
-    callback: put_or_delete_tache,
+    callback: put_or_delete_task,
     wait: 500,
     highlight: false,
     allowSubmit: false,

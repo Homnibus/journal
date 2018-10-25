@@ -7,7 +7,7 @@
 
 {% block title %}Nouveau Codex{% endblock %}
 
-{% block nouveau-codex %}current{% endblock %}
+{% block nav-new_codex %}current{% endblock %}
 
 {% block header %}
 <h1>Creation d'un nouveau Codex</h1>
@@ -16,7 +16,7 @@
 
 {% block content %}
 <section class="derniers-projets">
-  <form class="nouveau-codex" action="{% url 'nouveau_codex' %}" method="post">
+  <form class="nouveau-codex" action="{% url 'new_codex' %}" method="post">
     {% csrf_token %}
     <h2>Titre</h2>
     {{ form.titre }}

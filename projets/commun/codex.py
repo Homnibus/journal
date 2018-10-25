@@ -1,9 +1,9 @@
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 
 from ..models import Projet
-from .error import Http_status
+from .error import HttpStatus
 
-def get_codex_from_slug(slug, user, http_status=Http_status()):
+def get_codex_from_slug(slug, user, http_status=HttpStatus()):
     """Récupération du codex en cours et gestion des droits"""
     try:
         #Récupération du codex
@@ -25,12 +25,11 @@ def get_codex_from_slug(slug, user, http_status=Http_status()):
         raise
     except Exception:
         raise
-        
-class Page_Journal():
+
+
+class Page:
     def __init__(self, date):
-        self.journal_form = None
-        self.liste_todo = []
         self.date = date
-        self.task_list = []
-        self.journal_entry = None
-        self.new_task = None
+        self.note_form = None
+        self.new_task_form = None
+        self.tasks_form = []

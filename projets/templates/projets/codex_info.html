@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/main_courante.css' %}" />
+<link rel="stylesheet" href="{% static 'css/codex_info.css' %}" />
 {% endblock %}
 
 {% block title %}Informations générales{% endblock %}
 
-{% block nav-afficher_main_courante %}current{% endblock %}
+{% block nav-codex_info %}current{% endblock %}
 
 {% block header %}
 <h1>Informations générales - {{ codex.titre|title }}</h1>
@@ -26,7 +26,7 @@
     {% endif %}
     <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
   </header>
-  <form action="{% url 'afficher_main_courante' slug=codex.slug %}" method="post" class="auto_save_form">
+  <form action="{% url 'codex_info' codex_slug=codex.slug %}" method="post" class="auto_save_form">
     {{ form.non_field_errors }}
     {{ form.texte.errors }}
     {{ form.texte }}
@@ -39,5 +39,5 @@
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
     <script src="{% static 'js/basic.js' %}"></script>
-    <script src="{% static 'js/afficher_main_courante.js' %}"></script>
+    <script src="{% static 'js/codex_info.js' %}"></script>
 {% endblock %}

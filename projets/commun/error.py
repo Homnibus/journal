@@ -3,13 +3,15 @@ from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import render
 from django.http import JsonResponse
 
-class Http_status():
+
+class HttpStatus:
     def __init__(self):
         self.status = 200
         self.message = ""
         self.explanation = ""
 
-def afficher_erreur(request,ex,http_status=Http_status()):
+
+def render_error(request, ex, http_status=HttpStatus()):
     logger = logging.getLogger(__name__)
     if http_status.status == 200:
         http_status.status = 500
@@ -23,7 +25,8 @@ def afficher_erreur(request,ex,http_status=Http_status()):
     else:
         return render(request, 'projets/400.html', vars(http_status), status=http_status.status)
 
-def raise_SuspiciousOperation(http_status=Http_status()):
+
+def raise_suspicious_operation(http_status = HttpStatus()):
     http_status.status = 405
     http_status.message = "Méthode de requête non autorisée."
     http_status.explanation = "La méthode de votre requête n'est pas supportée."

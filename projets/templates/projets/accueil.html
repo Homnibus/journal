@@ -23,7 +23,7 @@
 <section class="derniers-codex">
   {% for codex in derniers_codex %}
   <article class="codex">
-    <a href="{% url 'afficher_codex' slug=codex.slug %}">
+    <a href="{% url 'codex' codex_slug=codex.slug %}">
       <div class="codex-flex-content">
         <div class="titre">
           {{ codex.titre|title }}

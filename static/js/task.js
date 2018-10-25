@@ -8,10 +8,10 @@ function update_task_hash(texte,id){
 
 function show_task_save(parent_div){
 //Notice the user that the page was saved//
-    var save_tache = parent_div.closest('.page-tasks').find('.save-info');
+    var save_task = parent_div.closest('.page-tasks').find('.save-info');
     //animate the save div
-    save_tache.fadeIn('slow', function(){
-        save_tache.fadeOut('slow');
+    save_task.fadeIn('slow', function(){
+        save_task.fadeOut('slow');
     });    
 }
 
@@ -29,12 +29,12 @@ function show_new_task(result){
     
     //On ajoute des <div> au formulaire retourné pour pouvoir naviguer dedans avec jquery
     var out_form_str = '<div>' + result.out_form + '</div>'
-    //On ajoute correctement le formulaire de retour en dessous de l'ajout de tache
+    //On ajoute correctement le formulaire de retour en dessous de l'ajout de task
     var new_checkbox = $('.todo_entree_checkbox',out_form_str).clone().wrap('<div>').parent().html()
     var new_textearea = $('.todo_entree_texte',out_form_str).clone().wrap('<div>').parent().html()
     var new_id = $('.todo_entree_id',out_form_str).clone().wrap('<div>').parent().html()
     old_tasks_div.prepend(
-        '<article class="task">' +                            
+        '<article class="task">' +
         new_id +
         '<div class="disp-todo_entree_checkbox">' +
         new_checkbox + 
@@ -46,7 +46,7 @@ function show_new_task(result){
     );    
 }
 
-function post_tache(){
+function post_task(){
 //Create a new task//
     var parent_div = $(this).closest('.task');
     var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
@@ -58,7 +58,7 @@ function post_tache(){
         $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
         //setup ajax call
         $.ajax({
-            url: '/projets/' + $('#slug').val() + 'rest-tache',
+            url: '/projets/' + $('#slug').val() + 'task',
             data: {
                 'texte': texte,
             },
@@ -80,7 +80,7 @@ function post_tache(){
                     //set typeWatch
                     var jqry_textearea = $('.todo_entree_id[value = ' + result.id +']').closest('article').find('.todo_entree_texte');
                     jqry_textearea.typeWatch( {
-                        callback: put_or_delete_tache,
+                        callback: put_or_delete_task,
                         wait: 500,
                         highlight: false,
                         allowSubmit: false,
@@ -93,25 +93,25 @@ function post_tache(){
                     //give an error feedback to the user
                     show_task_error(parent_div,result.local_error);
                 }
-                //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une tache
+                //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une task
                 $('.add-item-button').removeClass('unclickable');
 
             },
             error: (jqXHR, exception) => {
                 show_error(jqXHR, exception);
-                //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une tache
+                //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une task
                 $('.add-item-button').removeClass('unclickable');
 
             }
         });
     }
     else{
-        //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une tache
+        //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une task
         $('.add-item-button').removeClass('unclickable');
     }
 }
 
-function put_tache(parent_div,realisee,texte,id){
+function put_task(parent_div,realisee,texte,id){
 //Update task//
 
     var hash = task_hash[id];
@@ -122,7 +122,7 @@ function put_tache(parent_div,realisee,texte,id){
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
     //setup ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'rest-tache',
+        url: '/projets/' + $('#slug').val() + 'task',
         data: {
             'id': id,
             'texte': texte,
@@ -148,7 +148,7 @@ function put_tache(parent_div,realisee,texte,id){
     });
 }
 
-function delete_tache(parent_div,id){
+function delete_task(parent_div,id){
 //Delete a task//
     
     //delete task from the dom
@@ -158,7 +158,7 @@ function delete_tache(parent_div,id){
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
     //setup ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'rest-tache',
+        url: '/projets/' + $('#slug').val() + 'task',
         data: {
             'id': id,
         },
@@ -182,15 +182,15 @@ function delete_tache(parent_div,id){
     });
 }
 
-function put_or_delete_tache(){
+function put_or_delete_task(){
     var parent_div = $(this).closest('.task');
     var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
     var texte = get_text(parent_div.find('.todo_entree_texte'));
     var id = parent_div.find('.todo_entree_id').attr('value');
     if(texte != ''){
-        put_tache(parent_div,realisee,texte,id);
+        put_task(parent_div,realisee,texte,id);
     }
     else{
-        delete_tache(parent_div,id);
+        delete_task(parent_div,id);
     }
 }

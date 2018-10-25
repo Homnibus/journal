@@ -1,10 +1,6 @@
-import json
-
-from django.http import HttpResponseBadRequest
-
 class PutAndDeleteParsingMiddleware:
     """
-    Permet de parser les request PUT et DELETE sans avoir a utiliser un framework REST dans un permier temps
+    Allow to parse PUT and DELETE request without having to use a REST framework
     """
     def __init__(self, get_response):
         self.get_response = get_response
