@@ -1,9 +1,9 @@
 task_hash={};
 
-function update_task_hash(texte,id){
+function update_task_hash(text,id){
 //Update the hash corresponding to the id//  
     //trim the text so it's the same as in the database
-    task_hash[id] = texte.trim().hashCode();
+    task_hash[id] = text.trim().hashCode();
 }
 
 function show_task_save(parent_div){
@@ -50,9 +50,9 @@ function post_task(){
 //Create a new task//
     var parent_div = $(this).closest('.task');
     var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
-    var texte = get_text(parent_div.find('.todo_entree_texte'));
+    var text = get_text(parent_div.find('.todo_entree_texte'));
 
-    if(texte != ''){
+    if(text !== ''){
 
         //setup csrf token
         $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
@@ -60,7 +60,7 @@ function post_task(){
         $.ajax({
             url: '/projets/' + $('#slug').val() + 'task',
             data: {
-                'texte': texte,
+                'text': text,
             },
             dataType: 'json',
             method: 'POST',
@@ -69,13 +69,13 @@ function post_task(){
                 hide_error();
                 if(result.success){
                     //update the hash of the text for the next update
-                    update_task_hash(texte,result.id);                    
+                    update_task_hash(text,result.id);
 
                     //delete text from the inital from
                     $('.new-task .todo_entree_texte').val('');
                         
                     //add the new task to the dom
-                    show_new_task(result)
+                    show_new_task(result);
                                         
                     //set typeWatch
                     var jqry_textearea = $('.todo_entree_id[value = ' + result.id +']').closest('article').find('.todo_entree_texte');
@@ -111,12 +111,12 @@ function post_task(){
     }
 }
 
-function put_task(parent_div,realisee,texte,id){
+function put_task(parent_div,realisee,text,id){
 //Update task//
 
     var hash = task_hash[id];
     //update the hash of the text for the next update
-    update_task_hash(texte,id);
+    update_task_hash(text,id);
 
     //setup crsf token
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
@@ -125,8 +125,8 @@ function put_task(parent_div,realisee,texte,id){
         url: '/projets/' + $('#slug').val() + 'task',
         data: {
             'id': id,
-            'texte': texte,
-            'realisee': realisee,
+            'text': text,
+            'is_achieved': realisee,
             'hash': hash,
         },
         dataType: 'json',
@@ -152,7 +152,7 @@ function delete_task(parent_div,id){
 //Delete a task//
     
     //delete task from the dom
-    parent_div.remove()
+    parent_div.remove();
     
     //setup csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
@@ -185,10 +185,10 @@ function delete_task(parent_div,id){
 function put_or_delete_task(){
     var parent_div = $(this).closest('.task');
     var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
-    var texte = get_text(parent_div.find('.todo_entree_texte'));
+    var text = get_text(parent_div.find('.todo_entree_texte'));
     var id = parent_div.find('.todo_entree_id').attr('value');
-    if(texte != ''){
-        put_task(parent_div,realisee,texte,id);
+    if(text !== ''){
+        put_task(parent_div,realisee,text,id);
     }
     else{
         delete_task(parent_div,id);

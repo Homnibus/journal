@@ -1,9 +1,9 @@
 note_hash={};
 
-function update_note_hash(texte,id){
+function update_note_hash(text,id){
 //Update the hash corresponding to the id//  
     //trim the text so it's the same as in the database
-    note_hash[id] = texte.trim().hashCode();
+    note_hash[id] = text.trim().hashCode();
 }
 
 function show_note_save(parent_div){
@@ -22,7 +22,7 @@ function show_note_error(parent_div,local_error){
     parent_div.find('.journal_entree_texte').addClass('textarea-error');
 }                  
 
-function post_note(parent_div,texte){
+function post_note(parent_div,text){
 //Create a new note//
     //setup csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
@@ -30,7 +30,7 @@ function post_note(parent_div,texte){
     $.ajax({
         url: '/projets/' + $('#slug').val() + 'note',
         data: {
-            'texte': texte,
+            'text': text,
         },
         dataType: 'json',
         method: 'POST',
@@ -42,7 +42,7 @@ function post_note(parent_div,texte){
                 parent_div.find(".journal_entree_id").attr('value',result.id);
                 
                 //update the hash of the text for the next update
-                update_note_hash(texte,result.id);
+                update_note_hash(text,result.id);
                 
                 //give a feedback to the user
                 show_note_save(parent_div);
@@ -58,12 +58,12 @@ function post_note(parent_div,texte){
     });
 }
 
-function put_note(parent_div,texte,id){
+function put_note(parent_div,text,id){
 //Update a note//
 
     var hash = note_hash[id];
     //update the hash of the text for the next update
-    update_note_hash(texte,id);
+    update_note_hash(text,id);
 
     //setup csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
@@ -72,7 +72,7 @@ function put_note(parent_div,texte,id){
         url: '/projets/' + $('#slug').val() + 'note',
         data: {
             'id': id,
-            'texte': texte,
+            'text': text,
             'hash':hash,
         },
         dataType: 'json',
@@ -129,14 +129,14 @@ function delete_note(parent_div,id){
 
 function post_put_or_delete_note(){
     var parent_div = $(this).closest(".page-entry");
-    var texte = get_text(parent_div.find(".journal_entree_texte"));
+    var text = get_text(parent_div.find(".journal_entree_texte"));
     var id = parent_div.find(".journal_entree_id").attr("value");
-    if(texte != ''){
+    if(text != ''){
         if(id){
-            put_note(parent_div,texte,id);
+            put_note(parent_div,text,id);
         }
         else{
-            post_note(parent_div,texte);
+            post_note(parent_div,text);
         }
     }
     else{
@@ -146,10 +146,10 @@ function post_put_or_delete_note(){
 
 function put_or_delete_note(){
     var parent_div = $(this).closest(".page-entry");
-    var texte = get_text(parent_div.find(".journal_entree_texte"));
+    var text = get_text(parent_div.find(".journal_entree_texte"));
     var id = parent_div.find(".journal_entree_id").attr("value");
-    if(texte != ''){
-        put_note(parent_div,texte,id);
+    if(text != ''){
+        put_note(parent_div,text,id);
     }
     else{
         delete_note(parent_div,id);

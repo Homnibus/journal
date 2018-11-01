@@ -5,11 +5,15 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 from ..commun.codex import get_codex_from_slug
 from ..commun.error import HttpStatus, render_error, raise_suspicious_operation
 from ..forms import (TODO_EntreeForm)
-from ..models import TODO_Entree
+from ..models import TODO_Entree, Task
+from ..serializers import TaskSerializer
 
 # Get an instance of a logger
 logging.basicConfig(level=logging.DEBUG)
@@ -118,3 +122,22 @@ def afficher_taches_toutes(request,page_number=1,sort_by=None,sort_way=None):
         #Retourne l'erreur sous la forme d'une page ou d'un dico json
         return render_error(request, ex, http_status)
     return HttpResponseForbidden()
+
+
+@api_view(['GET', 'POST'])
+def task_list(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        snippets = Task.objects.all()
+        serializer = TaskSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

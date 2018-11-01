@@ -30,11 +30,11 @@
       <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
     </header>  
       {{ today_entry.note_form.non_field_errors }}
-      {{ today_entry.note_form.texte.errors }}
-      {{ today_entry.note_form.journal_id.errors }}
-      {{ today_entry.note_form.journal_id }}
+      {{ today_entry.note_form.text.errors }}
+      {{ today_entry.note_form.note_id.errors }}
+      {{ today_entry.note_form.note_id }}
     <div class="disp-journal_entree_texte" >
-      {{ today_entry.note_form.texte }}
+      {{ today_entry.note_form.text }}
     </div>
   </section>
 
@@ -44,28 +44,28 @@
     <div class="save-info" style="display:none">Sauvegardé</div>
     </header>
     <section class="task new-task">
-            {{ today_entry.new_task_form.texte.errors }}
+            {{ today_entry.new_task_form.text.errors }}
       <div class="disp-add-item-button">
         <img class="add-item-button" id="add_todo" src="{% static 'img/add_button.png' %}"
              alt="Ajouter" />
       </div>
       <div class="disp-todo_entree_texte">
-        {{ today_entry.new_task_form.texte }}
+        {{ today_entry.new_task_form.text }}
       </div>
     </section>
     <section class="task-list old-tasks">
       {% for task_entry in today_entry.tasks_form reversed%}
       <article class="task">
         {{ task_entry.non_field_errors }}
-        {{ task_entry.texte.errors }}
-        {{ task_entry.todo_id.errors }}
-        {{ task_entry.realisee.errors }}
-        {{ task_entry.todo_id }}
+        {{ task_entry.text.errors }}
+        {{ task_entry.task_id.errors }}
+        {{ task_entry.is_achieved.errors }}
+        {{ task_entry.task_id }}
         <div class="disp-todo_entree_checkbox">
-          {{ task_entry.realisee }}
+          {{ task_entry.is_achieved }}
         </div>
         <div class="disp-todo_entree_texte">
-          {{ task_entry.texte }}
+          {{ task_entry.text }}
         </div>
       </article>
       {% endfor %}
@@ -84,11 +84,11 @@
       </header>
       {% if entry.note_form %}
         {{ entry.note_form.non_field_errors }}
-        {{ entry.note_form.texte.errors }}
-        {{ entry.note_form.journal_id.errors }}
-        {{ entry.note_form.journal_id }}
+        {{ entry.note_form.text.errors }}
+        {{ entry.note_form.note_id.errors }}
+        {{ entry.note_form.note_id }}
         <div class="disp-journal_entree_texte">
-          <pre class="journal_entree_texte disabled-textarea">{{ entry.note_form.texte.value }}</pre>
+          <pre class="journal_entree_texte disabled-textarea">{{ entry.note_form.text.value }}</pre>
         </div>
       {% endif %}
     </section>
@@ -104,15 +104,15 @@
         {% for task_entry in entry.tasks_form %}
         <article class="task">
           {{ task_entry.non_field_errors }}
-          {{ task_entry.texte.errors }}
-          {{ task_entry.todo_id.errors }}
-          {{ task_entry.realisee.errors }}
-          {{ task_entry.todo_id }}
+          {{ task_entry.text.errors }}
+          {{ task_entry.task_id.errors }}
+          {{ task_entry.is_achieved.errors }}
+          {{ task_entry.task_id }}
           <div class="disp-todo_entree_checkbox">
-            {{ task_entry.realisee }}
+            {{ task_entry.is_achieved }}
           </div>
           <div class="disp-todo_entree_texte">
-            <div class="todo_entree_texte disabled-textarea">{{ task_entry.texte.value }}</div>
+            <div class="todo_entree_texte disabled-textarea">{{ task_entry.text.value }}</div>
           </div>
         </article>
       {% endfor %}

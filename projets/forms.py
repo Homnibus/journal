@@ -1,7 +1,85 @@
-from django.forms import (Form, ModelForm, Textarea, BaseModelFormSet, CharField, PasswordInput, HiddenInput
-    , CheckboxInput, IntegerField, CharField, BooleanField, Widget)
-                          
-from .models import Projet, Main_Courante, Journal_Entree, TODO_Entree
+from django.forms import ModelForm, Textarea, HiddenInput, CheckboxInput, IntegerField
+
+from .models import Projet, Main_Courante, Journal_Entree, TODO_Entree, Codex, Information, Note, Task
+
+
+class CodexForm(ModelForm):
+    class Meta:
+        model = Codex
+        fields = ('title', 'description')
+        widgets = {
+            'description': Textarea(attrs={'rows': 3, 'style': 'resize:none;'})
+        }
+
+
+class InformationForm(ModelForm):
+    class Meta:
+        model = Information
+        fields = ('text',)
+        widgets = {
+            'text': Textarea(attrs={'rows': 3, 'style': 'resize:none;'})
+        }
+
+
+class NoteForm(ModelForm):
+    note_id = IntegerField(widget=HiddenInput(attrs={'class': 'journal_entree_id'}), required=False)
+
+    class Meta:
+        model = Note
+        fields = ('text',)
+        widgets = {
+            'text': Textarea(
+                attrs={
+                    'rows': 3,
+                    'class': 'journal_entree_texte journal_typewatch',
+                    'placeholder': 'Notes du jour',
+                    'readonly': ''
+                })
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(NoteForm, self).__init__(*args, **kwargs)
+        # If an object is given as a parameter, the id field must be updated
+        if self.instance:
+            self.initial['note_id'] = self.instance.id
+
+    def save(self, commit=True, page=None, *args, **kwargs):
+        note = super(NoteForm, self).save(commit=False, *args, **kwargs)
+        # Update the id as it cannot be retrieved by a ModelForm
+        note.id = self.cleaned_data['note_id']
+        # Set the note page that we get from the url
+        note.page = page
+        if commit:
+            note.save()
+        return note
+
+
+class TaskForm(ModelForm):
+    task_id = IntegerField(widget=HiddenInput(attrs={'class': 'todo_entree_id'}), required=False)
+
+    class Meta:
+        model = Task
+        fields = ('text', 'is_achieved')
+        widgets = {
+            'text': Textarea(attrs={'rows': 1, 'class': 'todo_entree_texte', 'placeholder': 'Nouvelle tache'}),
+            'is_achieved': CheckboxInput(attrs={'class': 'todo_entree_checkbox'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TaskForm, self).__init__(*args, **kwargs)
+        # If an object is given as a parameter, the id field must be updated
+        if self.instance:
+            self.initial['task_id'] = self.instance.id
+
+    def save(self, commit=True, page=None, *args, **kwargs):
+        task = super(TaskForm, self).save(commit=False, *args, **kwargs)
+        # Update the id as it cannot be retrieved by a ModelForm
+        task.id = self.cleaned_data['task_id']
+        # Set the task page that we get from the url
+        task.page = page
+        if commit:
+            task.save()
+        return task
 
 
 class ProjetForm(ModelForm):

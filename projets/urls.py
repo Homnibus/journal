@@ -20,4 +20,5 @@ urlpatterns = [
     path('<slug:codex_slug>/task', views.task_view, name='task'),
     path('<slug:codex_slug>/note', views.note_view, name='note'),
     path('<slug:codex_slug>/codex-info', views.codex_info_view, name='codex_info'),
+    path('<slug:codex_slug>/DRF/task', views.task_list, name='task_details'),
 ]

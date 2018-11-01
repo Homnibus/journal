@@ -1,14 +1,12 @@
-from datetime import datetime, time
-
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 
-from ..commun.codex import Page
+from ..commun.codex import Page as Page_container
 from ..commun.error import HttpStatus, render_error, raise_suspicious_operation
-from ..forms import Journal_EntreeForm, TODO_EntreeForm
-from ..models import Projet, Journal_Entree, TODO_Entree, get_current_timestamp
+from ..forms import NoteForm, TaskForm
+from ..models import get_current_timestamp, Page, Note, Task, Codex
 
 
 def get_today_page(codex, today):
@@ -16,40 +14,34 @@ def get_today_page(codex, today):
     Return the page of the day
     """
     # Initialize output data
-    today_page = Page(date=today)
-    
-    # Get the note of the day
-    today_note = Journal_Entree.objects.filter(
-        projet=codex,
-        date_creation__range=[
-            datetime.combine(today, time.min),
-            datetime.combine(today, time.max)
-        ]
-    ).first()
-    # If there is no note created today, create a new one
-    if today_note is None:
-        today_note = Journal_Entree(projet=codex)
-    
+    output_page_data = Page_container(date=today)
+
+    # Get the page of the day (use filter and first to have one object or None)
+    today_page = Page.objects.filter(codex=codex, date=today.date()).first()
+    # If the page does not exist, create an empty one
+    # Do not save it before the user create a note or a task
+    if not today_page:
+        today_page = Page(codex=codex, date=today.date())
+
+    # Get the note of the day (use filter and first to have one object or None)
+    today_note = Note.objects.filter(page=today_page).first()
+    # If the note does not exist, create an empty one
+    if not today_note:
+        today_note = Note(page=today_page)
+
     # Add the note as a form to the page
-    today_page.note_form = Journal_EntreeForm(instance=today_note)
+    output_page_data.note_form = NoteForm(instance=today_note)
 
     # Add a new task form to the page
-    today_page.new_task_form = TODO_EntreeForm()
+    output_page_data.new_task_form = TaskForm()
 
     # Get the tasks of the day
-    today_tasks = list(TODO_Entree.objects.filter(
-        projet=codex,
-        date_creation__range=[
-            datetime.combine(today, time.min),
-            datetime.combine(today, time.max)
-        ]
-    ).order_by('date_creation'))
-
+    today_tasks = list(Task.objects.filter(page=today_page).order_by('creation_date'))
     # Add each task as a form to the page
     for task in today_tasks:
-        today_page.tasks_form.append(TODO_EntreeForm(instance=task))
+        output_page_data.tasks_form.append(TaskForm(instance=task))
 
-    return today_page
+    return output_page_data
 
     
 def get_pages_before_today(codex, today):
@@ -57,58 +49,34 @@ def get_pages_before_today(codex, today):
     Return all the pages which were created before today for the given codex
     """
     # Initialize output data
-    old_pages = []
+    output_old_pages = []
     
-    # Get all the notes which are older than today
-    old_notes = list(Journal_Entree.objects.filter(
-        projet=codex,
-        date_creation__lt=datetime.combine(today, time.min)
-    ).order_by('date_creation'))
-    old_notes_counter = 0
-    
-    # Get all the tasks which are older than today
-    old_tasks = TODO_Entree.objects.filter(
-        projet=codex,
-        date_creation__lt=datetime.combine(today, time.min)
-    ).order_by('date_creation')
-    old_tasks_counter = 0
-    
-    # Reconcile the note list with the task list according to their creation date
-    while old_tasks_counter < len(old_tasks) or old_notes_counter < len(old_notes):
-    
-        # Find the min date between the current note and task
-        if old_tasks_counter >= len(old_tasks):
-            current_date = old_notes[old_notes_counter].date_creation.date()
-        elif old_notes_counter >= len(old_notes):
-            current_date = old_tasks[old_tasks_counter].date_creation.date()
-        else:
-            current_date = min(
-                old_notes[old_notes_counter].date_creation,
-                old_tasks[old_tasks_counter].date_creation
-            ).date()
-        
-        # Initialize a page with the previous date
-        current_page = Page(date=current_date)
-        is_page_alone = True
-        
-        # Add the note to the current page
-        while old_notes_counter < len(old_notes) and old_notes[old_notes_counter].date_creation.date() == current_date:
-            # TODO :Add error if there is more than one note for the same day
-            if not is_page_alone:
-                print("ERROR")
-            current_page.note_form = Journal_EntreeForm(instance=old_notes[old_notes_counter])
-            old_notes_counter += 1
-            is_page_alone = False
-        
-        # Add the tasks to then current page
-        while old_tasks_counter < len(old_tasks) and old_tasks[old_tasks_counter].date_creation.date() == current_date:
-            current_page.tasks_form.append(TODO_EntreeForm(instance=old_tasks[old_tasks_counter]))
-            old_tasks_counter += 1
-        
-        # Add the current page to the output page list
-        old_pages.append(current_page)
+    # Get all the pages which are older than today
+    old_pages = list(Page.objects.filter(
+        codex=codex,
+        date__lt=today.date()
+    ).order_by('date'))
 
-    return old_pages
+    # For each page, get the note and the corresponding tasks
+    for page in old_pages:
+        page_container = Page_container(date=page.date)
+
+        # Get the corresponding note
+        note = Note.objects.filter(page=page).first()
+        # Add the note as a form to the page container
+        if note:
+            page_container.note_form = NoteForm(instance=note)
+
+        # Get the corresponding tasks
+        tasks = list(Task.objects.filter(page=page).order_by('creation_date'))
+        # Add each task as a form to the page container
+        for task in tasks:
+            page_container.tasks_form.append(TaskForm(instance=task))
+
+        # Add the current page container to the output page list
+        output_old_pages.append(page_container)
+
+    return output_old_pages
 
 
 def get_codex(request, codex_slug, http_status):
@@ -120,7 +88,7 @@ def get_codex(request, codex_slug, http_status):
 
     # Get the codex from the slug
     try:
-        codex = Projet.objects.get(slug=codex_slug)
+        codex = Codex.objects.get(slug=codex_slug)
     except ObjectDoesNotExist:
         # TODO : factorise this
         http_status.status = 404

@@ -3,15 +3,15 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from projets.commun.error import HttpStatus, render_error, raise_suspicious_operation
 from projets.commun.utils import java_string_hashcode, JsonResponseContainer
-from projets.forms import Journal_EntreeForm
-from projets.models import Journal_Entree, get_current_timestamp, Projet
+from projets.forms import NoteForm
+from projets.models import Note, get_current_timestamp, Codex, Page
 
 
 def is_authorized_to_create_note(user, codex):
     """
     Indicate if the user is authorized to create the note_view
     """
-    if user == codex.createur:
+    if user == codex.author:
         return True
     return False
 
@@ -20,7 +20,7 @@ def is_authorized_to_update_note(user, note):
     """
     Indicate if the user is authorized to update the note_view
     """
-    if user == note.projet.createur:
+    if user == note.page.codex.author:
         return True
     return False
 
@@ -30,8 +30,8 @@ def is_authorized_to_delete_note(user, note_id):
     Indicate if the user is authorized to delete the note_view
     """
     # Get the task_view from the database
-    note = Journal_Entree.objects.get(id=note_id)
-    if user == note.projet.createur:
+    note = Note.objects.get(id=note_id)
+    if user == note.page.codex.author:
         return True
     return False
 
@@ -44,7 +44,7 @@ def post_note(request, codex_slug):
     response = JsonResponseContainer()
 
     # Get the form
-    input_form = Journal_EntreeForm(request.POST)
+    input_form = NoteForm(request.POST)
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
@@ -59,7 +59,7 @@ def post_note(request, codex_slug):
 
     # Get the codex of the task_view from the slug
     try:
-        codex = Projet.objects.get(slug=codex_slug)
+        codex = Codex.objects.get(slug=codex_slug)
     except ObjectDoesNotExist:
         # TODO : factorise this
         local_error = "Le codex n'existe pas."
@@ -71,16 +71,15 @@ def post_note(request, codex_slug):
         return response.get_json_response()
 
     # Check if a note_view already exist for today
-    today = get_current_timestamp()
-    note = Journal_Entree.objects.filter(
-        projet=codex,
-        date_creation__year=today.year,
-        date_creation__month=today.month,
-        date_creation__day=today.day
-    ).first()
+    # TODO: try to upgrade the way this check is down
+    today = get_current_timestamp().date()
+    page = Page.objects.filter(
+        codex=codex,
+        date=today,
+    ).select_related('note').first()
 
     # If a note_view was already created today, throw an error
-    if note is not None:
+    if hasattr(page, 'note'):
         local_error = "Une note_view existe déjà pour ce jour"
         response.data.update({
             'success': False,
@@ -100,9 +99,9 @@ def post_note(request, codex_slug):
         return response.get_json_response()
 
     # If all the above test are ok, create the note_view
-    request_text = input_form.save(commit=False).texte
-    note = Journal_Entree(projet=codex, texte=request_text)
-    note.save()
+    request_text = input_form.save(commit=False).text
+    note = Note(text=request_text)
+    note.save(codex=codex)
 
     # Prepare the output data
     response.data.update({
@@ -120,7 +119,7 @@ def put_note(request):
     response = JsonResponseContainer()
 
     # Get the form
-    input_form = Journal_EntreeForm(request.PUT)
+    input_form = NoteForm(request.PUT)
 
     # Get the note_view id from the request
     note_id = request.PUT.get('id')
@@ -141,11 +140,11 @@ def put_note(request):
         return response.get_json_response()
 
     # Get the text from the form
-    request_text = input_form.save(commit=False).texte
+    request_text = input_form.save(commit=False).text
 
     # Get the note_view from the database
     try:
-        note = Journal_Entree.objects.get(id=note_id)
+        note = Note.objects.get(id=note_id)
     except ObjectDoesNotExist:
         local_error = "La note_view n'existe pas."
         response.data.update({
@@ -156,7 +155,7 @@ def put_note(request):
         return response.get_json_response()
 
     # If the note_view hash of the request doesn't correspond to the note_view hash of the database, throw an error
-    database_note_hash = str(java_string_hashcode(note.texte))
+    database_note_hash = str(java_string_hashcode(note.text))
     if request_note_hash != database_note_hash:
         local_error = "Cette page a été modifiée depuis la tentative de mise à jour."
         response.data.update({
@@ -178,7 +177,7 @@ def put_note(request):
         return response.get_json_response()
 
     # If all the above test are ok, update the note_view
-    note.texte = request_text
+    note.text = request_text
     note.save()
 
     # Prepare the output data
@@ -218,7 +217,7 @@ def delete_note(request):
         return response.get_json_response()
 
     # Delete the note_view
-    Journal_Entree.objects.get(id=note_id).delete()
+    Note.objects.get(id=note_id).delete()
 
     # Prepare the output data
     response.data.update({

@@ -3,15 +3,15 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from projets.commun.error import HttpStatus, render_error, raise_suspicious_operation
 from projets.commun.utils import java_string_hashcode, JsonResponseContainer
-from projets.forms import TODO_EntreeForm
-from projets.models import TODO_Entree, Projet
+from projets.forms import TaskForm
+from projets.models import Codex, Task
 
 
 def is_authorized_to_create_task(user, codex):
     """
     Indicate if the user is authorized to create the task_view
     """
-    if user == codex.createur:
+    if user == codex.author:
         return True
     return False
 
@@ -20,7 +20,7 @@ def is_authorized_to_update_task(user, task):
     """
     Indicate if the user is authorized to update the task_view
     """
-    if user == task.projet.createur:
+    if user == task.page.codex.author:
         return True
     return False
 
@@ -30,8 +30,8 @@ def is_authorized_to_delete_task(user, task_id):
     Indicate if the user is authorized to delete the task_view
     """
     # Get the task_view from the database
-    task = TODO_Entree.objects.get(id=task_id)
-    if user == task.projet.createur:
+    task = Task.objects.get(id=task_id)
+    if user == task.page.codex.author:
         return True
     return False
 
@@ -44,7 +44,7 @@ def post_task(request, codex_slug):
     response = JsonResponseContainer()
 
     # Get the form
-    input_form = TODO_EntreeForm(request.POST)
+    input_form = TaskForm(request.POST)
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
@@ -62,7 +62,7 @@ def post_task(request, codex_slug):
 
     # TODO: put this test in the form validation
     # If the task_view text is empty, throw an error
-    if not form_task.texte or form_task.texte.isspace():
+    if not form_task.text or form_task.text.isspace():
         local_error = "Impossible de créer une tache vide"
         response.data.update({
             'success': False,
@@ -73,7 +73,7 @@ def post_task(request, codex_slug):
 
     # Get the codex of the task_view from the slug
     try:
-        codex = Projet.objects.get(slug=codex_slug)
+        codex = Codex.objects.get(slug=codex_slug)
     except ObjectDoesNotExist:
         # TODO : factorise this
         local_error = "Le codex n'existe pas."
@@ -95,17 +95,16 @@ def post_task(request, codex_slug):
         return response.get_json_response()
 
     # If all the above test are ok, create the task_view
-    task = TODO_Entree(
-        projet=codex,
-        texte=form_task.texte,
-        realisee=form_task.realisee
+    task = Task(
+        text=form_task.text,
+        is_achieved=form_task.is_achieved
     )
-    task.save()
+    task.save(codex=codex)
 
     # TODO : change the way this data is returned
     # Récupération du html d'un nouveau formulaire avec les données mises à jours pour affichage
     # et ajout aux données à retourner
-    output_form = '<table>' + str(TODO_EntreeForm(instance=task)) + '</table>'
+    output_form = '<table>' + str(TaskForm(instance=task)) + '</table>'
 
     # Prepare the output data
     response.data.update({
@@ -124,7 +123,7 @@ def put_task(request):
     response = JsonResponseContainer()
 
     # Get the form
-    input_form = TODO_EntreeForm(request.PUT)
+    input_form = TaskForm(request.PUT)
 
     # TODO : get this information from the form
     # Get the task_view id from the request
@@ -152,7 +151,7 @@ def put_task(request):
     # TODO : try to put this check in the form validation
     # Get the task_view from the database
     try:
-        task = TODO_Entree.objects.get(id=task_id)
+        task = Task.objects.get(id=task_id)
     except ObjectDoesNotExist:
         local_error = "La tache que vous voulez modifier n'existe pas."
         response.data.update({
@@ -164,7 +163,7 @@ def put_task(request):
         return response.get_json_response()
 
     # If the task_view hash of the request doesn't correspond to the task_view hash of the database, throw an error
-    database_task_hash = str(java_string_hashcode(task.texte))
+    database_task_hash = str(java_string_hashcode(task.text))
     if request_task_hash != database_task_hash:
         local_error = "Cette page a été modifié depuis la tentative de mise à jour."
         response.data.update({
@@ -186,8 +185,8 @@ def put_task(request):
         return response.get_json_response()
 
     # If all the above test are ok, update the task_view
-    task.texte = form_task.texte
-    task.realisee = form_task.realisee
+    task.text = form_task.text
+    task.is_achieved = form_task.is_achieved
     task.save()
 
     # Prepare the output data
@@ -228,7 +227,7 @@ def delete_task(request):
         return response.get_json_response()
 
     # Delete the task_view
-    TODO_Entree.objects.filter(id=task_id).delete()
+    Task.objects.filter(id=task_id).delete()
 
     # Prepare the output data
     response.data.update({
