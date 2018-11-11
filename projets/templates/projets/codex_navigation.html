@@ -1,7 +1,14 @@
 {% extends "projets/base_template.html" %}
+{% load i18n %}
 
 {% block nav %}
-    <a href="{% url 'codex' codex_slug=codex.slug %}" class="{% block nav-codex %}{% endblock %}">Codex</a>
-    <a href="{% url 'afficher_taches' slug=codex.slug %}" class="{% block nav-taches %}{% endblock %}">Taches</a>
-    <a href="{% url 'codex_info' codex_slug=codex.slug %}" class="{% block nav-codex_info %}{% endblock %}">Infos</a>
+    <a href="{% url 'codex_details' codex_slug=codex.slug %}" class="{% block nav-codex %}{% endblock %}">
+        {% trans 'Codex' %}
+    </a>
+    <a href="{% url 'codex_tasks' codex_slug=codex.slug %}" class="{% block nav-taches %}{% endblock %}">
+        {% trans 'Tasks' %}
+    </a>
+    <a href="{% url 'information' codex_slug=codex.slug %}" class="{% block nav-codex_info %}{% endblock %}">
+        {% trans 'Info' %}
+    </a>
 {% endblock %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
-from ..forms import ProjetForm
+from ..forms import CodexForm
 from ..commun.error import HttpStatus, render_error, raise_suspicious_operation
 
 
@@ -11,10 +11,10 @@ def get_new_codex(request):
     Return the page for the codex creation
     """
     # Create the output form
-    output_form = ProjetForm()
+    output_form = CodexForm()
     # Prepare the output data
     output_data = {'form': output_form}
-    return render(request, 'projets/new_codex.html', output_data)
+    return render(request, 'projets/codex_add.html', output_data)
 
 
 def post_new_codex(request):
@@ -22,18 +22,18 @@ def post_new_codex(request):
     Create the codex and redirect to the codex page
     """
     # Get the form
-    input_form = ProjetForm(request.POST)
+    input_form = CodexForm(request.POST)
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
         # Prepare the output data
         output_data = {'form': input_form}
         # TODO : manage form error
-        return render(request, 'projets/new_codex.html', output_data)
+        return render(request, 'projets/codex_add.html', output_data)
 
     # Create the new Codex
     codex = input_form.save(commit=False)
-    codex.createur = request.user
+    codex.author = request.user
     codex.save()
 
     # Redirect to the codex page
@@ -42,7 +42,7 @@ def post_new_codex(request):
 
 @login_required
 @never_cache
-def new_codex_view(request):
+def codex_add_view(request):
     """
     Manage the codex creation
     """

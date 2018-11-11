@@ -1,36 +1,38 @@
 note_hash={};
 
-function update_note_hash(text,id){
-//Update the hash corresponding to the id//  
-    //trim the text so it's the same as in the database
+/** Update the hash corresponding to the id */
+function update_note_hash(text, id){
+    // Trim the text so it's the same as in the database
     note_hash[id] = text.trim().hashCode();
 }
 
+/** Notice the user that the note was saved */
 function show_note_save(parent_div){
-//Notice the user that the note was saved//
-    var save_journal = parent_div.find('.save-info');
-    //animate the save div
-    save_journal.fadeIn('slow', function(){
-        save_journal.fadeOut('slow');
+    const save_note = parent_div.find('.save-info');
+    // Animate the save div
+    save_note.fadeIn('slow', function(){
+        save_note.fadeOut('slow');
     });    
 }
 
-function show_note_error(parent_div,local_error){
-//Notice the user that the note couldn't be saved
-    var error = $('<div class="local-error">').text(local_error); 
+/** Notice the user that the note couldn't be saved */
+function show_note_error(parent_div, local_error){
+    const error = $('<div class="local-error">').text(local_error);
     parent_div.find('header').append(error);
-    parent_div.find('.journal_entree_texte').addClass('textarea-error');
+    parent_div.find('.note_text').addClass('textarea-error');
 }                  
 
-function post_note(parent_div,text){
-//Create a new note//
-    //setup csrf token
-    $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
-    //setup ajax call
+/** Create a new note */
+function post_note(parent_div, text){
+    const codex_slug = $('#slug').val();
+    // Set the csrf token
+    $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
+    // Do the ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'note',
+        url: '/notes',
         data: {
             'text': text,
+            'codex_slug': codex_slug,
         },
         dataType: 'json',
         method: 'POST',
@@ -38,17 +40,17 @@ function post_note(parent_div,text){
             
             hide_error();
             if(result.success){
-                //update the id of the note
-                parent_div.find(".journal_entree_id").attr('value',result.id);
+                // Update the id of the note
+                parent_div.find('.note_id').attr('value',result.id);
                 
-                //update the hash of the text for the next update
+                // Update the hash of the text for the next update
                 update_note_hash(text,result.id);
                 
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_note_save(parent_div);
             }
             else{
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_note_error(parent_div,result.local_error);
             }
         },
@@ -58,20 +60,18 @@ function post_note(parent_div,text){
     });
 }
 
-function put_note(parent_div,text,id){
-//Update a note//
-
-    var hash = note_hash[id];
-    //update the hash of the text for the next update
+/** Update a note */
+function put_note(parent_div, text, id){
+    const hash = note_hash[id];
+    // Update the hash of the text for the next update
     update_note_hash(text,id);
 
-    //setup csrf token
-    $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
-    //setup ajax call
+    // Set the csrf token
+    $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
+    // Do the ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'note',
+        url: '/notes/' + id,
         data: {
-            'id': id,
             'text': text,
             'hash':hash,
         },
@@ -80,11 +80,11 @@ function put_note(parent_div,text,id){
         success: function(result) {
             hide_error();
             if(result.success){
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_note_save(parent_div);
             }
             else{
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_note_error(parent_div,result.local_error);
             }
         },
@@ -94,30 +94,27 @@ function put_note(parent_div,text,id){
     });
 }
 
+/** Delete a note */
 function delete_note(parent_div,id){
-//Delete a note//
-
-    //delete note from the dom
-    parent_div.find('.journal_entree_texte').remove()
+    // Delete note from the dom
+    parent_div.find('.note_text').remove();
     
-    //setup csrf token
-    $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
-    //setup ajax call
+    // Set the csrf token
+    $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
+    // Do the ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'note',
-        data: {
-            'id': id,
-        },
+        url: '/notes/' + id,
+        data: {},
         dataType: 'json',
         method: 'DELETE',
         success: function(result){
             hide_error();
             if(result.success){                
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_note_save(parent_div);
             }
             else{
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_note_error(parent_div,result.local_error);
             }
         },
@@ -127,11 +124,12 @@ function delete_note(parent_div,id){
     });
 }
 
+/** Do the according rest action on a note */
 function post_put_or_delete_note(){
-    var parent_div = $(this).closest(".page-entry");
-    var text = get_text(parent_div.find(".journal_entree_texte"));
-    var id = parent_div.find(".journal_entree_id").attr("value");
-    if(text != ''){
+    const parent_div = $(this).closest('.page-note');
+    const text = get_text(parent_div.find('.note_text'));
+    const id = parent_div.find('.note_id').attr('value');
+    if(text !== ''){
         if(id){
             put_note(parent_div,text,id);
         }
@@ -144,11 +142,12 @@ function post_put_or_delete_note(){
     }
 }
 
+/** Do the according rest action on a note */
 function put_or_delete_note(){
-    var parent_div = $(this).closest(".page-entry");
-    var text = get_text(parent_div.find(".journal_entree_texte"));
-    var id = parent_div.find(".journal_entree_id").attr("value");
-    if(text != ''){
+    const parent_div = $(this).closest('.page-note');
+    const text = get_text(parent_div.find('.note_text'));
+    const id = parent_div.find('.note_id').attr('value');
+    if(text !== ''){
         put_note(parent_div,text,id);
     }
     else{

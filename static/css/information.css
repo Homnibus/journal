@@ -1,0 +1,3 @@
+/* header */
+.information header { flex-direction: row; }
+.information h2 { white-space: nowrap; }

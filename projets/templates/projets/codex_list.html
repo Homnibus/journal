@@ -1,0 +1,47 @@
+{% extends "projets/accueil_navigation.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/codex_list.css' %}" />
+{% endblock %}
+
+{% block title %}{% trans 'Last Codex' %}{% endblock %}
+
+{% block nav-accueil %}current{% endblock %}
+
+{% block header %}
+<h1>{% trans 'Most recent Codex' %}</h1>
+<h4>
+  <div class="title">{% trans 'Search :' %}</div>
+  <div class="disp-codex-search">
+    <input class="codex-search" maxlength="256" placeholder="{% trans 'Codex title' %}" title="{% trans 'Search a Codex' %}" autocomplete="off" type="search">
+  </div>
+</h4>
+{% endblock %}
+
+{% block content %}
+<section class="codex-list">
+  {% for codex in codex_list %}
+  <article class="codex">
+    <a href="{{ codex.get_absolute_url }}">
+      <div class="codex-flex-content">
+        <div class="title">
+          {{ codex.title|title }}
+        </div>
+        <div class="filler"></div>
+        <div class="date">
+          {{ codex.update_date|date:"j M Y" }}
+        </div>
+      </div>  
+    </a>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/codex_list.js' %}"></script>
+{% endblock %}

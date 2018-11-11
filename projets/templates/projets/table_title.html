@@ -1,8 +1,8 @@
 <a href=
 {% if sort_by == sort_by_value and sort_way == 'desc' %}
-  "{% url 'afficher_taches_toutes' page_number=page_number sort_by=sort_by_value %}"
+  "?page_number={{ page_number }}&sort_by={{ sort_by_value }}"
 {% else %}
-  "{% url 'afficher_taches_toutes' page_number=page_number sort_by=sort_by_value sort_way='desc' %}"
+  "?page_number={{ page_number }}&sort_by={{ sort_by_value}}&sort_way=desc"
 {% endif %}
 {% if sort_by == sort_by_value %}
   {% if sort_way == 'desc' %}
@@ -12,5 +12,5 @@
   {% endif %}
 {% endif %}
 >
-  {{ titre }}
+  {{ title }}
 </a>

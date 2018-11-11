@@ -2,17 +2,15 @@
 .today-page .page-tasks { margin-top: .4em; }
 
 /* old-pages */
-.old-pages .codex-page:not(.flex-column) {
+.old-pages .page:not(.flex-column) {
   flex-direction: row;
 }
-.old-pages .codex-page {
+.old-pages .page {
   flex-wrap:wrap;
-  margin-top: 1.5em;
-  margin-right: -.6em;
-  margin-bottom: -.6em;
+  margin: 1.5em -.6em -.6em 0;
 }
 
-.old-pages .codex-page > section {
+.old-pages .page > section {
   flex: 1;
   min-width: 256px;
   margin-right: .6em;
@@ -24,28 +22,28 @@
 .task-list .task { margin-top: .8em; }
 .old-pages .task:first-child { margin: 0; }
 
-/* gestion du contour */
-.disp-journal_entree_texte,
+/* Border management */
+.disp-note_text,
 .task-list,
 .new-task{
   padding-left: .2em;
   padding-right: .2em;
 }
 
-.old-pages .journal_entree_texte,
+.old-pages .note_text,
 .old-pages .task{
   border: 1px solid rgba(0,0,0,.16);
   background: white;
   box-shadow: 0 0 0 0;
 }
 
-/*Text Box decoration*/
-.old-pages .codex-page:nth-child(odd) .disp-journal_entree_texte .journal_entree_texte,
-.old-pages .codex-page:nth-child(odd) .task{
+/* Text box decoration */
+.old-pages .page:nth-child(odd) .disp-note_text .note_text,
+.old-pages .page:nth-child(odd) .task{
   border-left: .4em solid #4D7385;
 }
-.old-pages .codex-page:nth-child(even) .disp-journal_entree_texte .journal_entree_texte,
-.old-pages .codex-page:nth-child(even) .task{
+.old-pages .page:nth-child(even) .disp-note_text .note_text,
+.old-pages .page:nth-child(even) .task{
   border-left: .4em solid #f0f3f5;
 }
 
@@ -59,16 +57,16 @@
   box-shadow: none;
 }
 
-.old-pages .disp-journal_entree_texte textarea:focus,
+.old-pages .disp-note_text textarea:focus,
 .old-pages .task:focus-within{
   border: 1px solid #2F4752; 
   box-shadow: 0 .1em .2em 0 #4D7385,0 .1em .5em 0 #79B5D1;
 }
 
 
-/* gestion du text */
-.old-pages .journal_entree_texte,
-.old-pages .todo_entree_texte{ 
+/* text management */
+.old-pages .note_text,
+.old-pages .task_text{
   font-size: .9em;
   font-family: arial;
   padding: .2em .2em .2em .5em; 
@@ -76,22 +74,19 @@
 }
 
 /* display div */
-.disp-todo_entree_checkbox,
-.disp-todo_entree_texte,
-.disp-journal_entree_texte,
-.disp-add-item-button
-{
-  display : flex;
-}
+.disp-task_is_achieved,
+.disp-task_text,
+.disp-note_text,
+.disp-add-item-button { display: flex; }
 
-/* display todo_entree_texte */
-/* display todo_entre_checkbox */
-.disp-todo_entree_texte,
-.disp-journal_entree_texte { flex: 1; }
+/* display task_text */
+/* display task_checkbox */
+.disp-task_text,
+.disp-note_text { flex: 1; }
 
 /* header */
-.codex-page header { flex-direction: row; }
-.codex-page h2 { white-space: nowrap; }
+.page header { flex-direction: row; }
+.page h2 { white-space: nowrap; }
 
 /* add button */
 .add-item-button {
@@ -99,11 +94,9 @@
   width: 21px;
   max-width: 21px;
   height: auto;
-  margin: auto;
-  margin-left: .2m;
-  margin-right: .5em;
+  margin: auto .5em auto .2em;
 }
-.todo_entree_checkbox { 
+.is_achieved {
   box-shadow: none; 
   margin: 0 .6em 0 .6em;
 }

@@ -1,16 +1,17 @@
 {% extends "projets/codex_navigation.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/codex_info.css' %}" />
+<link rel="stylesheet" href="{% static 'css/information.css' %}" />
 {% endblock %}
 
-{% block title %}Informations générales{% endblock %}
+{% block title %}{% trans 'General informations' %}{% endblock %}
 
 {% block nav-codex_info %}current{% endblock %}
 
 {% block header %}
-<h1>Informations générales - {{ codex.titre|title }}</h1>
+<h1>{% trans 'General informations - ' %}{{ codex.title|title }}</h1>
 <h4>{{ codex.description }}</h4>
 <div class="project-info">
   <input type="hidden" id="slug" value={{ codex.slug }}/>
@@ -19,17 +20,17 @@
 {% endblock %}
 
 {% block content %}
-<section class="general-info">
+<section class="information">
   <header>
-    {% if main_courante != None %}
-    <h2>{{ main_courante.date_update }}</h2>
+    {% if information != None %}
+    <h2>{{ information.update_date|date:"j F Y" }}</h2>
     {% endif %}
-    <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+    <div class="save-info" style="display:none">{% trans 'Saved' %}</div>
   </header>
-  <form action="{% url 'codex_info' codex_slug=codex.slug %}" method="post" class="auto_save_form">
+  <form action="{% url 'information' codex_slug=codex.slug %}" method="post" class="auto_save_form">
     {{ form.non_field_errors }}
-    {{ form.texte.errors }}
-    {{ form.texte }}
+    {{ form.text.errors }}
+    {{ form.text }}
   </form>
 </section>
 {% endblock %}
@@ -39,5 +40,5 @@
     <script src="{% static 'js/autosize.min.js' %}"></script>
     <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
     <script src="{% static 'js/basic.js' %}"></script>
-    <script src="{% static 'js/codex_info.js' %}"></script>
+    <script src="{% static 'js/information.js' %}"></script>
 {% endblock %}

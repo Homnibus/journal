@@ -1,40 +1,44 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils.translation import gettext
 from django.views.decorators.cache import never_cache
 
 from projets.commun.error import HttpStatus, raise_suspicious_operation, render_error
 from projets.commun.utils import JsonResponseContainer
-from projets.forms import Main_CouranteForm
-from projets.models import Main_Courante, Projet
+from projets.forms import InformationForm
+from projets.models import Information, Codex
 
 
-def get_codex_info(request, codex_slug, http_status):
+def get_information(request, codex_slug, http_status):
     """
     Return the page of the information of the given codex
     """
+    # Create the output date
+    output_data = {}
 
     # Get the codex from the slug
     try:
-        codex = Projet.objects.get(slug=codex_slug)
-    except ObjectDoesNotExist:
+        codex = Codex.objects.get(slug=codex_slug)
+    except Codex.DoesNotExist:
         # TODO : factorise this
         http_status.status = 404
-        http_status.message = "Le codex n'existe pas."
-        http_status.explanation = "Le codex que vous voulez accéder n'existe pas."
+        http_status.message = gettext("The Codex does not exist.")
+        http_status.explanation = gettext("The codex you are trying to access does not exist.")
         raise
 
-    # Get the corresponding info
-    codex_info = Main_Courante.objects.filter(projet=codex).first()
+    # Get the corresponding information
+    codex_information = Information.objects.filter(codex=codex).first()
 
     # Create the output form
-    form = Main_CouranteForm(instance=codex_info)
+    form = InformationForm(instance=codex_information)
 
-    return render(request, 'projets/codex_info.html', {'codex': codex, 'form': form, 'main_courante': codex_info})
+    # Update the output data
+    output_data.update({'codex': codex, 'form': form, 'information': codex_information})
+
+    return render(request, 'projets/information.html', output_data)
 
 
-def post_codex_info(request, codex_slug):
+def post_information(request, codex_slug):
     """
     Update the information of the given codex
     """
@@ -43,9 +47,9 @@ def post_codex_info(request, codex_slug):
 
     # Get the codex from the slug
     try:
-        codex = Projet.objects.get(slug=codex_slug)
-    except ObjectDoesNotExist:
-        local_error = "Le codex n'existe pas."
+        codex = Codex.objects.get(slug=codex_slug)
+    except Codex.DoesNotExist:
+        local_error = gettext("The Codex does not exist")
         response.data.update({
             'success': False,
             'local_error': local_error
@@ -54,12 +58,12 @@ def post_codex_info(request, codex_slug):
         return response.get_json_response()
 
     # Get the form
-    input_form = Main_CouranteForm(request.POST)
+    input_form = InformationForm(request.POST)
 
     # If the form is not valid, return an error status
     if not input_form.is_valid():
         # TODO : review the validation of the form
-        form_errors = "form validation error"
+        form_errors = gettext("Form validation error.")
         response.data.update({
             'success': False,
             'form_errors': form_errors
@@ -68,20 +72,20 @@ def post_codex_info(request, codex_slug):
         return response.get_json_response()
 
     # Update or create the codex info
-    codex_info, created = Main_Courante.objects.update_or_create(
-        projet=codex,
-        defaults={'projet': codex, 'texte': input_form.save(commit=False).texte}
+    Information.objects.update_or_create(
+        codex=codex,
+        defaults={'codex': codex, 'text': input_form.save(commit=False).text}
     )
+
     response.data.update({
         'success': True,
-        'date_update': codex_info.date_update.strftime('%Y-%m-%d %H:%M')
     })
     return response.get_json_response()
 
 
 @login_required
 @never_cache
-def codex_info_view(request, codex_slug):
+def information_view(request, codex_slug):
     """
     Manage the codex information
     """
@@ -91,9 +95,9 @@ def codex_info_view(request, codex_slug):
 
     try:
         if request.method == 'GET':
-            response = get_codex_info(request, codex_slug, http_status)
+            response = get_information(request, codex_slug, http_status)
         elif request.method == 'POST' and request.is_ajax():
-            response = post_codex_info(request, codex_slug)
+            response = post_information(request, codex_slug)
         else:
             raise_suspicious_operation(http_status)
         return response

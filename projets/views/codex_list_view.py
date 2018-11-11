@@ -2,27 +2,27 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from projets.commun.error import HttpStatus, raise_suspicious_operation, render_error
-from projets.models import Projet
+from projets.models import Codex
 
 
-def get_recent_codex(request):
+def get_codex(request):
     """
-    Return the recent codex page
+    Return codex of the current user
     """
     # Initialize output
     output_data = {}
 
     # Get all the codex
-    codex = Projet.objects.filter(createur=request.user).order_by('-date_update')
+    codex_list = Codex.objects.filter(author=request.user).order_by('-update_date')
 
     # Add the codex to the output data
-    output_data.update({'derniers_codex': codex})
+    output_data.update({'codex_list': codex_list})
 
-    return render(request, 'projets/accueil.html', output_data)
+    return render(request, 'projets/codex_list.html', output_data)
 
 
 @login_required
-def recent_codex_view(request):
+def codex_list_view(request):
     """
     Manage the recent codex view
     """
@@ -32,7 +32,7 @@ def recent_codex_view(request):
 
     try:
         if request.method == 'GET':
-            response = get_recent_codex(request)
+            response = get_codex(request)
         else:
             raise_suspicious_operation(http_status)
         return response

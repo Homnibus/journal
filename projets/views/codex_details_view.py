@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
+from django.utils.translation import gettext
 from django.views.decorators.cache import never_cache
 
 from ..commun.codex import Page as Page_container
@@ -17,11 +17,11 @@ def get_today_page(codex, today):
     output_page_data = Page_container(date=today)
 
     # Get the page of the day (use filter and first to have one object or None)
-    today_page = Page.objects.filter(codex=codex, date=today.date()).first()
+    today_page = Page.objects.filter(codex=codex, date=today).first()
     # If the page does not exist, create an empty one
     # Do not save it before the user create a note or a task
     if not today_page:
-        today_page = Page(codex=codex, date=today.date())
+        today_page = Page(codex=codex, date=today)
 
     # Get the note of the day (use filter and first to have one object or None)
     today_note = Note.objects.filter(page=today_page).first()
@@ -54,7 +54,7 @@ def get_pages_before_today(codex, today):
     # Get all the pages which are older than today
     old_pages = list(Page.objects.filter(
         codex=codex,
-        date__lt=today.date()
+        date__lt=today
     ).order_by('date'))
 
     # For each page, get the note and the corresponding tasks
@@ -89,37 +89,37 @@ def get_codex(request, codex_slug, http_status):
     # Get the codex from the slug
     try:
         codex = Codex.objects.get(slug=codex_slug)
-    except ObjectDoesNotExist:
+    except Codex.DoesNotExist:
         # TODO : factorise this
         http_status.status = 404
-        http_status.message = "Le codex n'existe pas."
-        http_status.explanation = "Le codex que vous voulez accéder n'existe pas."
+        http_status.message = gettext("The Codex does not exist.")
+        http_status.explanation = gettext("The Codex you are trying to access does not exist.")
         raise
 
     # Add the codex to the output data
     output_data.update({'codex': codex})
 
     # Get today date in the database to have only one provider of date
-    today = get_current_timestamp()
+    today = get_current_timestamp().date()
 
     # Get the page of the day
     today_page = get_today_page(codex, today)
 
     # Add the page of the day to the output data
-    output_data.update({'today_entry': today_page})
+    output_data.update({'today_page': today_page})
 
     # Get the others older pages
     old_pages = get_pages_before_today(codex, today)
 
     # Add the older pages to the output data
-    output_data.update({'older_entry': old_pages})
+    output_data.update({'older_pages': old_pages})
 
-    return render(request, 'projets/codex.html', output_data)
+    return render(request, 'projets/codex_details.html', output_data)
 
 
 @login_required
 @never_cache
-def codex_view(request, codex_slug):
+def codex_details_view(request, codex_slug):
     """
     Manage the codex view
     """

@@ -1,19 +1,19 @@
-from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.core.exceptions import PermissionDenied
 
-from ..models import Projet
+from ..models import Codex
 from .error import HttpStatus
 
 def get_codex_from_slug(slug, user, http_status=HttpStatus()):
     """Récupération du codex en cours et gestion des droits"""
     try:
         #Récupération du codex
-        codex = Projet.objects.get(slug=slug)
+        codex = Codex.objects.get(slug=slug)
         #Verification que le codex existe et que le user a le droits de voir le codex
         #if codex.createur != user:
         #    raise PermissionDenied
         #Si aucune erreur, on retourne le codex
         return codex
-    except ObjectDoesNotExist:
+    except Codex.DoesNotExist:
         http_status.status = 404
         http_status.message = "Le codex n'existe pas."
         http_status.explanation = "Le codex que vous voulez accéder n'existe pas."

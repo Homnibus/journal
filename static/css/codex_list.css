@@ -5,7 +5,7 @@ body > header > h4 {
   padding-bottom: .6em;
 }
 
-body > header > h4 .titre{
+body > header > h4 .title{
  padding-right: 0.5em;
  white-space: nowrap;
 }
@@ -15,7 +15,7 @@ body > header > h4 .titre{
 }
 
 /* codex */
-.derniers-codex {
+.codex-list {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
@@ -41,7 +41,7 @@ body > header > h4 .titre{
   height:100%;
 }
 .codex-flex-content .filler { flex: 1; }
-.codex-flex-content .titre { font-size: 1.4em; }
+.codex-flex-content .title { font-size: 1.4em; }
 .codex-flex-content .date { 
   text-align: right; 
   font-size: 0.9em;
@@ -59,20 +59,20 @@ body > header > h4 .titre{
 .codex a:hover, 
 .codex a:active,
 .codex a:focus { background-color: #4D7385; }
-.codex a:link .titre {
+.codex a:link .title {
   color: #2F4752;
   text-decoration: none;
 }
-.codex a:visited .titre {
+.codex a:visited .title {
   color: #2F4752;
   text-decoration: none;
 }
-.codex a:hover .titre {
+.codex a:hover .title {
   color: white;
   text-decoration: none;
 }
-.codex a:active .titre,
-.codex a:focus .titre{
+.codex a:active .title,
+.codex a:focus .title{
   color: white;
   text-decoration: none;
   background-color: #4D7385;

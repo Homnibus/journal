@@ -1,0 +1,90 @@
+{% extends codex|yesno:"projets/codex_navigation.html,projets/accueil_navigation.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/task_list.css' %}" />
+{% endblock %}
+
+{% block title %}{% trans 'Tasks' %}{% endblock %}
+
+{% block nav-taches %}current{% endblock %}
+
+{% block header %}
+<h1>{% trans 'All Tasks' %}</h1>
+{% csrf_token %}
+{% endblock %}
+
+{% trans 'Achieved' as col_achieved %}
+{% trans 'Task' as col_Task %}
+{% trans 'Codex' as col_codex %}
+{% trans 'Achieved date' as col_achieved_date %}
+{% trans 'Creation date' as col_creation_date %}
+
+{% block content %}
+<section class="codex-tasks">
+  <div>
+    <table> 
+      <tr>
+        <th>
+          {% include "projets/table_title.html" with title=col_achieved sort_by_value='is_achieved' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+        <th>
+          {% include "projets/table_title.html" with title=col_Task sort_by_value='text' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+          <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
+        </th>
+        {%  if not codex %}
+        <th>
+          {% include "projets/table_title.html" with title=col_codex sort_by_value='page__codex__title' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+        {%  endif %}
+        <th>
+          {% include "projets/table_title.html" with title=col_achieved_date sort_by_value='achieved_date' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+        <th>
+          {% include "projets/table_title.html" with title=col_creation_date sort_by_value='creation_date' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        </th>
+      </tr>
+      {% for task in task_list %}
+        <tr class="task">
+          <td>{{ task.is_achieved }}</td>
+          <td>{{ task.text }}</td>
+          {%  if not codex %}
+            <td>{{ task.page.codex.title }}</td>
+          {% endif %}
+          <td>
+            {% if task.achieved_date %}
+            {{ task.achieved_date }}
+            {% else %}
+            - 
+            {% endif %}
+          </td>
+          <td>{{ task.creation_date }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class='pagination'>
+  {% if task_list.has_previous %}
+    <a href='?page_number={{ task_list.previous_page_number }}' class='next'>{% trans 'Previous' %}</a> -
+  {% endif %}
+  {% for page in paginator_range %}
+    {% if page == task_list.number %}
+      <a href='?page_number={{ page }}' class='current'>{{page}}</a> -
+    {% else %}
+      <a href='?page_number={{ page }}'>{{page}}</a> -
+    {% endif %}
+  {% endfor %}
+  {% if task_list.has_next %}
+  <a href='?page_number={{ task_list.next_page_number }}' class='next'>{% trans 'Next' %}</a>
+  {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/autosize.min.js' %}"></script>
+    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
+    <script src="{% static 'js/basic.js' %}"></script>
+{% endblock %}

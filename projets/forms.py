@@ -8,7 +8,7 @@ class CodexForm(ModelForm):
         model = Codex
         fields = ('title', 'description')
         widgets = {
-            'description': Textarea(attrs={'rows': 3, 'style': 'resize:none;'})
+            'description': Textarea(attrs={'rows': 3, 'style': 'resize:none;', 'class': 'codex_text'})
         }
 
 
@@ -17,12 +17,12 @@ class InformationForm(ModelForm):
         model = Information
         fields = ('text',)
         widgets = {
-            'text': Textarea(attrs={'rows': 3, 'style': 'resize:none;'})
+            'text': Textarea(attrs={'rows': 3, 'style': 'resize:none;', 'class': 'information_text' })
         }
 
 
 class NoteForm(ModelForm):
-    note_id = IntegerField(widget=HiddenInput(attrs={'class': 'journal_entree_id'}), required=False)
+    note_id = IntegerField(widget=HiddenInput(attrs={'class': 'note_id'}), required=False)
 
     class Meta:
         model = Note
@@ -31,7 +31,7 @@ class NoteForm(ModelForm):
             'text': Textarea(
                 attrs={
                     'rows': 3,
-                    'class': 'journal_entree_texte journal_typewatch',
+                    'class': 'note_text note_typewatch',
                     'placeholder': 'Notes du jour',
                     'readonly': ''
                 })
@@ -55,14 +55,14 @@ class NoteForm(ModelForm):
 
 
 class TaskForm(ModelForm):
-    task_id = IntegerField(widget=HiddenInput(attrs={'class': 'todo_entree_id'}), required=False)
+    task_id = IntegerField(widget=HiddenInput(attrs={'class': 'task_id'}), required=False)
 
     class Meta:
         model = Task
         fields = ('text', 'is_achieved')
         widgets = {
-            'text': Textarea(attrs={'rows': 1, 'class': 'todo_entree_texte', 'placeholder': 'Nouvelle tache'}),
-            'is_achieved': CheckboxInput(attrs={'class': 'todo_entree_checkbox'})
+            'text': Textarea(attrs={'rows': 1, 'class': 'task_text', 'placeholder': 'Nouvelle tache'}),
+            'is_achieved': CheckboxInput(attrs={'class': 'task_is_achieved'})
         }
 
     def __init__(self, *args, **kwargs):

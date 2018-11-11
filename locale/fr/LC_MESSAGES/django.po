@@ -1,0 +1,222 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-10 12:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\projets\templates\projets\400.html:4
+#: .\projets\templates\projets\400.html:7
+msgid "Error "
+msgstr "Erreur "
+
+#: .\projets\templates\projets\accueil_navigation.html:5
+msgid "New +"
+msgstr "Nouveau +"
+
+#: .\projets\templates\projets\accueil_navigation.html:6
+#: .\projets\templates\projets\task_list.html:19
+msgid "Task"
+msgstr "Tache"
+
+#: .\projets\templates\projets\base_template.html:11
+msgid "ResCodex - "
+msgstr "ResCodex - "
+
+#: .\projets\templates\projets\base_template.html:31
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: .\projets\templates\projets\base_template.html:34
+msgid "Login"
+msgstr "Connexion"
+
+#: .\projets\templates\projets\codex_add.html:5
+msgid "New Codex"
+msgstr "Nouveau Codex"
+
+#: .\projets\templates\projets\codex_add.html:10
+msgid "Creation of a new Codex"
+msgstr "Creation d'un nouveau Codex"
+
+#: .\projets\templates\projets\codex_add.html:11
+msgid "Give a title and a short description to your Codex !"
+msgstr "Donnez un titre et une courte description à votre Codex !"
+
+#: .\projets\templates\projets\codex_add.html:18
+msgid "Title"
+msgstr "Titre"
+
+#: .\projets\templates\projets\codex_add.html:20
+msgid "Description"
+msgstr "Description"
+
+#: .\projets\templates\projets\codex_details.html:18
+msgid "Codex - "
+msgstr "Codex - "
+
+#: .\projets\templates\projets\codex_details.html:32
+#: .\projets\templates\projets\codex_details.html:46
+#: .\projets\templates\projets\codex_details.html:85
+#: .\projets\templates\projets\codex_details.html:103
+#: .\projets\templates\projets\information.html:28
+msgid "Saved"
+msgstr "Sauvegardé"
+
+#: .\projets\templates\projets\codex_details.html:45
+#: .\projets\templates\projets\codex_details.html:102
+#: .\projets\templates\projets\codex_navigation.html:9
+#: .\projets\templates\projets\task_list.html:9
+msgid "Tasks"
+msgstr "Taches"
+
+#: .\projets\templates\projets\codex_details.html:52
+msgid "Add"
+msgstr "Ajouter"
+
+#: .\projets\templates\projets\codex_list.html:9
+msgid "Last Codex"
+msgstr "Derniers Codex"
+
+#: .\projets\templates\projets\codex_list.html:14
+msgid "Most recent Codex"
+msgstr "Codex récents"
+
+#: .\projets\templates\projets\codex_list.html:16
+msgid "Search :"
+msgstr "Rechercher :"
+
+#: .\projets\templates\projets\codex_list.html:18
+msgid "Codex title"
+msgstr "Titre du Codex"
+
+#: .\projets\templates\projets\codex_list.html:18
+msgid "Search a Codex"
+msgstr "Rechercher un Codex"
+
+#: .\projets\templates\projets\codex_navigation.html:6
+#: .\projets\templates\projets\task_list.html:20
+msgid "Codex"
+msgstr "Codex "
+
+#: .\projets\templates\projets\codex_navigation.html:12
+msgid "Info"
+msgstr "Info"
+
+#: .\projets\templates\projets\information.html:9
+msgid "General informations"
+msgstr "Information générale"
+
+#: .\projets\templates\projets\information.html:14
+msgid "General informations - "
+msgstr "Information générale - "
+
+#: .\projets\templates\projets\task_list.html:14
+msgid "All Tasks"
+msgstr "Toutes les taches"
+
+#: .\projets\templates\projets\task_list.html:18
+msgid "Achieved"
+msgstr "Réalisée"
+
+#: .\projets\templates\projets\task_list.html:21
+msgid "Achieved date"
+msgstr "Date réalisation"
+
+#: .\projets\templates\projets\task_list.html:22
+msgid "Creation date"
+msgstr "Date création"
+
+#: .\projets\templates\projets\task_list.html:69
+msgid "Previous"
+msgstr "Précedent"
+
+#: .\projets\templates\projets\task_list.html:79
+msgid "Next"
+msgstr "Suivant"
+
+#: .\projets\views\codex_details_view.py:95
+#: .\projets\views\information_view.py:25 .\projets\views\note_view.py:78
+#: .\projets\views\task_view.py:158
+msgid "The Codex does not exist."
+msgstr "Le Codex n'existe pas."
+
+#: .\projets\views\codex_details_view.py:96
+msgid "The Codex you are trying to access does not exist."
+msgstr "Le Codex n'existe pas."
+
+#: .\projets\views\information_view.py:26
+msgid "The codex you are trying to access does not exist."
+msgstr "Le Codex n'existe pas."
+
+#: .\projets\views\information_view.py:52
+msgid "The Codex does not exist"
+msgstr "Le Codex n'existe pas."
+
+#: .\projets\views\information_view.py:66 .\projets\views\note_view.py:52
+#: .\projets\views\note_view.py:65 .\projets\views\note_view.py:143
+#: .\projets\views\task_view.py:119 .\projets\views\task_view.py:146
+#: .\projets\views\task_view.py:214
+msgid "Form validation error."
+msgstr "Erreur de validation du formulaire."
+
+#: .\projets\views\note_view.py:96
+msgid "A Note already exist for today."
+msgstr ""
+
+#: .\projets\views\note_view.py:106
+msgid "You are not allowed to create this Note"
+msgstr "Vous n'etes pas autorisé à créer cette Note."
+
+#: .\projets\views\note_view.py:159
+msgid "The Note does not exist."
+msgstr "Cette Note n'existe pas."
+
+#: .\projets\views\note_view.py:171
+msgid "The Note have been modified since the last modification attempt."
+msgstr "Cette Note a été modifié depuis la dernière tentative de modification."
+
+#: .\projets\views\note_view.py:183
+msgid "You are note authorized to modify this Note."
+msgstr "Vous n'etes pas autorisé à modifier cette Note."
+
+#: .\projets\views\note_view.py:212
+msgid "You are note authorized to delete this Note."
+msgstr "Vous n'etes pas autorisé à supprimer cette Note."
+
+#: .\projets\views\task_view.py:133
+msgid "Can't create an empty Task."
+msgstr "Vous ne pouvez pas créer une Tache vide."
+
+#: .\projets\views\task_view.py:168
+msgid "You are not allowed to create this Task."
+msgstr "Vous n'etes pas autorisé à créer cette Tache."
+
+#: .\projets\views\task_view.py:231
+msgid "The Task you are trying to modify does not exist."
+msgstr "La Tache que vous voulez modifier n'existe pas."
+
+#: .\projets\views\task_view.py:244
+msgid "The Task has been modified since the last attempt of modification."
+msgstr "La Tache a été modifiée depuis la dernière tentative de modification."
+
+#: .\projets\views\task_view.py:255
+msgid "You are not allowed to modify this Task"
+msgstr "Vous n'etes pas autorisé à modifier cette Tache."
+
+#: .\projets\views\task_view.py:285
+msgid "You are not allowed to delete this Task."
+msgstr "Vous n'etes pas autorisé à modifier cette Tache."

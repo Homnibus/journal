@@ -1,0 +1,25 @@
+{% extends "projets/accueil_navigation.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'New Codex' %}{% endblock %}
+
+{% block nav-new_codex %}current{% endblock %}
+
+{% block header %}
+<h1>{% trans 'Creation of a new Codex' %}</h1>
+<h4>{% trans 'Give a title and a short description to your Codex !' %}</h4>
+{% endblock %}
+
+{% block content %}
+<section class='new-codex'>
+  <form action='{% url "new_codex" %}' method='post'>
+    {% csrf_token %}
+    <h2>{% trans 'Title' %}</h2>
+    {{ form.title }}
+    <h2>{% trans 'Description' %}</h2>
+    {{ form.description }}
+    <input type='submit' value='Sauvegarder' />
+  </form>
+</section>
+{% endblock %}

@@ -1,14 +1,15 @@
-{% extends "projets/base_template.html" %}
+{% extends 'projets/base_template.html' %}
+{% load i18n %}
 
-{% block title %}Erreur {{ status }}{% endblock %}
+{% block title %}{% trans 'Error '%}{{ status }}{% endblock %}
 
 {% block header %}
-<h1 align="center">Erreur {{ status }}: {{ message }} </h1>
+<h1 align='center'>{% trans 'Error '%}{{ status }}: {{ message }} </h1>
 {% endblock %}
 
 {% block content %}
   <section>
-    <p align="center">{{ explanation }}</p>
+    <p align='center'>{{ explanation }}</p>
     <br/>
     <br/>
   </section>

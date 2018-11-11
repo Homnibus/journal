@@ -1,132 +1,130 @@
 task_hash={};
 
-function update_task_hash(text,id){
-//Update the hash corresponding to the id//  
-    //trim the text so it's the same as in the database
+/** Update the hash corresponding to the id */
+function update_task_hash(text, id){
+    // Trim the text so it's the same as in the database
     task_hash[id] = text.trim().hashCode();
 }
 
+/** Notice the user that the page was saved */
 function show_task_save(parent_div){
-//Notice the user that the page was saved//
-    var save_task = parent_div.closest('.page-tasks').find('.save-info');
-    //animate the save div
+    const save_task = parent_div.closest('.page-tasks').find('.save-info');
+    // Animate the save div
     save_task.fadeIn('slow', function(){
         save_task.fadeOut('slow');
     });    
 }
 
-function show_task_error(parent_div,local_error){
-//Notice the user that the page couldn't be saved
-    var error = $('<div class="local-error">').text(local_error); 
+/** Notice the user that the page couldn't be saved */
+function show_task_error(parent_div, local_error){
+    const error = $('<div class="local-error">').text(local_error);
     parent_div.closest('.page-task').find('header').append(error);
-    parent_div.find('.todo_entree_texte').addClass('textarea-error');
+    parent_div.find('.task_text').addClass('textarea-error');
 }
 
+/** Add the new task to the dom */
 function show_new_task(result){
-//Add the new task to the dom//
-    //Get the old_tasks div
-    var old_tasks_div = $('.today-page .old-tasks');
-    
-    //On ajoute des <div> au formulaire retourné pour pouvoir naviguer dedans avec jquery
-    var out_form_str = '<div>' + result.out_form + '</div>'
-    //On ajoute correctement le formulaire de retour en dessous de l'ajout de task
-    var new_checkbox = $('.todo_entree_checkbox',out_form_str).clone().wrap('<div>').parent().html()
-    var new_textearea = $('.todo_entree_texte',out_form_str).clone().wrap('<div>').parent().html()
-    var new_id = $('.todo_entree_id',out_form_str).clone().wrap('<div>').parent().html()
+    // Get the old_tasks div
+    const old_tasks_div = $('.today-page .old-tasks');
+
+    // Add <div> to the returned form to navigate inside with Jquery
+    const out_form_str = '<div>' + result.out_form + '</div>';
+    // Add the returned form under the task add
+    const new_checkbox = $('.task_is_achieved', out_form_str).clone().wrap('<div>').parent().html();
+    const new_textarea = $('.task_text', out_form_str).clone().wrap('<div>').parent().html();
+    const new_id = $('.task_id', out_form_str).clone().wrap('<div>').parent().html();
     old_tasks_div.prepend(
         '<article class="task">' +
         new_id +
-        '<div class="disp-todo_entree_checkbox">' +
+        '<div class="disp-task_is_achieved">' +
         new_checkbox + 
         '</div>' +
-        '<div class="disp-todo_entree_texte">' +
-        new_textearea +
+        '<div class="disp-task_text">' +
+        new_textarea +
         '</div>' +
         '</article>'
     );    
 }
 
+/** Create a new task */
 function post_task(){
-//Create a new task//
-    var parent_div = $(this).closest('.task');
-    var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
-    var text = get_text(parent_div.find('.todo_entree_texte'));
+    const parent_div = $(this).closest('.task');
+    const text = get_text(parent_div.find('.task_text'));
+    const codex_slug = $('#slug').val();
 
     if(text !== ''){
-
-        //setup csrf token
-        $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
-        //setup ajax call
+        // Set the csrf token
+        $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
+        // Do the ajax call
         $.ajax({
-            url: '/projets/' + $('#slug').val() + 'task',
+
+            url: '/tasks',
             data: {
                 'text': text,
+                'codex_slug':codex_slug,
             },
             dataType: 'json',
             method: 'POST',
             success: function(result) {
-                
                 hide_error();
                 if(result.success){
-                    //update the hash of the text for the next update
-                    update_task_hash(text,result.id);
+                    // Update the hash of the text for the next update
+                    update_task_hash(text, result.id);
 
-                    //delete text from the inital from
-                    $('.new-task .todo_entree_texte').val('');
+                    // Delete text from the initial from
+                    $('.new-task .task_text').val('');
                         
-                    //add the new task to the dom
+                    // Add the new task to the dom
                     show_new_task(result);
                                         
-                    //set typeWatch
-                    var jqry_textearea = $('.todo_entree_id[value = ' + result.id +']').closest('article').find('.todo_entree_texte');
-                    jqry_textearea.typeWatch( {
+                    //Set typeWatch event
+                    const jqry_textarea = $('.task_id[value = ' + result.id + ']').closest('article').find('.task_text');
+                    jqry_textarea.typeWatch( {
                         callback: put_or_delete_task,
                         wait: 500,
                         highlight: false,
                         allowSubmit: false,
                         captureLength: 1,
                     });
-                    //give a success feedback to the user
+                    // Give a success feedback to the user
                     show_task_save(parent_div);
                 }
                 else{
-                    //give an error feedback to the user
-                    show_task_error(parent_div,result.local_error);
+                    // Give an error feedback to the user
+                    show_task_error(parent_div, result.local_error);
                 }
-                //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une task
+                // At the end of the function, remove the unclickable class to allow the add of a new task
                 $('.add-item-button').removeClass('unclickable');
 
             },
             error: (jqXHR, exception) => {
                 show_error(jqXHR, exception);
-                //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une task
+                // At the end of the function, remove the unclickable class to allow the add of a new task
                 $('.add-item-button').removeClass('unclickable');
 
             }
         });
     }
     else{
-        //Une fois la fonction fini on retire la classe unclickable pour pouvoir de nouveau ajouter une task
+        // At the end of the function, remove the unclickable class to allow the add of a new task
         $('.add-item-button').removeClass('unclickable');
     }
 }
 
-function put_task(parent_div,realisee,text,id){
-//Update task//
+/** Update task */
+function put_task(parent_div, is_achieved, text, id){
+    const hash = task_hash[id];
+    // Update the hash of the text for the next update
+    update_task_hash(text, id);
 
-    var hash = task_hash[id];
-    //update the hash of the text for the next update
-    update_task_hash(text,id);
-
-    //setup crsf token
-    $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
-    //setup ajax call
+    // Set the crsf token
+    $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
+    // Do the ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'task',
+        url: '/tasks/' + id,
         data: {
-            'id': id,
             'text': text,
-            'is_achieved': realisee,
+            'is_achieved': is_achieved,
             'hash': hash,
         },
         dataType: 'json',
@@ -134,12 +132,12 @@ function put_task(parent_div,realisee,text,id){
         success: function(result) {
             hide_error();
             if(result.success){
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_task_save(parent_div);  
             }
             else{
-                //give a feedback to the user
-                show_task_error(parent_div,result.local_error);
+                // Give a feedback to the user
+                show_task_error(parent_div, result.local_error);
             }
         },
         error: function (jqXHR, exception) {
@@ -148,32 +146,29 @@ function put_task(parent_div,realisee,text,id){
     });
 }
 
-function delete_task(parent_div,id){
-//Delete a task//
-    
-    //delete task from the dom
+/** Delete a task */
+function delete_task(parent_div, id){
+    // Delete task from the dom
     parent_div.remove();
     
-    //setup csrf token
-    $.ajaxSetup({headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()}});
-    //setup ajax call
+    // Set the csrf token
+    $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
+    // Do the ajax call
     $.ajax({
-        url: '/projets/' + $('#slug').val() + 'task',
-        data: {
-            'id': id,
-        },
+        url: '/tasks/' + id,
+        data: {},
         dataType: 'json',
         method: 'DELETE',
         success: function(result) {
             hide_error();
             if(result.success){
                 
-                //give a feedback to the user
+                // Give a feedback to the user
                 show_task_save(parent_div);                
             }
             else{
-                //give a feedback to the user
-                show_task_error(parent_div,result.local_error);
+                // Give a feedback to the user
+                show_task_error(parent_div, result.local_error);
             }
         },
         error: function (jqXHR, exception) {
@@ -182,15 +177,16 @@ function delete_task(parent_div,id){
     });
 }
 
+/** Do the according rest action on a note */
 function put_or_delete_task(){
-    var parent_div = $(this).closest('.task');
-    var realisee = parent_div.find('.todo_entree_checkbox').prop('checked');
-    var text = get_text(parent_div.find('.todo_entree_texte'));
-    var id = parent_div.find('.todo_entree_id').attr('value');
+    const parent_div = $(this).closest('.task');
+    const is_achieved = parent_div.find('.task_is_achieved').prop('checked');
+    const text = get_text(parent_div.find('.task_text'));
+    const id = parent_div.find('.task_id').attr('value');
     if(text !== ''){
-        put_task(parent_div,realisee,text,id);
+        put_task(parent_div, is_achieved, text, id);
     }
     else{
-        delete_task(parent_div,id);
+        delete_task(parent_div, id);
     }
 }

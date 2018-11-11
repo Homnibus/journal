@@ -53,7 +53,7 @@ class Codex(models.Model):
         super(Codex, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('codex_details', kwargs={'pk': self.id})
+        return reverse('codex_details', kwargs={'codex_slug': self.slug})
 
     def set_nested_update_date(self):
         # Set the codex update date
