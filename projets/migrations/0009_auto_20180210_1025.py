@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('projets', '0008_auto_20180210_1020'),
-    ]
+    dependencies = [("projets", "0008_auto_20180210_1020")]
 
     operations = [
         migrations.AlterField(
-            model_name='todo_entree',
-            name='date_creation',
-            field=models.DateTimeField(editable=False, verbose_name='Date de creation'),
-        ),
+            model_name="todo_entree",
+            name="date_creation",
+            field=models.DateTimeField(editable=False, verbose_name="Date de creation"),
+        )
     ]

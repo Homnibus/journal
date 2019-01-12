@@ -1,49 +1,30 @@
-h4 { display: flex; }
-
-div.result {
+/* flex-table */
+.flex-table {
   margin-top: 0.2em;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
- 
-table {
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
   width: 100%;
 }
 
- table a.sort_down {
-    background-color: #4D7385;
-    color: white;
-    border-bottom: 2px solid #79B5D1;
-}
- 
-table a.sort_up {
-    background-color: #4D7385;
-    color: white;
-    border-top: 2px solid #79B5D1;
+.flex-row:nth-of-type(odd){
+  background-color: white;
 }
 
-table a {
-    background-color: #4D7385;
-    color: white;
+.flex-row:nth-of-type(even){
+  background-color: #f0f3f5;
 }
 
-table a:link {
-  color: white;
-  text-decoration: none;
-}
-table a:visited {
-  color: white;
-  text-decoration: none;
-}
-table a:hover {
-  color: #2F4752;
-  text-decoration: none;
-}
-table a:active,nav a:focus{
-  color: white;
-  text-decoration: none;
-}
 
-th {
+.flex-cell-header {
   background-color: #4D7385;
   color: white;
   text-transform: uppercase;
@@ -52,33 +33,39 @@ th {
   white-space: nowrap;
   text-align: left;
 }
- 
-th.max-width{
-  width: 100%;
-  min-width: 20em;
+a.flex-cell-header{
+  color: white;
 }
- 
-td {
-  text-align: center;
+a.flex-cell-header:link,a.flex-cell-header:visited{
+  color: white;
+  text-decoration: none;
+}
+a.flex-cell-header:hover{
+  color: #2F4752;
+  text-decoration: none;
+}
+a.flex-cell-header:active,a.flex-cell-header:focus{
+  color: white;
+  text-decoration: none;
+}
+
+.flex-cell {
+  padding: .4em .6em;
   border-bottom: 1px solid rgba(0,0,0,.12);
+  display:flex;
+  align-items: center;
 }
- 
-td.task-texte{
-  text-align: left;
+
+.flex-cell-text {
+  width: 30em;
+  min-width: 15em;
+  justify-content: left;
 }
- 
-th, td {
-  padding-left: .6em;
-  padding-right: .6em;
-  padding-top: .4em;
-  padding-bottom: .4em;
+.flex-cell-checkbox {
+  min-width: 5em;
+  justify-content: center;
 }
- 
- 
-tr {
-  background-color: white;
-}
- 
-tr:nth-child(odd) {
-  background-color: #f0f3f5;
+.flex-cell-date {
+  min-width: 7em;
+  justify-content: center;
 }

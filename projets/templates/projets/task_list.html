@@ -15,68 +15,58 @@
 {% csrf_token %}
 {% endblock %}
 
-{% trans 'Achieved' as col_achieved %}
-{% trans 'Task' as col_Task %}
-{% trans 'Codex' as col_codex %}
-{% trans 'Achieved date' as col_achieved_date %}
-{% trans 'Creation date' as col_creation_date %}
-
 {% block content %}
 <section class="codex-tasks">
-  <div>
-    <table> 
-      <tr>
-        <th>
-          {% include "projets/table_title.html" with title=col_achieved sort_by_value='is_achieved' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
-        </th>
-        <th>
-          {% include "projets/table_title.html" with title=col_Task sort_by_value='text' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
-          <div class="save-info" id="sauvegarde" style="display:none">Sauvegardé</div>
-        </th>
+  <div class="flex-table">
+    <div class="flex-row">
+        {% include "projets/table_title.html" with title='Achieved' class='flex-cell flex-cell-header flex-cell-checkbox'  sort_by_value='is_achieved' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        {% include "projets/table_title.html" with title='Task' class='flex-cell flex-cell-header flex-cell-text' sort_by_value='text' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
         {%  if not codex %}
-        <th>
-          {% include "projets/table_title.html" with title=col_codex sort_by_value='page__codex__title' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
-        </th>
-        {%  endif %}
-        <th>
-          {% include "projets/table_title.html" with title=col_achieved_date sort_by_value='achieved_date' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
-        </th>
-        <th>
-          {% include "projets/table_title.html" with title=col_creation_date sort_by_value='creation_date' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
-        </th>
-      </tr>
-      {% for task in task_list %}
-        <tr class="task">
-          <td>{{ task.is_achieved }}</td>
-          <td>{{ task.text }}</td>
-          {%  if not codex %}
-            <td>{{ task.page.codex.title }}</td>
-          {% endif %}
-          <td>
+            {% include "projets/table_title.html" with title='Codex' class='flex-cell flex-cell-header flex-cell-text' sort_by_value='page__codex__title' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        {% endif %}
+        {% include "projets/table_title.html" with title='Achi. date' class='flex-cell flex-cell-header flex-cell-date' sort_by_value='achieved_date' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+        {% include "projets/table_title.html" with title='Crea. date' class='flex-cell flex-cell-header flex-cell-date' sort_by_value='creation_date' sort_by=sort_by sort_way=sort_way page_number=task_list.number only%}
+    </div>
+
+    {% for task in task_list %}
+    <div class="flex-row">
+        <div class="flex-cell flex-cell-checkbox">
+            <input type="checkbox" {% if task.is_achieved %}checked{% endif %} onclick="return false;">
+        </div>
+        <div class="flex-cell flex-cell-text">
+          {{ task.text }}
+        </div>
+        {%  if not codex %}
+        <div class="flex-cell flex-cell-text">
+            {{ task.page.codex.title }}
+        </div>
+        {% endif %}
+        <div class="flex-cell flex-cell-date">
             {% if task.achieved_date %}
-            {{ task.achieved_date }}
-            {% else %}
-            - 
+                {{ task.achieved_date|date:"d/m/Y" }}
             {% endif %}
-          </td>
-          <td>{{ task.creation_date }}</td>
-        </tr>
-      {% endfor %}
-    </table>
+        </div>
+        <div class="flex-cell flex-cell-date">
+            {{ task.creation_date|date:"d/m/Y" }}
+        </div>
+    </div>
+    {% endfor %}
   </div>
+
   <div class='pagination'>
-  {% if task_list.has_previous %}
-    <a href='?page_number={{ task_list.previous_page_number }}' class='next'>{% trans 'Previous' %}</a> -
+  {% if has_first %}
+    <a href='?page_number=1' class='pagination-first'>&lt;&lt;</a>
   {% endif %}
   {% for page in paginator_range %}
-    {% if page == task_list.number %}
-      <a href='?page_number={{ page }}' class='current'>{{page}}</a> -
-    {% else %}
-      <a href='?page_number={{ page }}'>{{page}}</a> -
-    {% endif %}
+      <a href='?page_number={{ page }}'
+         class='
+            {% if page == task_list.number %}current{% endif %}
+            {% if page == 1 and not has_first %} pagination-first{% endif %}
+            {% if page == task_list.paginator.num_pages and not has_last %} pagination-last{% endif %}'
+      >{{page}}</a>
   {% endfor %}
-  {% if task_list.has_next %}
-  <a href='?page_number={{ task_list.next_page_number }}' class='next'>{% trans 'Next' %}</a>
+  {% if has_last %}
+    <a href='?page_number={{ task_list.paginator.num_pages }}' class='pagination-last'>&gt;&gt;</a>
   {% endif %}
   </div>
 </section>

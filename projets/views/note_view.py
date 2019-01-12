@@ -50,23 +50,17 @@ def post_note(request):
     if not input_form.is_valid():
         # TODO: review the form validation
         form_errors = gettext("Form validation error.")
-        response.data.update({
-            'success': False,
-            'form_errors': form_errors
-        })
+        response.data.update({"success": False, "form_errors": form_errors})
         response.status = 400
         return response.get_json_response()
 
     # Get the codex of from the slug
-    codex_slug = request.POST.get('codex_slug')
+    codex_slug = request.POST.get("codex_slug")
 
     # If the codex_slug is empty, throw an error
     if not codex_slug:
         form_errors = gettext("Form validation error.")
-        response.data.update({
-            'success': False,
-            'form_errors': form_errors
-        })
+        response.data.update({"success": False, "form_errors": form_errors})
         response.status = 400
         return response.get_json_response()
 
@@ -76,38 +70,26 @@ def post_note(request):
     except Codex.DoesNotExist:
         # TODO : factorise this
         local_error = gettext("The Codex does not exist.")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 404
         return response.get_json_response()
 
     # Check if a note_details_view already exist for today
     # TODO: try to upgrade the way this check is down
     today = get_current_timestamp().date()
-    page = Page.objects.filter(
-        codex=codex,
-        date=today,
-    ).select_related('note').first()
+    page = Page.objects.filter(codex=codex, date=today).select_related("note").first()
 
     # If a note_details_view was already created today, throw an error
-    if hasattr(page, 'note'):
+    if hasattr(page, "note"):
         local_error = gettext("A Note already exist for today.")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 400
         return response.get_json_response()
 
     # Check if the user has the permission
     if not is_authorized_to_create_note(request.user, codex):
         local_error = gettext("You are not allowed to create this Note")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 403
         return response.get_json_response()
 
@@ -117,10 +99,7 @@ def post_note(request):
     note.save(codex=codex)
 
     # Prepare the output data
-    response.data.update({
-        'success': True,
-        'id': note.id
-    })
+    response.data.update({"success": True, "id": note.id})
     return response.get_json_response()
 
 
@@ -135,17 +114,15 @@ def put_note(request, note_id):
     input_form = NoteForm(request.PUT)
 
     # Get the note_details_view hash from the request
-    request_note_hash = request.PUT.get('hash')
+    request_note_hash = request.PUT.get("hash")
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
         # TODO : review the validation of the form
         form_errors = gettext("Form validation error.")
-        response.data.update({
-            'success': False,
-            'id': note_id,
-            'form_errors': form_errors
-        })
+        response.data.update(
+            {"success": False, "id": note_id, "form_errors": form_errors}
+        )
         response.status = 400
         return response.get_json_response()
 
@@ -157,10 +134,7 @@ def put_note(request, note_id):
         note = Note.objects.get(id=note_id)
     except Note.DoesNotExist:
         local_error = gettext("The Note does not exist.")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 404
         return response.get_json_response()
 
@@ -168,12 +142,12 @@ def put_note(request, note_id):
     #  throw an error
     database_note_hash = str(java_string_hashcode(note.text))
     if request_note_hash != database_note_hash:
-        local_error = gettext("The Note have been modified since the last modification attempt.")
-        response.data.update({
-            'success': False,
-            'id': note_id,
-            'local_error': local_error
-        })
+        local_error = gettext(
+            "The Note have been modified since the last modification attempt."
+        )
+        response.data.update(
+            {"success": False, "id": note_id, "local_error": local_error}
+        )
         response.status = 400
         return response.get_json_response()
 
@@ -181,10 +155,7 @@ def put_note(request, note_id):
     if not is_authorized_to_update_note(request.user, note):
         # TODO : factorise this
         local_error = gettext("You are note authorized to modify this Note.")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 403
         return response.get_json_response()
 
@@ -193,9 +164,7 @@ def put_note(request, note_id):
     note.save()
 
     # Prepare the output data
-    response.data.update({
-        'success': True,
-    })
+    response.data.update({"success": True})
     return response.get_json_response()
 
 
@@ -210,10 +179,7 @@ def delete_note(request, note_id):
     if not is_authorized_to_delete_note(request.user, note_id):
         # TODO : factorise this
         local_error = gettext("You are note authorized to delete this Note.")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 403
         return response.get_json_response()
 
@@ -221,10 +187,7 @@ def delete_note(request, note_id):
     Note.objects.get(id=note_id).delete()
 
     # Prepare the output data
-    response.data.update({
-        'success': True,
-        'id': note_id
-    })
+    response.data.update({"success": True, "id": note_id})
     return response.get_json_response()
 
 
@@ -241,9 +204,9 @@ def note_details_view(request, note_id):
         if not request.is_ajax():
             raise_suspicious_operation(http_status)
 
-        if request.method == 'PUT':
+        if request.method == "PUT":
             response = put_note(request, note_id)
-        elif request.method == 'DELETE':
+        elif request.method == "DELETE":
             response = delete_note(request, note_id)
         else:
             raise_suspicious_operation(http_status)
@@ -268,7 +231,7 @@ def note_list_view(request):
         if not request.is_ajax():
             raise_suspicious_operation(http_status)
 
-        if request.method == 'POST':
+        if request.method == "POST":
             response = post_note(request)
         else:
             raise_suspicious_operation(http_status)

@@ -8,37 +8,90 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Projet',
+            name="Projet",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titre', models.CharField(max_length=100, unique=True)),
-                ('slug', models.SlugField(max_length=100)),
-                ('description', models.TextField(null=True)),
-                ('date_creation', models.DateTimeField(auto_now_add=True, verbose_name='Date de creation')),
-                ('date_update', models.DateTimeField(auto_now=True, verbose_name='Date de mise a jour')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("titre", models.CharField(max_length=100, unique=True)),
+                ("slug", models.SlugField(max_length=100)),
+                ("description", models.TextField(null=True)),
+                (
+                    "date_creation",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Date de creation"
+                    ),
+                ),
+                (
+                    "date_update",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Date de mise a jour"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Contact_Liste',
+            name="Contact_Liste",
             fields=[
-                ('projet', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='projets.Projet')),
-                ('texte', models.TextField(null=True)),
-                ('date_creation', models.DateTimeField(auto_now_add=True, verbose_name='Date de creation')),
-                ('date_update', models.DateTimeField(auto_now=True, verbose_name='Date de mise a jour')),
+                (
+                    "projet",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="projets.Projet",
+                    ),
+                ),
+                ("texte", models.TextField(null=True)),
+                (
+                    "date_creation",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Date de creation"
+                    ),
+                ),
+                (
+                    "date_update",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Date de mise a jour"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Main_Courante',
+            name="Main_Courante",
             fields=[
-                ('projet', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='projets.Projet')),
-                ('texte', models.TextField(null=True)),
-                ('date_creation', models.DateTimeField(auto_now_add=True, verbose_name='Date de creation')),
-                ('date_update', models.DateTimeField(auto_now=True, verbose_name='Date de mise a jour')),
+                (
+                    "projet",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="projets.Projet",
+                    ),
+                ),
+                ("texte", models.TextField(null=True)),
+                (
+                    "date_creation",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Date de creation"
+                    ),
+                ),
+                (
+                    "date_update",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Date de mise a jour"
+                    ),
+                ),
             ],
         ),
     ]

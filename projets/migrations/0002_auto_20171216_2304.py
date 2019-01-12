@@ -5,27 +5,25 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('projets', '0001_initial'),
-    ]
+    dependencies = [("projets", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='contact_liste',
-            name='texte',
+            model_name="contact_liste",
+            name="texte",
             field=models.TextField(blank=True, default=1),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='main_courante',
-            name='texte',
-            field=models.TextField(blank=True, default=' '),
+            model_name="main_courante",
+            name="texte",
+            field=models.TextField(blank=True, default=" "),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='projet',
-            name='description',
-            field=models.TextField(blank=True, default=' '),
+            model_name="projet",
+            name="description",
+            field=models.TextField(blank=True, default=" "),
             preserve_default=False,
         ),
     ]

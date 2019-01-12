@@ -5,19 +5,17 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('projets', '0007_auto_20180130_2244'),
-    ]
+    dependencies = [("projets", "0007_auto_20180130_2244")]
 
     operations = [
         migrations.AlterField(
-            model_name='todo_entree',
-            name='date_creation',
-            field=models.DateTimeField(verbose_name='Date de creation'),
+            model_name="todo_entree",
+            name="date_creation",
+            field=models.DateTimeField(verbose_name="Date de creation"),
         ),
         migrations.AlterField(
-            model_name='todo_entree',
-            name='date_update',
-            field=models.DateTimeField(verbose_name='Date de mise a jour'),
+            model_name="todo_entree",
+            name="date_update",
+            field=models.DateTimeField(verbose_name="Date de mise a jour"),
         ),
     ]

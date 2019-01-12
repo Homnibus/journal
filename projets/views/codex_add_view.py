@@ -13,8 +13,8 @@ def get_new_codex(request):
     # Create the output form
     output_form = CodexForm()
     # Prepare the output data
-    output_data = {'form': output_form}
-    return render(request, 'projets/codex_add.html', output_data)
+    output_data = {"form": output_form}
+    return render(request, "projets/codex_add.html", output_data)
 
 
 def post_new_codex(request):
@@ -27,17 +27,15 @@ def post_new_codex(request):
     # If the form is not valid, throw an error
     if not input_form.is_valid():
         # Prepare the output data
-        output_data = {'form': input_form}
+        output_data = {"form": input_form}
         # TODO : manage form error
-        return render(request, 'projets/codex_add.html', output_data)
+        return render(request, "projets/codex_add.html", output_data, status=400)
 
     # Create the new Codex
-    codex = input_form.save(commit=False)
-    codex.author = request.user
-    codex.save()
+    codex = input_form.save(author=request.user)
 
     # Redirect to the codex page
-    return redirect('codex', codex_slug=codex.slug)
+    return redirect("codex_details", codex_slug=codex.slug)
 
 
 @login_required
@@ -51,9 +49,9 @@ def codex_add_view(request):
     response = None
 
     try:
-        if request.method == 'GET':
+        if request.method == "GET":
             response = get_new_codex(request)
-        elif request.method == 'POST':
+        elif request.method == "POST":
             response = post_new_codex(request)
         else:
             raise_suspicious_operation(http_status)

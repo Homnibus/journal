@@ -9,18 +9,20 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('projets', '0004_auto_20171223_1656'),
+        ("projets", "0004_auto_20171223_1656"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='projet',
-            name='createur',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            model_name="projet",
+            name="createur",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='projet',
-            name='slug',
-            field=models.SlugField(unique=True),
+            model_name="projet", name="slug", field=models.SlugField(unique=True)
         ),
     ]

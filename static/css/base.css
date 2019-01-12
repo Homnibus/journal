@@ -231,7 +231,6 @@ input {
 
 .disabled-textarea { 
   white-space: pre-wrap;
-  background-color: white;
 }
 
 textarea:focus, 
@@ -285,39 +284,51 @@ textarea.textarea-error:focus{
 
 /* pagination */
 div.pagination {
+  display: flex;
   text-align: center;
-  padding-top: .4em;
+  margin: 1em auto 1em auto;
+  background-color: #4D7385;
+  border-radius: 0.5em;
+}
+
+.pagination-first{
+  border-bottom-left-radius: 0.5em;
+  border-top-left-radius: 0.5em;
+}
+
+.pagination-last{
+  border-bottom-right-radius: 0.5em;
+  border-top-right-radius: 0.5em;
 }
 
 .pagination a{
+  color: white;
   font-size: 1em;
   line-height: 1.2em;
+  padding: 0.4em 0.4em 0.2em 0.4em;
+  border-bottom: 2px solid #2F4752;
 }
 
-.pagination a.next { color: black; }
 .pagination a.current {
-  color: black;
+  color: white;
+  text-decoration: none;
   border-bottom: 2px solid #79B5D1;
+  background-color: #2F4752;
 }
 
 .pagination a:link {
-  color: black;
   text-decoration: none;
 }
 .pagination a:visited {
+  text-decoration: none;
+}
+
+.pagination a:hover {
   color: #2F4752;
   text-decoration: none;
-}
-.pagination a.current:visited,
-.pagination a.next:visited {
-  color: black;
-}
-.pagination a:hover {
-  color: #4D7385;
-  text-decoration: none;
-  border-bottom: 2px solid #79B5D1;
+  border-bottom: 2px solid #4D7385;
+  background-color: #79B5D1;
 }
 .pagination a:active,.pagination a:focus{
-  color: #2F4752;
   text-decoration: none;
 }

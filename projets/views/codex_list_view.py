@@ -13,12 +13,14 @@ def get_codex(request):
     output_data = {}
 
     # Get all the codex
-    codex_list = Codex.objects.filter(author=request.user).order_by('-update_date')
+    codex_list = Codex.objects.filter(author=request.user).order_by(
+        "-nested_update_date"
+    )
 
     # Add the codex to the output data
-    output_data.update({'codex_list': codex_list})
+    output_data.update({"codex_list": codex_list})
 
-    return render(request, 'projets/codex_list.html', output_data)
+    return render(request, "projets/codex_list.html", output_data)
 
 
 @login_required
@@ -31,7 +33,7 @@ def codex_list_view(request):
     response = None
 
     try:
-        if request.method == 'GET':
+        if request.method == "GET":
             response = get_codex(request)
         else:
             raise_suspicious_operation(http_status)

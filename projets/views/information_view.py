@@ -23,7 +23,9 @@ def get_information(request, codex_slug, http_status):
         # TODO : factorise this
         http_status.status = 404
         http_status.message = gettext("The Codex does not exist.")
-        http_status.explanation = gettext("The codex you are trying to access does not exist.")
+        http_status.explanation = gettext(
+            "The codex you are trying to access does not exist."
+        )
         raise
 
     # Get the corresponding information
@@ -33,9 +35,9 @@ def get_information(request, codex_slug, http_status):
     form = InformationForm(instance=codex_information)
 
     # Update the output data
-    output_data.update({'codex': codex, 'form': form, 'information': codex_information})
+    output_data.update({"codex": codex, "form": form, "information": codex_information})
 
-    return render(request, 'projets/information.html', output_data)
+    return render(request, "projets/information.html", output_data)
 
 
 def post_information(request, codex_slug):
@@ -50,10 +52,7 @@ def post_information(request, codex_slug):
         codex = Codex.objects.get(slug=codex_slug)
     except Codex.DoesNotExist:
         local_error = gettext("The Codex does not exist")
-        response.data.update({
-            'success': False,
-            'local_error': local_error
-        })
+        response.data.update({"success": False, "local_error": local_error})
         response.status = 404
         return response.get_json_response()
 
@@ -64,22 +63,14 @@ def post_information(request, codex_slug):
     if not input_form.is_valid():
         # TODO : review the validation of the form
         form_errors = gettext("Form validation error.")
-        response.data.update({
-            'success': False,
-            'form_errors': form_errors
-        })
+        response.data.update({"success": False, "form_errors": form_errors})
         response.status = 400
         return response.get_json_response()
 
     # Update or create the codex info
-    Information.objects.update_or_create(
-        codex=codex,
-        defaults={'codex': codex, 'text': input_form.save(commit=False).text}
-    )
+    input_form.save(codex=codex)
 
-    response.data.update({
-        'success': True,
-    })
+    response.data.update({"success": True})
     return response.get_json_response()
 
 
@@ -94,9 +85,9 @@ def information_view(request, codex_slug):
     http_status = HttpStatus()
 
     try:
-        if request.method == 'GET':
+        if request.method == "GET":
             response = get_information(request, codex_slug, http_status)
-        elif request.method == 'POST' and request.is_ajax():
+        elif request.method == "POST" and request.is_ajax():
             response = post_information(request, codex_slug)
         else:
             raise_suspicious_operation(http_status)

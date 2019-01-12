@@ -1,4 +1,4 @@
 Django==2.1
 psycopg2==2.7.5
 pytz==2018.5
-djangorestframework==3.9.0
+black==18.9b0

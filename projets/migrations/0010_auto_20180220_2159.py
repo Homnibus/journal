@@ -5,54 +5,50 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('projets', '0009_auto_20180210_1025'),
-    ]
+    dependencies = [("projets", "0009_auto_20180210_1025")]
 
     operations = [
         migrations.AlterField(
-            model_name='contact_liste',
-            name='date_creation',
-            field=models.DateTimeField(editable=False, verbose_name='Date de creation'),
+            model_name="contact_liste",
+            name="date_creation",
+            field=models.DateTimeField(editable=False, verbose_name="Date de creation"),
         ),
         migrations.AlterField(
-            model_name='contact_liste',
-            name='date_update',
-            field=models.DateTimeField(verbose_name='Date de mise a jour'),
+            model_name="contact_liste",
+            name="date_update",
+            field=models.DateTimeField(verbose_name="Date de mise a jour"),
         ),
         migrations.AlterField(
-            model_name='journal_entree',
-            name='date_creation',
-            field=models.DateTimeField(editable=False, verbose_name='Date de creation'),
+            model_name="journal_entree",
+            name="date_creation",
+            field=models.DateTimeField(editable=False, verbose_name="Date de creation"),
         ),
         migrations.AlterField(
-            model_name='journal_entree',
-            name='date_update',
-            field=models.DateTimeField(verbose_name='Date de mise a jour'),
+            model_name="journal_entree",
+            name="date_update",
+            field=models.DateTimeField(verbose_name="Date de mise a jour"),
         ),
         migrations.AlterField(
-            model_name='main_courante',
-            name='date_creation',
-            field=models.DateTimeField(editable=False, verbose_name='Date de creation'),
+            model_name="main_courante",
+            name="date_creation",
+            field=models.DateTimeField(editable=False, verbose_name="Date de creation"),
         ),
         migrations.AlterField(
-            model_name='main_courante',
-            name='date_update',
-            field=models.DateTimeField(verbose_name='Date de mise a jour'),
+            model_name="main_courante",
+            name="date_update",
+            field=models.DateTimeField(verbose_name="Date de mise a jour"),
         ),
         migrations.AlterField(
-            model_name='projet',
-            name='date_creation',
-            field=models.DateTimeField(editable=False, verbose_name='Date de creation'),
+            model_name="projet",
+            name="date_creation",
+            field=models.DateTimeField(editable=False, verbose_name="Date de creation"),
         ),
         migrations.AlterField(
-            model_name='projet',
-            name='date_update',
-            field=models.DateTimeField(verbose_name='Date de mise a jour'),
+            model_name="projet",
+            name="date_update",
+            field=models.DateTimeField(verbose_name="Date de mise a jour"),
         ),
         migrations.AlterField(
-            model_name='projet',
-            name='titre',
-            field=models.CharField(max_length=80),
+            model_name="projet", name="titre", field=models.CharField(max_length=80)
         ),
     ]

@@ -36,26 +36,23 @@ def get_today_page(codex, today):
     output_page_data.new_task_form = TaskForm()
 
     # Get the tasks of the day
-    today_tasks = list(Task.objects.filter(page=today_page).order_by('creation_date'))
+    today_tasks = list(Task.objects.filter(page=today_page).order_by("creation_date"))
     # Add each task as a form to the page
     for task in today_tasks:
         output_page_data.tasks_form.append(TaskForm(instance=task))
 
     return output_page_data
 
-    
+
 def get_pages_before_today(codex, today):
     """
     Return all the pages which were created before today for the given codex
     """
     # Initialize output data
     output_old_pages = []
-    
+
     # Get all the pages which are older than today
-    old_pages = list(Page.objects.filter(
-        codex=codex,
-        date__lt=today
-    ).order_by('date'))
+    old_pages = list(Page.objects.filter(codex=codex, date__lt=today).order_by("date"))
 
     # For each page, get the note and the corresponding tasks
     for page in old_pages:
@@ -68,7 +65,7 @@ def get_pages_before_today(codex, today):
             page_container.note_form = NoteForm(instance=note)
 
         # Get the corresponding tasks
-        tasks = list(Task.objects.filter(page=page).order_by('creation_date'))
+        tasks = list(Task.objects.filter(page=page).order_by("creation_date"))
         # Add each task as a form to the page container
         for task in tasks:
             page_container.tasks_form.append(TaskForm(instance=task))
@@ -93,11 +90,13 @@ def get_codex(request, codex_slug, http_status):
         # TODO : factorise this
         http_status.status = 404
         http_status.message = gettext("The Codex does not exist.")
-        http_status.explanation = gettext("The Codex you are trying to access does not exist.")
+        http_status.explanation = gettext(
+            "The Codex you are trying to access does not exist."
+        )
         raise
 
     # Add the codex to the output data
-    output_data.update({'codex': codex})
+    output_data.update({"codex": codex})
 
     # Get today date in the database to have only one provider of date
     today = get_current_timestamp().date()
@@ -106,15 +105,15 @@ def get_codex(request, codex_slug, http_status):
     today_page = get_today_page(codex, today)
 
     # Add the page of the day to the output data
-    output_data.update({'today_page': today_page})
+    output_data.update({"today_page": today_page})
 
     # Get the others older pages
     old_pages = get_pages_before_today(codex, today)
 
     # Add the older pages to the output data
-    output_data.update({'older_pages': old_pages})
+    output_data.update({"older_pages": old_pages})
 
-    return render(request, 'projets/codex_details.html', output_data)
+    return render(request, "projets/codex_details.html", output_data)
 
 
 @login_required
@@ -128,7 +127,7 @@ def codex_details_view(request, codex_slug):
     http_status = HttpStatus()
 
     try:
-        if request.method == 'GET':
+        if request.method == "GET":
             response = get_codex(request, codex_slug, http_status)
         else:
             raise_suspicious_operation(http_status)

@@ -33,7 +33,7 @@
 .old-pages .note_text,
 .old-pages .task{
   border: 1px solid rgba(0,0,0,.16);
-  background: white;
+  background-color: white;
   box-shadow: 0 0 0 0;
 }
 
@@ -68,7 +68,7 @@
 .old-pages .note_text,
 .old-pages .task_text{
   font-size: .9em;
-  font-family: arial;
+  font-family: arial, serif;
   padding: .2em .2em .2em .5em; 
   width: 100%;
 }
@@ -82,7 +82,9 @@
 /* display task_text */
 /* display task_checkbox */
 .disp-task_text,
-.disp-note_text { flex: 1; }
+.disp-note_text {
+  flex: 1;
+}
 
 /* header */
 .page header { flex-direction: row; }
