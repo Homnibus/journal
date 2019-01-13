@@ -6,7 +6,12 @@ from django.core.exceptions import SuspiciousOperation
 
 from projets.commun.codex import Page
 from projets.commun.error import raise_suspicious_operation, HttpStatus, render_error
-from projets.commun.utils import JsonResponseContainer, java_string_hashcode, min_paginator_rang, max_paginator_rang
+from projets.commun.utils import (
+    JsonResponseContainer,
+    java_string_hashcode,
+    min_paginator_rang,
+    max_paginator_rang,
+)
 
 
 class CommunTest(TestCase):
@@ -158,7 +163,9 @@ class UtilsMinPaginatorRangTest(TestCase):
         with self.assertRaises(IndexError):
             min_paginator_rang(self.current_page, self.max_page, step)
 
-    def test_min_paginator_rang_current_page_greater_than_max_page_assert_index_error(self):
+    def test_min_paginator_rang_current_page_greater_than_max_page_assert_index_error(
+        self
+    ):
         current_page = 2
         with self.assertRaises(IndexError):
             min_paginator_rang(current_page, self.max_page, self.step)
@@ -240,7 +247,9 @@ class UtilsMaxPaginatorRangTest(TestCase):
         with self.assertRaises(IndexError):
             max_paginator_rang(self.current_page, self.max_page, step)
 
-    def test_max_paginator_rang_current_page_greater_than_max_page_assert_index_error(self):
+    def test_max_paginator_rang_current_page_greater_than_max_page_assert_index_error(
+        self
+    ):
         current_page = 2
         with self.assertRaises(IndexError):
             max_paginator_rang(current_page, self.max_page, self.step)

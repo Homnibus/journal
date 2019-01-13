@@ -6,8 +6,15 @@ from django.urls import reverse
 from projets.commun.error import HttpStatus
 from projets.commun.utils import java_string_hashcode
 from projets.models import Codex, Page, Task
-from projets.views import (is_authorized_to_create_task, is_authorized_to_update_task, is_authorized_to_delete_task,
-                           get_list_task, delete_task, put_task, post_task)
+from projets.views import (
+    is_authorized_to_create_task,
+    is_authorized_to_update_task,
+    is_authorized_to_delete_task,
+    get_list_task,
+    delete_task,
+    put_task,
+    post_task,
+)
 
 
 class TaskViewTest(TestCase):
@@ -27,7 +34,9 @@ class TaskViewTest(TestCase):
 
         self.assertEqual(is_authorized, True)
 
-    def test_is_authorized_to_create_task_user_is_not_author_task_assert_return_false(self):
+    def test_is_authorized_to_create_task_user_is_not_author_task_assert_return_false(
+        self
+    ):
         user = self.user = User.objects.create_user(
             username="test_user", email="test_user@test.com", password="admin"
         )
@@ -40,7 +49,9 @@ class TaskViewTest(TestCase):
 
         self.assertEqual(is_authorized, True)
 
-    def test_is_authorized_to_update_task_user_is_not_author_task_assert_return_false(self):
+    def test_is_authorized_to_update_task_user_is_not_author_task_assert_return_false(
+        self
+    ):
         user = self.user = User.objects.create_user(
             username="test_user", email="test_user@test.com", password="admin"
         )
@@ -53,7 +64,9 @@ class TaskViewTest(TestCase):
 
         self.assertEqual(is_authorized, True)
 
-    def test_is_authorized_to_delete_task_user_is_not_author_task_assert_return_false(self):
+    def test_is_authorized_to_delete_task_user_is_not_author_task_assert_return_false(
+        self
+    ):
         user = self.user = User.objects.create_user(
             username="test_user", email="test_user@test.com", password="admin"
         )
@@ -77,11 +90,17 @@ class TaskListTest(TestCase):
         self.form_text = "Updated Test Text"
         self.form_is_achieved = True
         self.form_hash = str(java_string_hashcode(self.text))
-        self.form_data = {"text": self.form_text, "is_achieved": self.form_is_achieved, "hash": self.form_hash}
+        self.form_data = {
+            "text": self.form_text,
+            "is_achieved": self.form_is_achieved,
+            "hash": self.form_hash,
+        }
         self.page = Page.objects.create(codex=self.codex)
         self.task = Task.objects.create(page=self.page, text=self.text)
         self.url_list = reverse("tasks")
-        self.url_list_filtered = reverse("codex_tasks", kwargs={"codex_slug": self.codex.slug})
+        self.url_list_filtered = reverse(
+            "codex_tasks", kwargs={"codex_slug": self.codex.slug}
+        )
         self.url_details = reverse("task_details", kwargs={"task_id": self.task.id})
 
     def test_get_list_task_assert_return_http_response(self):
@@ -158,7 +177,11 @@ class PostTaskTest(TestCase):
         self.url_list = reverse("tasks")
         self.form_text = "Test Text"
         self.form_is_achieved = True
-        self.form_data = {"text": self.form_text, "is_achieved": self.form_is_achieved, "codex_slug": self.codex.slug}
+        self.form_data = {
+            "text": self.form_text,
+            "is_achieved": self.form_is_achieved,
+            "codex_slug": self.codex.slug,
+        }
 
     def test_post_task_assert_return_http_response(self):
         """ Test if the method return a HttpResponse """
@@ -185,7 +208,7 @@ class PostTaskTest(TestCase):
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
         post_task(request)
-        tasks = Task.objects.all().order_by('id')
+        tasks = Task.objects.all().order_by("id")
 
         self.assertEqual(len(tasks), 2)
         self.assertEqual(tasks[0].text, text)
@@ -193,7 +216,9 @@ class PostTaskTest(TestCase):
 
     def test_post_task_view_assert_return_200(self):
         """ Test if the view return a 200 response to a get request"""
-        response = self.client.post(self.url_list, self.form_data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            self.url_list, self.form_data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+        )
 
         self.assertEqual(response.status_code, 200)
 
@@ -268,7 +293,11 @@ class PutTaskTest(TestCase):
         self.form_text = "Updated Test Text"
         self.form_is_achieved = True
         self.form_hash = str(java_string_hashcode(self.text))
-        self.form_data = {"text": self.form_text, "is_achieved": self.form_is_achieved, "hash": self.form_hash}
+        self.form_data = {
+            "text": self.form_text,
+            "is_achieved": self.form_is_achieved,
+            "hash": self.form_hash,
+        }
         self.page = Page.objects.create(codex=self.codex)
         self.task = Task.objects.create(page=self.page, text=self.text)
         self.url_details = reverse("task_details", kwargs={"task_id": self.task.id})
@@ -277,7 +306,7 @@ class PutTaskTest(TestCase):
         """ Test if the method return a HttpResponse """
         request = self.factory.post(self.url_details, self.form_data)
         request.user = self.user
-        request.method = 'PUT'
+        request.method = "PUT"
         request.PUT = request.POST
         response = put_task(request, self.task.id)
 
@@ -288,7 +317,7 @@ class PutTaskTest(TestCase):
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
-        request.method = 'PUT'
+        request.method = "PUT"
         request.PUT = request.POST
         put_task(request, self.task.id)
 
@@ -304,7 +333,7 @@ class PutTaskTest(TestCase):
         request = self.factory.post(self.url_details, self.form_data)
         request.user = self.user
         print(request.POST)
-        request.method = 'PUT'
+        request.method = "PUT"
         request.PUT = request.POST
         put_task(request, self.task.id)
 
@@ -318,7 +347,7 @@ class PutTaskTest(TestCase):
         self.form_data["text"] = ""
         request = self.factory.post(self.url_details, self.form_data)
         request.user = self.user
-        request.method = 'PUT'
+        request.method = "PUT"
         print(request.POST)
         request.PUT = request.POST
         response = put_task(request, self.task.id)
@@ -330,7 +359,7 @@ class PutTaskTest(TestCase):
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
-        request.method = 'PUT'
+        request.method = "PUT"
         request.PUT = request.POST
         response = put_task(request, task_id=0)
 
@@ -342,7 +371,7 @@ class PutTaskTest(TestCase):
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
-        request.method = 'PUT'
+        request.method = "PUT"
         request.PUT = request.POST
         response = put_task(request, self.task.id)
 
@@ -356,7 +385,7 @@ class PutTaskTest(TestCase):
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = user
-        request.method = 'PUT'
+        request.method = "PUT"
         request.PUT = request.POST
         response = put_task(request, self.task.id)
 
@@ -364,13 +393,17 @@ class PutTaskTest(TestCase):
 
     def test_put_task_details_view_assert_input_invalid(self):
         """ Test if the view return a 400 response if there is not form data"""
-        response = self.client.put(self.url_details, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.put(
+            self.url_details, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+        )
 
         self.assertEqual(response.status_code, 400)
 
     def test_post_task_details_view_assert_return_405(self):
         """ Test if the view return a 405 response to a get request"""
-        response = self.client.post(self.url_details, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            self.url_details, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+        )
 
         self.assertEqual(response.status_code, 405)
 
@@ -389,7 +422,11 @@ class DeleteTaskTest(TestCase):
         self.form_text = "Updated Test Text"
         self.form_is_achieved = True
         self.form_hash = str(java_string_hashcode(self.text))
-        self.form_data = {"text": self.form_text, "is_achieved": self.form_is_achieved, "hash": self.form_hash}
+        self.form_data = {
+            "text": self.form_text,
+            "is_achieved": self.form_is_achieved,
+            "hash": self.form_hash,
+        }
         self.page = Page.objects.create(codex=self.codex)
         self.task = Task.objects.create(page=self.page, text=self.text)
         self.url_details = reverse("task_details", kwargs={"task_id": self.task.id})
@@ -441,7 +478,9 @@ class DeleteTaskTest(TestCase):
 
     def test_delete_task_details_view_assert_return_200(self):
         """ Test if the view return a 200 response to a get request"""
-        response = self.client.delete(self.url_details, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.delete(
+            self.url_details, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+        )
 
         self.assertEqual(response.status_code, 200)
 

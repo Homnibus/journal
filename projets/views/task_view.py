@@ -4,7 +4,12 @@ from django.shortcuts import render
 from django.utils.translation import gettext
 
 from projets.commun.error import HttpStatus, render_error, raise_suspicious_operation
-from projets.commun.utils import java_string_hashcode, JsonResponseContainer, min_paginator_rang, max_paginator_rang
+from projets.commun.utils import (
+    java_string_hashcode,
+    JsonResponseContainer,
+    min_paginator_rang,
+    max_paginator_rang,
+)
 from projets.forms import TaskForm
 from projets.models import Codex, Task
 
