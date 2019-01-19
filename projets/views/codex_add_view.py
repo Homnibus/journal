@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
 
+from ..commun.error import HttpMethodNotAllowed
 from ..forms import CodexForm
-from ..commun.error import HttpStatus, render_error, raise_suspicious_operation
 
 
 def get_new_codex(request):
@@ -28,7 +28,6 @@ def post_new_codex(request):
     if not input_form.is_valid():
         # Prepare the output data
         output_data = {"form": input_form}
-        # TODO : manage form error
         return render(request, "projets/codex_add.html", output_data, status=400)
 
     # Create the new Codex
@@ -44,19 +43,10 @@ def codex_add_view(request):
     """
     Manage the codex creation
     """
-    # Initialize output
-    http_status = HttpStatus()
-    response = None
-
-    try:
-        if request.method == "GET":
-            response = get_new_codex(request)
-        elif request.method == "POST":
-            response = post_new_codex(request)
-        else:
-            raise_suspicious_operation(http_status)
-        return response
-
-    except Exception as ex:
-        # Return the error as a html page or as a JSON dictionary
-        return render_error(request, ex, http_status)
+    if request.method == "GET" and not request.is_ajax():
+        response = get_new_codex(request)
+    elif request.method == "POST" and not request.is_ajax():
+        response = post_new_codex(request)
+    else:
+        raise HttpMethodNotAllowed
+    return response

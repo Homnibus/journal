@@ -2,6 +2,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block css %}
+<link rel='stylesheet' href='{% static "css/codex_add.css" %}' />
+{% endblock %}
+
 {% block title %}{% trans 'New Codex' %}{% endblock %}
 
 {% block nav-new_codex %}current{% endblock %}
@@ -15,11 +19,13 @@
 <section class='new-codex'>
   <form action='{% url "codex_add" %}' method='post'>
     {% csrf_token %}
-    <h2>{% trans 'Title' %}</h2>
+    <h2>{% trans 'Title' %} :</h2>
     {{ form.title }}
-    <h2>{% trans 'Description' %}</h2>
+    <h2>{% trans 'Description' %} :</h2>
     {{ form.description }}
-    <input type='submit' value='Sauvegarder' />
+      <div class="button-disp">
+        <input type='submit' value='Sauvegarder' />
+      </div>
   </form>
 </section>
 {% endblock %}

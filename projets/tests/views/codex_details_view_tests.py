@@ -6,7 +6,7 @@ import datetime
 from django.urls import reverse
 
 from projets.commun.codex import Page as Page_container
-from projets.commun.error import HttpStatus
+from projets.commun.error import HttpStatus, HttpNotFound
 from projets.forms import TaskForm, NoteForm
 from projets.models import Codex, Page, get_current_timestamp, Note, Task
 from projets.views.codex_details_view import (
@@ -34,7 +34,6 @@ class GetTodayPageTest(TestCase):
         Note.objects.create(page=self.page, text="Note test text")
         Task.objects.create(page=self.page, text="Task test text 1")
         Task.objects.create(page=self.page, text="Task test text 2")
-        self.http_status = HttpStatus()
         self.url = reverse("codex_details", kwargs={"codex_slug": self.codex.slug})
 
     def test_get_today_page_assert_return_page_container(self):
@@ -94,7 +93,7 @@ class GetTodayPageTest(TestCase):
     def test_get_codex_assert_return_http_response(self):
         """ Test if the method return a HttpResponse """
         request = self.factory.get(self.url)
-        response = get_codex(request, self.codex.slug, self.http_status)
+        response = get_codex(request, self.codex.slug)
 
         self.assertIsInstance(response, HttpResponse)
 
@@ -104,25 +103,12 @@ class GetTodayPageTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_get_codex_codex_not_exist_assert_raise_not_exist(self):
+    def test_get_codex_codex_not_exist_assert_raise_not_found(self):
         """ Test if the method raise an error if the codex does not exist """
         slug = "TEST-KO"
         request = self.factory.get(reverse("information", kwargs={"codex_slug": slug}))
-        with self.assertRaises(Codex.DoesNotExist):
-            get_codex(request, slug, self.http_status)
-
-    def test_get_codex_codex_not_exist_assert_http_status_not_empty(self):
-        """ Test if the method update the http status if the codex does not exist """
-        slug = "TEST-KO"
-        request = self.factory.get(reverse("information", kwargs={"codex_slug": slug}))
-        try:
-            get_codex(request, slug, self.http_status)
-        except:
-            pass
-
-        self.assertNotEqual(self.http_status.status, 200)
-        self.assertNotEqual(self.http_status.explanation, "")
-        self.assertNotEqual(self.http_status.message, "")
+        with self.assertRaises(HttpNotFound):
+            get_codex(request, slug)
 
     def test_delete_codex_view_assert_return_405(self):
         """ Test if the view return a 405 response to a delete request"""

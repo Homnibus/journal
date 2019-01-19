@@ -3,7 +3,12 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from projets.commun.error import HttpStatus
+from projets.commun.error import (
+    HttpStatus,
+    HttpForbidden,
+    HttpNotFound,
+    HttpInvalidFormData,
+)
 from projets.commun.utils import java_string_hashcode
 from projets.models import Codex, Page, Task
 from projets.views import (
@@ -222,14 +227,13 @@ class PostTaskTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_post_task_view_text_empty_assert_return_400(self):
-        """ Test if the view return a 200 response to a get request"""
+    def test_post_task_view_text_empty_assert_return_invalid_form_data(self):
+        """ Test if the view raise a HttpInvalidFormData if the request is not valid"""
         self.form_data["text"] = ""
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        response = post_task(request)
-
-        self.assertEqual(response.status_code, 400)
+        with self.assertRaises(HttpInvalidFormData):
+            post_task(request)
 
     def test_post_task_view_without_slug_assert_return_400(self):
         """ Test if the view return a 200 response to a get request"""
@@ -240,25 +244,23 @@ class PostTaskTest(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_post_task_view_codex_not_exist_assert_return_404(self):
+    def test_post_task_view_codex_not_exist_assert_raise_not_found(self):
         """ Test if the view return a 404 if the given slug does not exist """
         self.form_data["codex_slug"] = "slug-ko"
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        response = post_task(request)
+        with self.assertRaises(HttpNotFound):
+            post_task(request)
 
-        self.assertEqual(response.status_code, 404)
-
-    def test_post_task_of_other_user_assert_raise_403(self):
-        """ Test if the method raise a 403 error the user has no right to update it """
+    def test_post_task_of_other_user_assert_raise_forbidden(self):
+        """ Test if the method raise a HttpForbiden error the user has no right to update it """
         user = User.objects.create_user(
             username="tartine", email="tarnite@lelapin.com", password="top_secret"
         )
         request = self.factory.post(self.url_list, self.form_data)
         request.user = user
-        response = post_task(request)
-
-        self.assertEqual(response.status_code, 403)
+        with self.assertRaises(HttpForbidden):
+            post_task(request)
 
     def test_delete_task_view_assert_return_405(self):
         """ Test if the view return a 405 response to a delete request"""
@@ -305,6 +307,7 @@ class PutTaskTest(TestCase):
     def test_put_task_assert_return_http_response(self):
         """ Test if the method return a HttpResponse """
         request = self.factory.post(self.url_details, self.form_data)
+        print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
@@ -342,43 +345,43 @@ class PutTaskTest(TestCase):
         self.assertEqual(tasks[0].text, text)
         self.assertEqual(tasks[0].is_achieved, False)
 
-    def test_put_task_text_empty_assert_raise_400(self):
-        """ Test if the method raise a 400 error if the form text is empty """
+    def test_put_task_text_empty_assert_raise_invalid_form_data(self):
+        """ Test if the method raise a HttpInvalidFormData error if the form text is empty """
         self.form_data["text"] = ""
         request = self.factory.post(self.url_details, self.form_data)
+        print(request.POST)
         request.user = self.user
         request.method = "PUT"
-        print(request.POST)
         request.PUT = request.POST
-        response = put_task(request, self.task.id)
+        with self.assertRaises(HttpInvalidFormData):
+            put_task(request, self.task.id)
 
-        self.assertEqual(response.status_code, 400)
-
-    def test_put_task_does_not_exist_assert_raise_404(self):
-        """ Test if the method raise a 404 error if the task does not exist """
+    def test_put_task_does_not_exist_assert_raise_not_found(self):
+        """ Test if the method raise a HttpNotFound error if the task does not exist """
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
-        response = put_task(request, task_id=0)
+        with self.assertRaises(HttpNotFound):
+            put_task(request, task_id=0)
 
-        self.assertEqual(response.status_code, 404)
-
-    def test_put_task_hash_invalid_assert_raise_400(self):
-        """ Test if the method raise a 400 error if the text hash is not the same as the one of the database text """
+    def test_put_task_hash_invalid_assert_raise_invalid_form_data(self):
+        """
+        Test if the method raise a HttpInvalidFormData error if the text hash is not the same as the one of the
+        database text
+        """
         self.form_data["hash"] = "1"
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
-        response = put_task(request, self.task.id)
+        with self.assertRaises(HttpInvalidFormData):
+            put_task(request, self.task.id)
 
-        self.assertEqual(response.status_code, 400)
-
-    def test_put_task_of_other_user_assert_raise_403(self):
-        """ Test if the method raise a 403 error the user has no right to update it """
+    def test_put_task_of_other_user_assert_raise_forbidden(self):
+        """ Test if the method raise a HttpForbidden error the user has no right to update it """
         user = User.objects.create_user(
             username="tartine", email="tarnite@lelapin.com", password="top_secret"
         )
@@ -387,9 +390,8 @@ class PutTaskTest(TestCase):
         request.user = user
         request.method = "PUT"
         request.PUT = request.POST
-        response = put_task(request, self.task.id)
-
-        self.assertEqual(response.status_code, 403)
+        with self.assertRaises(HttpForbidden):
+            put_task(request, self.task.id)
 
     def test_put_task_details_view_assert_input_invalid(self):
         """ Test if the view return a 400 response if there is not form data"""
@@ -459,8 +461,8 @@ class DeleteTaskTest(TestCase):
 
         self.assertEqual(len(tasks), 1)
 
-    def test_delete_task_of_other_user_assert_return_error(self):
-        """ Test if the method return a HttpResponse """
+    def test_delete_task_of_other_user_assert_raise_forbidden(self):
+        """ Try to delete the ask of an other user and assert the method raise an HttpForbidden error"""
         user = User.objects.create_user(
             username="tartine", email="tarnite@lelapin.com", password="top_secret"
         )
@@ -471,10 +473,8 @@ class DeleteTaskTest(TestCase):
         task = Task.objects.create(page=page, text="Test Text2")
         request = self.factory.delete(self.url_details)
         request.user = self.user
-        delete_task(request, task.id)
-        tasks = Task.objects.filter(id=task.id)
-
-        self.assertEqual(len(tasks), 1)
+        with self.assertRaises(HttpForbidden):
+            delete_task(request, task.id)
 
     def test_delete_task_details_view_assert_return_200(self):
         """ Test if the view return a 200 response to a get request"""

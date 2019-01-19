@@ -3,12 +3,20 @@ from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render
 from django.utils.translation import gettext
 
-from projets.commun.error import HttpStatus, render_error, raise_suspicious_operation
+from projets.commun.error import (
+    HttpStatus,
+    render_error,
+    raise_suspicious_operation,
+    HttpInvalidFormData,
+    HttpForbidden,
+    HttpMethodNotAllowed,
+)
 from projets.commun.utils import (
     java_string_hashcode,
     JsonResponseContainer,
     min_paginator_rang,
     max_paginator_rang,
+    get_object_or_not_found,
 )
 from projets.forms import TaskForm
 from projets.models import Codex, Task
@@ -63,7 +71,7 @@ def get_list_task(request, codex_slug=None):
         # TODO : check if the user can see the codex ?
         # TODO : throw an error if the codex does not exist
         # Get the corresponding codex
-        codex = Codex.objects.get(slug=codex_slug)
+        codex = get_object_or_not_found(Codex, slug=codex_slug)
         # Filter the initial QuerySet
         task_list = task_list.filter(page__codex=codex)
         # Add the slug to the output date to filter the table
@@ -109,6 +117,7 @@ def get_list_task(request, codex_slug=None):
     # Update the output data with the current page
     output_data.update({"task_list": paginator_page})
 
+    # TODO: Set this prop as a Global Const and put it in a conf file
     step = 2
     min_rang = min_paginator_rang(paginator_page_number, paginator.num_pages, step)
     max_rang = max_paginator_rang(paginator_page_number, paginator.num_pages, step)
@@ -138,50 +147,34 @@ def post_task(request):
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
-        # TODO: review the form validation
-        form_errors = gettext("Form validation error.")
-        response.data.update({"success": False, "form_errors": form_errors})
-        response.status = 400
-        return response.get_json_response()
+        raise HttpInvalidFormData(
+            form_errors=input_form.non_field_errors(),
+            fields_error=input_form.errors.as_json(),
+        )
 
-    # Get the task_details_view model from the form
+    # Get the task model from the form
     form_task = input_form.save(commit=False)
-
-    # TODO: put this test in the form validation
-    # If the task_details_view text is empty, throw an error
-    if not form_task.text or form_task.text.isspace():
-        local_error = gettext("Can't create an empty Task.")
-        response.data.update({"success": False, "local_error": local_error})
-        response.status = 400
-        return response.get_json_response()
 
     # Get the codex of the task from the slug
     codex_slug = request.POST.get("codex_slug")
 
     # If the codex_slug is empty, throw an error
     if not codex_slug:
+        # TODO : as the codex slug is in the POST param, it should be in the form validation
         form_errors = gettext("Form validation error.")
         response.data.update({"success": False, "form_errors": form_errors})
         response.status = 400
         return response.get_json_response()
 
-    try:
-        codex = Codex.objects.get(slug=codex_slug)
-    except Codex.DoesNotExist:
-        # TODO : factorise this
-        local_error = gettext("The Codex does not exist.")
-        response.data.update({"success": False, "local_error": local_error})
-        response.status = 404
-        return response.get_json_response()
+    # Get the codex of the note from the slug
+    codex = get_object_or_not_found(Codex, slug=codex_slug)
 
     # Check if the user has the permission
     if not is_authorized_to_create_task(request.user, codex):
-        local_error = gettext("You are not allowed to create this Task.")
-        response.data.update({"success": False, "local_error": local_error})
-        response.status = 403
-        return response.get_json_response()
+        raise HttpForbidden
 
     # If all the above test are ok, create the task_details_view
+    # TODO : save with the form if possible
     task = Task(text=form_task.text, is_achieved=form_task.is_achieved)
     task.save(codex=codex)
 
@@ -206,56 +199,40 @@ def put_task(request, task_id):
     input_form = TaskForm(request.PUT)
 
     # TODO : get this information from the form
-    # Get the task_details_view hash from the request
+    # Get the task hash from the request
     request_task_hash = request.PUT.get("hash")
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
-        # TODO : review the validation of the form
-        # TODO : change the way error are returned to raise an error as in the other methods
-        form_errors = gettext("Form validation error.")
-        response.data.update(
-            {"success": False, "id": task_id, "form_errors": form_errors}
+        # The error is handled by the RequestExceptionHandler Middleware
+        raise HttpInvalidFormData(
+            form_errors=input_form.non_field_errors(),
+            fields_error=input_form.errors.as_json(),
         )
-        response.status = 400
-        return response.get_json_response()
 
-    # Get the task_details_view model from the form
+    # Get the task model from the form
     form_task = input_form.save(commit=False)
 
     # TODO : try to put this check in the form validation
     # Get the task_details_view from the database
-    try:
-        task = Task.objects.get(id=task_id)
-    except Task.DoesNotExist:
-        local_error = gettext("The Task you are trying to modify does not exist.")
-        response.data.update(
-            {"success": False, "id": task_id, "local_error": local_error}
-        )
-        response.status = 404
-        return response.get_json_response()
+    task = get_object_or_not_found(Task, id=task_id)
 
-    # If the task_details_view hash of the request doesn't correspond to the task_details_view hash of the database,
+    # If the task hash of the request doesn't correspond to the task hash of the database,
     # throw an error
     database_task_hash = str(java_string_hashcode(task.text))
     if request_task_hash != database_task_hash:
-        local_error = gettext(
-            "The Task has been modified since the last attempt of modification."
+        raise HttpInvalidFormData(
+            form_errors=gettext(
+                "The Note have been modified since the last modification attempt."
+            )
         )
-        response.data.update(
-            {"success": False, "id": task_id, "local_error": local_error}
-        )
-        response.status = 400
-        return response.get_json_response()
 
     # Check if the user has the permission
     if not is_authorized_to_update_task(request.user, task):
-        local_error = gettext("You are not allowed to modify this Task")
-        response.data.update({"success": False, "local_error": local_error})
-        response.status = 403
-        return response.get_json_response()
+        raise HttpForbidden
 
-    # If all the above test are ok, update the task_details_view
+    # If all the above test are ok, update the task
+    # TODO : try to save the model from the form
     task.text = form_task.text
     task.is_achieved = form_task.is_achieved
     task.save()
@@ -274,14 +251,14 @@ def delete_task(request, task_id):
 
     # Check if the user has the permission
     if not is_authorized_to_delete_task(request.user, task_id):
-        # TODO : change the way error are returned to raise an error as in the other methods
-        local_error = gettext("You are not allowed to delete this Task.")
-        response.data.update({"success": False, "local_error": local_error})
-        response.status = 403
-        return response.get_json_response()
+        raise HttpForbidden
 
-    # Delete the task_details_view
-    Task.objects.filter(id=task_id).delete()
+    # Get the task from the database
+    task = get_object_or_not_found(Task, id=task_id)
+
+    # Delete the task
+    # TODO : check if the object exist in the other view before deleting it
+    task.delete()
 
     # Prepare the output data
     response.data.update({"success": True, "id": task_id})
@@ -293,26 +270,14 @@ def task_details_view(request, task_id):
     """
     Manage REST like actions on a task_details_view.
     """
-    # Create the output data
-    http_status = HttpStatus()
-    response = None
+    if request.method == "PUT" and request.is_ajax():
+        response = put_task(request, task_id)
+    elif request.method == "DELETE" and request.is_ajax():
+        response = delete_task(request, task_id)
+    else:
+        raise HttpMethodNotAllowed
 
-    try:
-        if not request.is_ajax():
-            raise_suspicious_operation(http_status)
-
-        if request.method == "PUT":
-            response = put_task(request, task_id)
-        elif request.method == "DELETE":
-            response = delete_task(request, task_id)
-        else:
-            raise_suspicious_operation(http_status)
-
-        # Return the output data
-        return response
-    except Exception as ex:
-        # Return the error as a html page or as a JSON dictionary
-        return render_error(request, ex, http_status)
+    return response
 
 
 @login_required
@@ -320,24 +285,14 @@ def task_list_view(request):
     """
     Manage REST like actions: get list and post.
     """
-    # Create the output data
-    http_status = HttpStatus()
-    response = None
+    if request.method == "GET" and not request.is_ajax():
+        response = get_list_task(request)
+    elif request.method == "POST" and request.is_ajax():
+        response = post_task(request)
+    else:
+        raise HttpMethodNotAllowed
 
-    try:
-
-        if request.method == "GET":
-            response = get_list_task(request)
-        elif request.method == "POST" and request.is_ajax():
-            response = post_task(request)
-        else:
-            raise_suspicious_operation(http_status)
-
-        # Return the output data
-        return response
-    except Exception as ex:
-        # Return the error as a html page or as a JSON dictionary
-        return render_error(request, ex, http_status)
+    return response
 
 
 @login_required
@@ -345,19 +300,10 @@ def task_list_filtered_view(request, codex_slug=None):
     """
     Manage REST like actions: get list filtered.
     """
-    # Create the output data
-    http_status = HttpStatus()
-    response = None
 
-    try:
+    if request.method == "GET" and not request.is_ajax():
+        response = get_list_task(request, codex_slug)
+    else:
+        raise HttpMethodNotAllowed
 
-        if request.method == "GET":
-            response = get_list_task(request, codex_slug)
-        else:
-            raise_suspicious_operation(http_status)
-
-        # Return the output data
-        return response
-    except Exception as ex:
-        # Return the error as a html page or as a JSON dictionary
-        return render_error(request, ex, http_status)
+    return response

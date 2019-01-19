@@ -1,4 +1,10 @@
 {% extends "projets/base_template.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+<link rel='stylesheet' href='{% static "css/connexion.css" %}' />
+{% endblock %}
 
 {% block title %}Connexion{% endblock %}
 
@@ -19,9 +25,14 @@
     {% else %}
         <form method="post" action="{% url 'connexion' %}">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div>{{ form.username.label }}</div>
+            {{ form.username }}
+            <div>{{ form.password.label }}</div>
+            {{ form.password }}
             <input type="hidden" name="next" value="{{ next }}" />
-            <input type="submit" value="Connexion" />
+            <div class="button-disp">
+                <input type="submit" value="Connexion" />
+            </div>
         </form>
     {% endif %}
 {% endblock %}

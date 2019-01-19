@@ -94,7 +94,7 @@ class CodexAddViewTest(TestCase):
         self.assertEqual(len(codex_list), 0)
         self.assertRedirects(
             response,
-            "/connexion" + "?next=" + reverse("codex_add"),
+            reverse("connexion") + "?next=" + reverse("codex_add"),
             status_code=302,
             target_status_code=200,
         )

@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from projets.commun.error import HttpStatus
+from projets.commun.error import HttpStatus, HttpNotFound, HttpInvalidFormData
 from projets.models import Codex, Information
 from projets.views import get_information, post_information
 
@@ -26,7 +26,7 @@ class InformationViewTest(TestCase):
     def test_get_information_assert_return_http_response(self):
         """ Test if the method return a HttpResponse """
         request = self.factory.get(self.url)
-        response = get_information(request, self.codex.slug, self.http_status)
+        response = get_information(request, self.codex.slug)
 
         self.assertIsInstance(response, HttpResponse)
 
@@ -36,39 +36,25 @@ class InformationViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_get_information_codex_not_exist_assert_raise_not_exist(self):
+    def test_get_information_codex_not_exist_assert_raise_not_found(self):
         """ Test if the method raise an error if the codex does not exist """
         slug = "TEST-KO"
         request = self.factory.get(reverse("information", kwargs={"codex_slug": slug}))
-        with self.assertRaises(Codex.DoesNotExist):
-            get_information(request, slug, self.http_status)
-
-    def test_get_information_codex_not_exist_assert_http_status_not_empty(self):
-        """ Test if the method update the http status if the codex does not exist """
-        slug = "TEST-KO"
-        request = self.factory.get(reverse("information", kwargs={"codex_slug": slug}))
-        try:
-            get_information(request, slug, self.http_status)
-        except:
-            pass
-
-        self.assertNotEqual(self.http_status.status, 200)
-        self.assertNotEqual(self.http_status.explanation, "")
-        self.assertNotEqual(self.http_status.message, "")
+        with self.assertRaises(HttpNotFound):
+            get_information(request, slug)
 
     def test_post_information_assert_return_json_response(self):
         """ Test if the method return a HttpResponse """
-        request = self.factory.post(self.url)
+        request = self.factory.post(self.url, self.form_data)
         response = post_information(request, self.codex.slug)
 
         self.assertIsInstance(response, JsonResponse)
 
-    def test_post_information_form_not_valid_assert_return_400(self):
-        """ Test if the method return a 400 response if the form is not valid """
+    def test_post_information_form_not_valid_assert_return_invalid_form_data(self):
+        """ Test if the method return a HttpInvalidFormData response if the form is not valid """
         request = self.factory.post(self.url)
-        response = post_information(request, self.codex.slug)
-
-        self.assertEqual(response.status_code, 400)
+        with self.assertRaises(HttpInvalidFormData):
+            post_information(request, self.codex.slug)
 
     def test_post_information_form_valid_assert_return_200(self):
         """ Test if the method return a 200 response if the form is valid """
@@ -113,12 +99,11 @@ class InformationViewTest(TestCase):
 
         self.assertEqual(len(informations), 1)
 
-    def test_post_information_codex_not_exist_assert_return_404(self):
+    def test_post_information_codex_not_exist_assert_return_not_found(self):
         """ Test if the codex is created in the data base """
         request = self.factory.post(self.url, self.form_data)
-        response = post_information(request, "TEST-SLUG-KO")
-
-        self.assertEqual(response.status_code, 404)
+        with self.assertRaises(HttpNotFound):
+            post_information(request, "TEST-SLUG-KO")
 
     def test_delete_information_view_assert_return_405(self):
         """ Test if the method return a 405 response id the http method is not valid """

@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "projets.middleware.PutAndDeleteParsingMiddleware",
+    "projets.middleware.RequestExceptionHandler",
 ]
 
 ROOT_URLCONF = "rescodex.urls"

@@ -1,15 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.utils.translation import gettext
 from django.views.decorators.cache import never_cache
 
-from projets.commun.error import HttpStatus, raise_suspicious_operation, render_error
-from projets.commun.utils import JsonResponseContainer
+from projets.commun.error import HttpInvalidFormData, HttpMethodNotAllowed
+from projets.commun.utils import JsonResponseContainer, get_object_or_not_found
 from projets.forms import InformationForm
 from projets.models import Information, Codex
 
 
-def get_information(request, codex_slug, http_status):
+def get_information(request, codex_slug):
     """
     Return the page of the information of the given codex
     """
@@ -17,16 +16,7 @@ def get_information(request, codex_slug, http_status):
     output_data = {}
 
     # Get the codex from the slug
-    try:
-        codex = Codex.objects.get(slug=codex_slug)
-    except Codex.DoesNotExist:
-        # TODO : factorise this
-        http_status.status = 404
-        http_status.message = gettext("The Codex does not exist.")
-        http_status.explanation = gettext(
-            "The codex you are trying to access does not exist."
-        )
-        raise
+    codex = get_object_or_not_found(Codex, slug=codex_slug)
 
     # Get the corresponding information
     codex_information = Information.objects.filter(codex=codex).first()
@@ -48,24 +38,17 @@ def post_information(request, codex_slug):
     response = JsonResponseContainer()
 
     # Get the codex from the slug
-    try:
-        codex = Codex.objects.get(slug=codex_slug)
-    except Codex.DoesNotExist:
-        local_error = gettext("The Codex does not exist")
-        response.data.update({"success": False, "local_error": local_error})
-        response.status = 404
-        return response.get_json_response()
+    codex = get_object_or_not_found(Codex, slug=codex_slug)
 
     # Get the form
     input_form = InformationForm(request.POST)
 
     # If the form is not valid, return an error status
     if not input_form.is_valid():
-        # TODO : review the validation of the form
-        form_errors = gettext("Form validation error.")
-        response.data.update({"success": False, "form_errors": form_errors})
-        response.status = 400
-        return response.get_json_response()
+        raise HttpInvalidFormData(
+            form_errors=input_form.non_field_errors(),
+            fields_error=input_form.errors.as_json(),
+        )
 
     # Update or create the codex info
     input_form.save(codex=codex)
@@ -80,19 +63,10 @@ def information_view(request, codex_slug):
     """
     Manage the codex information
     """
-    # Initialize output
-    response = None
-    http_status = HttpStatus()
-
-    try:
-        if request.method == "GET":
-            response = get_information(request, codex_slug, http_status)
-        elif request.method == "POST" and request.is_ajax():
-            response = post_information(request, codex_slug)
-        else:
-            raise_suspicious_operation(http_status)
-        return response
-
-    except Exception as ex:
-        # Return the error as a html page or as a JSON dictionary
-        return render_error(request, ex, http_status)
+    if request.method == "GET" and not request.is_ajax():
+        response = get_information(request, codex_slug)
+    elif request.method == "POST" and request.is_ajax():
+        response = post_information(request, codex_slug)
+    else:
+        raise HttpMethodNotAllowed
+    return response

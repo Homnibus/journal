@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from projets.commun.error import HttpStatus, raise_suspicious_operation, render_error
+from projets.commun.error import HttpMethodNotAllowed
 from projets.models import Codex
 
 
@@ -28,17 +28,8 @@ def codex_list_view(request):
     """
     Manage the recent codex view
     """
-    # Initialize output
-    http_status = HttpStatus()
-    response = None
-
-    try:
-        if request.method == "GET":
-            response = get_codex(request)
-        else:
-            raise_suspicious_operation(http_status)
-        return response
-
-    except Exception as ex:
-        # Return the error as a html page or as a JSON dictionary
-        return render_error(request, ex, http_status)
+    if request.method == "GET":
+        response = get_codex(request)
+    else:
+        raise HttpMethodNotAllowed
+    return response

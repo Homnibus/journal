@@ -9,12 +9,12 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(
-        "connexion/",
+        "connexion",
         auth_views.LoginView.as_view(template_name="projets/connexion.html"),
         name="connexion",
     ),
     path(
-        "deconnexion/",
+        "deconnexion",
         auth_views.LogoutView.as_view(template_name="projets/deconnexion.html"),
         name="deconnexion",
     ),

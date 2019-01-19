@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
+from projets.commun.error import HttpForbidden, HttpInvalidFormData, HttpNotFound
 from projets.commun.utils import java_string_hashcode
 from projets.models import Codex, Page, Note
 from projets.views import (
@@ -106,14 +107,13 @@ class PostNoteTest(TestCase):
 
         self.assertEqual(note.text, self.form_text)
 
-    def test_post_note_already_exist_assert_return_error(self):
-        """ Test if the method return an error if the note of the day already exist """
+    def test_post_note_already_exist_assert_raise_invalid_form_data(self):
+        """ Test if the method return an HttpInvalidFormData if the note of the day already exist """
         Note.objects.create(page=self.page, text=self.form_text)
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        response = post_note(request)
-
-        self.assertEqual(response.status_code, 400)
+        with self.assertRaises(HttpInvalidFormData):
+            post_note(request)
 
     def test_post_note_assert_other_note_not_updated(self):
         """ Test if the method does not update other note """
@@ -139,14 +139,13 @@ class PostNoteTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_post_note_view_text_empty_assert_return_400(self):
-        """ Test if the view return a 200 response to a get request"""
+    def test_post_note_view_text_empty_assert_raise_invalid_form_data(self):
+        """ Test if the view return a HttpInvalidFormData if the text is empty """
         self.form_data["text"] = ""
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        response = post_note(request)
-
-        self.assertEqual(response.status_code, 400)
+        with self.assertRaises(HttpInvalidFormData):
+            post_note(request)
 
     def test_post_note_view_without_slug_assert_return_400(self):
         """ Test if the view return a 200 response to a get request"""
@@ -157,25 +156,23 @@ class PostNoteTest(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_post_note_view_codex_not_exist_assert_return_404(self):
-        """ Test if the view return a 404 if the given slug does not exist """
+    def test_post_note_view_codex_not_exist_assert_raise_not_found(self):
+        """ Test if the view return a HttpNotFound if the given slug does not exist """
         self.form_data["codex_slug"] = "slug-ko"
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        response = post_note(request)
+        with self.assertRaises(HttpNotFound):
+            post_note(request)
 
-        self.assertEqual(response.status_code, 404)
-
-    def test_post_note_of_other_user_assert_raise_403(self):
-        """ Test if the method raise a 403 error the user has no right to update it """
+    def test_post_note_of_other_user_assert_raise_forbidden(self):
+        """ Test if the method raise a HttpForbidden error the user has no right to update it """
         user = User.objects.create_user(
             username="tartine", email="tarnite@lelapin.com", password="top_secret"
         )
         request = self.factory.post(self.url_list, self.form_data)
         request.user = user
-        response = post_note(request)
-
-        self.assertEqual(response.status_code, 403)
+        with self.assertRaises(HttpForbidden):
+            post_note(request)
 
     def test_delete_note_not_ajax_view_assert_return_405(self):
         """ Test if the view return a 405 response to a not ajax request"""
@@ -254,8 +251,8 @@ class DeleteNoteTest(TestCase):
 
         self.assertEqual(len(notes), 1)
 
-    def test_delete_note_of_other_user_assert_return_error(self):
-        """ Test if the method return a HttpResponse """
+    def test_delete_note_of_other_user_assert_raise_forbidden(self):
+        """ Test if the method raise a HttpForbidden error if the user is not the creator """
         user = User.objects.create_user(
             username="tartine", email="tarnite@lelapin.com", password="top_secret"
         )
@@ -266,10 +263,8 @@ class DeleteNoteTest(TestCase):
         note = Note.objects.create(page=page, text="Test Text2")
         request = self.factory.delete(self.url_details)
         request.user = self.user
-        delete_note(request, note.id)
-        notes = Note.objects.filter(id=note.id)
-
-        self.assertEqual(len(notes), 1)
+        with self.assertRaises(HttpForbidden):
+            delete_note(request, note.id)
 
     def test_delete_note_details_view_assert_return_200(self):
         """ Test if the view return a 200 response to a get request"""
@@ -319,6 +314,7 @@ class PutNoteTest(TestCase):
     def test_put_note_assert_return_http_response(self):
         """ Test if the method return a HttpResponse """
         request = self.factory.post(self.url_details, self.form_data)
+        print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
@@ -358,43 +354,43 @@ class PutNoteTest(TestCase):
 
         self.assertEqual(notes[0].text, text)
 
-    def test_put_note_text_empty_assert_raise_400(self):
-        """ Test if the method raise a 400 error if the form text is empty """
+    def test_put_note_text_empty_assert_raise_invalid_form_data(self):
+        """ Test if the method raise a HttpInvalidFormData error if the form text is empty """
         self.form_data["text"] = ""
         request = self.factory.post(self.url_details, self.form_data)
         request.user = self.user
         request.method = "PUT"
         print(request.POST)
         request.PUT = request.POST
-        response = put_note(request, self.note.id)
+        with self.assertRaises(HttpInvalidFormData):
+            put_note(request, self.note.id)
 
-        self.assertEqual(response.status_code, 400)
-
-    def test_put_note_does_not_exist_assert_raise_404(self):
-        """ Test if the method raise a 404 error if the note does not exist """
+    def test_put_note_does_not_exist_assert_raise_not_found(self):
+        """ Test if the method raise a HttpNotFound error if the note does not exist """
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
-        response = put_note(request, note_id=0)
+        with self.assertRaises(HttpNotFound):
+            put_note(request, note_id=0)
 
-        self.assertEqual(response.status_code, 404)
-
-    def test_put_note_hash_invalid_assert_raise_400(self):
-        """ Test if the method raise a 400 error if the text hash is not the same as the one of the database text """
+    def test_put_note_hash_invalid_assert_raise_invalid_form_data(self):
+        """
+        Test if the method raise a HttpInvalidFormData error if the text hash is not the same as the one of the
+        database text
+        """
         self.form_data["hash"] = "1"
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
-        response = put_note(request, self.note.id)
+        with self.assertRaises(HttpInvalidFormData):
+            put_note(request, self.note.id)
 
-        self.assertEqual(response.status_code, 400)
-
-    def test_put_note_of_other_user_assert_raise_403(self):
-        """ Test if the method raise a 403 error the user has no right to update it """
+    def test_put_note_of_other_user_assert_raise_forbidden(self):
+        """ Test if the method raise a HttpForbidden error the user has no right to update it """
         user = User.objects.create_user(
             username="tartine", email="tarnite@lelapin.com", password="top_secret"
         )
@@ -403,9 +399,8 @@ class PutNoteTest(TestCase):
         request.user = user
         request.method = "PUT"
         request.PUT = request.POST
-        response = put_note(request, self.note.id)
-
-        self.assertEqual(response.status_code, 403)
+        with self.assertRaises(HttpForbidden):
+            put_note(request, self.note.id)
 
     def test_put_note_details_view_assert_input_invalid(self):
         """ Test if the view return a 400 response if there is not form data"""
