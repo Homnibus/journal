@@ -1,10 +1,10 @@
-nav { 
+nav {
   display: flex;
   flex-direction: column;
-  position:fixed;
-  top:0;
-  right:0;
-  width:100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
   z-index: 999;
 }
 
@@ -14,7 +14,7 @@ nav {
   margin-top: 2.35em;
 }
 
-nav > div{
+nav > div {
   display: flex;
 }
 
@@ -24,14 +24,11 @@ nav .filler {
   border-bottom: 2px solid #2F4752;
 }
 
-nav a{
+nav a {
   font-size: 1.1em;
   line-height: 1.6em;
-  padding-top: .3em;
-  padding-right: .3em;
-  padding-bottom: .3em;
-  padding-left: .3em;
-  margin:0;
+  padding: .3em;
+  margin: 0;
   background: #4D7385;
   border-bottom: 2px solid #2F4752;
 }
@@ -44,21 +41,24 @@ nav a:link {
   color: white;
   text-decoration: none;
 }
+
 nav a:visited {
   color: white;
   text-decoration: none;
 }
+
 nav a:hover {
-  background-color: #79B5D1;   
+  background-color: #79B5D1;
   color: #2F4752;
   text-decoration: none;
   border-bottom: 2px solid #4D7385;
 }
-nav a:active,nav a:focus{
+
+nav a:active, nav a:focus {
   color: white;
   text-decoration: none;
 }
 
 nav .error {
-  background-color : white;
+  background-color: white;
 }

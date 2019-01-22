@@ -1,18 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import gettext
+from django.http import JsonResponse
 
 from projets.commun.error import (
     HttpInvalidFormData,
     HttpForbidden,
     HttpMethodNotAllowed,
 )
-from projets.commun.utils import (
-    java_string_hashcode,
-    JsonResponseContainer,
-    get_object_or_not_found,
-)
-from projets.forms import NoteForm
-from projets.models import Note, get_current_timestamp, Codex, Page
+from projets.commun.utils import get_object_or_not_found
+from projets.forms import NoteUpdateForm, NoteCreateFromSlugForm
+from projets.models import Note
 
 
 def is_authorized_to_create_note(user, codex):
@@ -46,13 +42,10 @@ def is_authorized_to_delete_note(user, note_id):
 
 def post_note(request):
     """
-    Create a new note_details_view of the day.
+    Create a new note of the day.
     """
-    # Initialize the output data
-    response = JsonResponseContainer()
-
     # Get the form
-    input_form = NoteForm(request.POST)
+    input_form = NoteCreateFromSlugForm(request.POST)
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
@@ -61,58 +54,26 @@ def post_note(request):
             fields_error=input_form.errors.as_json(),
         )
 
-    # Get the codex of from the slug
-    codex_slug = request.POST.get("codex_slug")
-
-    # If the codex_slug is empty, throw an error
-    if not codex_slug:
-        # TODO : as the codex slug is in the POST param, it should be in the form validation
-        form_errors = gettext("Form validation error.")
-        response.data.update({"success": False, "form_errors": form_errors})
-        response.status = 400
-        return response.get_json_response()
-
-    # Get the codex of the note from the slug
-    codex = get_object_or_not_found(Codex, slug=codex_slug)
-
-    # Check if a note_details_view already exist for today
-    # TODO: try to upgrade the way this check is down
-    today = get_current_timestamp().date()
-    page = Page.objects.filter(codex=codex, date=today).select_related("note").first()
-
-    # If a note_details_view was already created today, throw an error
-    if hasattr(page, "note"):
-        raise HttpInvalidFormData(
-            form_errors=gettext("A Note already exist for today for this Codex.")
-        )
-
     # Check if the user has the permission
-    if not is_authorized_to_create_note(request.user, codex):
+    # TODO : put the authorization check in the form or in the model save
+    note = input_form.save(commit=False)
+    if not is_authorized_to_create_note(request.user, note.page.codex):
         raise HttpForbidden
 
-    # If all the above test are ok, create the note_details_view
-    request_text = input_form.save(commit=False).text
-    # TODO : use the form to save the note
-    note = Note(text=request_text)
-    note.save(codex=codex)
+    # If all the above test are ok, create the note
+    note = input_form.save()
 
-    # Prepare the output data
-    response.data.update({"success": True, "id": note.id})
-    return response.get_json_response()
+    return JsonResponse({"success": True, "id": note.id})
 
 
 def put_note(request, note_id):
     """
     Update the given note_details_view.
     """
-    # Initialize the output data
-    response = JsonResponseContainer()
-
     # Get the form
-    input_form = NoteForm(request.PUT)
-
-    # Get the note_details_view hash from the request
-    request_note_hash = request.PUT.get("hash")
+    input_data = request.PUT.copy()
+    input_data.update({"id": note_id})
+    input_form = NoteUpdateForm(input_data)
 
     # If the form is not valid, throw an error
     if not input_form.is_valid():
@@ -121,43 +82,22 @@ def put_note(request, note_id):
             fields_error=input_form.errors.as_json(),
         )
 
-    # Get the text from the form
-    request_text = input_form.save(commit=False).text
-
-    # Get the note from the database
-    note = get_object_or_not_found(Note, id=note_id)
-
-    # If the note_details_view hash of the request doesn't correspond to the note_details_view hash of the database,
-    #  throw an error
-    database_note_hash = str(java_string_hashcode(note.text))
-    if request_note_hash != database_note_hash:
-        raise HttpInvalidFormData(
-            form_errors=gettext(
-                "The Note have been modified since the last modification attempt."
-            )
-        )
-
     # Check if the user has the permission
+    # TODO : put the authorization check in the form or in the model save
+    note = input_form.save(commit=False)
     if not is_authorized_to_update_note(request.user, note):
         raise HttpForbidden
 
-    # If all the above test are ok, update the note_details_view
-    # TODO : use the form to save the note
-    note.text = request_text
-    note.save()
+    # If all the above test are ok, update the note
+    input_form.save()
 
-    # Prepare the output data
-    response.data.update({"success": True})
-    return response.get_json_response()
+    return JsonResponse({"success": True})
 
 
 def delete_note(request, note_id):
     """
     Delete the given note_details_view.
     """
-    # Initialize the output data
-    response = JsonResponseContainer()
-
     # Check if the user has the permission
     if not is_authorized_to_delete_note(request.user, note_id):
         raise HttpForbidden
@@ -166,13 +106,9 @@ def delete_note(request, note_id):
     note = get_object_or_not_found(Note, id=note_id)
 
     # Delete the note
-    # TODO : add a test if the not does not exist
-    # TODO : check if other delete use the same pattern (get the Model THEN delete it)
     note.delete()
 
-    # Prepare the output data
-    response.data.update({"success": True, "id": note_id})
-    return response.get_json_response()
+    return JsonResponse({"success": True})
 
 
 @login_required

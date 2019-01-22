@@ -1,8 +1,8 @@
 from datetime import datetime
 
+from django.contrib.auth.models import User
 from django.db import models, connection
 from django.template.defaultfilters import slugify
-from django.contrib.auth.models import User
 from django.urls import reverse
 
 
@@ -186,7 +186,7 @@ class Note(models.Model):
         """
         Override the save method to generate the creation date.
         codex parameter is used to create a note on a new page. This page will be the page of the day and should not
-            exist.
+        exist.
         """
         # At the creation of the note
         if not self.id:
@@ -334,7 +334,9 @@ class Information(models.Model):
 
 
 def get_current_timestamp():
-    """ Fonction qui récupère la base de la BDD pour n'avoir qu'une seul source de date qui n'est pas du tout optimisé ! """
+    """
+    Fonction qui récupère la base de la BDD pour n'avoir qu'une seul source de date qui n'est pas du tout optimisé !
+    """
     cursor = connection.cursor()
     cursor.execute("select current_timestamp")
     sql_result = cursor.fetchone()

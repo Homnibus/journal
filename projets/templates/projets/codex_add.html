@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block css %}
-<link rel='stylesheet' href='{% static "css/codex_add.css" %}' />
+    <link rel='stylesheet' href='{% static "css/codex_add.css" %}'/>
 {% endblock %}
 
 {% block title %}{% trans 'New Codex' %}{% endblock %}
@@ -11,21 +11,21 @@
 {% block nav-new_codex %}current{% endblock %}
 
 {% block header %}
-<h1>{% trans 'Creation of a new Codex' %}</h1>
-<h4>{% trans 'Give a title and a short description to your Codex !' %}</h4>
+    <h1>{% trans 'Creation of a new Codex' %}</h1>
+    <h4>{% trans 'Give a title and a short description to your Codex !' %}</h4>
 {% endblock %}
 
 {% block content %}
-<section class='new-codex'>
-  <form action='{% url "codex_add" %}' method='post'>
-    {% csrf_token %}
-    <h2>{% trans 'Title' %} :</h2>
-    {{ form.title }}
-    <h2>{% trans 'Description' %} :</h2>
-    {{ form.description }}
-      <div class="button-disp">
-        <input type='submit' value='Sauvegarder' />
-      </div>
-  </form>
-</section>
+    <section class='new-codex'>
+        <form action='{% url "codex_add" %}' method='post'>
+            {% csrf_token %}
+            <h2>{% trans 'Title' %} :</h2>
+            {{ form.title }}
+            <h2>{% trans 'Description' %} :</h2>
+            {{ form.description }}
+            <div class="button-disp">
+                <input type='submit' value='Sauvegarder'/>
+            </div>
+        </form>
+    </section>
 {% endblock %}

@@ -15,44 +15,47 @@
   width: 100%;
 }
 
-.flex-row:nth-of-type(odd){
+.flex-row:nth-of-type(odd) {
   background-color: white;
 }
 
-.flex-row:nth-of-type(even){
+.flex-row:nth-of-type(even) {
   background-color: #f0f3f5;
 }
-
 
 .flex-cell-header {
   background-color: #4D7385;
   color: white;
   text-transform: uppercase;
-  font-weight: 525;
+  font-weight: 500;
   letter-spacing: .05em;
   white-space: nowrap;
   text-align: left;
 }
-a.flex-cell-header{
+
+a.flex-cell-header {
   color: white;
 }
-a.flex-cell-header:link,a.flex-cell-header:visited{
+
+a.flex-cell-header:link, a.flex-cell-header:visited {
   color: white;
   text-decoration: none;
 }
-a.flex-cell-header:hover{
+
+a.flex-cell-header:hover {
   color: #2F4752;
   text-decoration: none;
 }
-a.flex-cell-header:active,a.flex-cell-header:focus{
+
+a.flex-cell-header:active, a.flex-cell-header:focus {
   color: white;
   text-decoration: none;
 }
 
 .flex-cell {
   padding: .4em .6em;
-  border-bottom: 1px solid rgba(0,0,0,.12);
-  display:flex;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  display: flex;
   align-items: center;
 }
 
@@ -61,10 +64,12 @@ a.flex-cell-header:active,a.flex-cell-header:focus{
   min-width: 15em;
   justify-content: left;
 }
+
 .flex-cell-checkbox {
   min-width: 5em;
   justify-content: center;
 }
+
 .flex-cell-date {
   min-width: 7em;
   justify-content: center;

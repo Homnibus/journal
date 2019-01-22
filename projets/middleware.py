@@ -1,4 +1,5 @@
 import logging
+
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -23,7 +24,7 @@ class PutAndDeleteParsingMiddleware:
                 request.method = "POST"
                 request._load_post_and_files()
                 request.method = "PUT"
-            except AttributeError as e:
+            except AttributeError:
                 request.META["REQUEST_METHOD"] = "POST"
                 request._load_post_and_files()
                 request.META["REQUEST_METHOD"] = "PUT"
@@ -37,7 +38,7 @@ class PutAndDeleteParsingMiddleware:
                 request.method = "POST"
                 request._load_post_and_files()
                 request.method = "DELETE"
-            except AttributeError as e:
+            except AttributeError:
                 request.META["REQUEST_METHOD"] = "POST"
                 request._load_post_and_files()
                 request.META["REQUEST_METHOD"] = "DELETE"

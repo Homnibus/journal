@@ -5,44 +5,45 @@
 <html lang='{{ LANGUAGE_CODE }}'>
 
 <head>
-   {% load static %}
-   <meta charset='UTF-8'>
-   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-   <title>{% trans 'ResCodex - ' %}{% block title %}{% endblock %}</title>
-   <link rel='shortcut icon' type='image/png' href='{% static "img/favicon.png" %}' />
-   <link rel='stylesheet' href='{% static "css/base.css" %}' />
-   <link rel='stylesheet' href='{% static "css/navigation.css" %}' />
-   {% block css %}{% endblock %}
-   {% block meta %}{% endblock %}
+    {% load static %}
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>{% trans 'ResCodex - ' %}{% block title %}{% endblock %}</title>
+    <link rel='shortcut icon' type='image/png' href='{% static "img/favicon.png" %}'/>
+    <link rel='stylesheet' href='{% static "css/base.css" %}'/>
+    <link rel='stylesheet' href='{% static "css/navigation.css" %}'/>
+    {% block css %}{% endblock %}
+    {% block meta %}{% endblock %}
 </head>
 
 <body>
-  <div class='background' style="background-image:url('{% static 'img/background.png' %}');background-repeat:no-repeat;background-position:calc(100% - 1.4em) calc(100% - .4em);width:100%;height:100vh;position:fixed;z-index:-1">
-  </div>
-  <nav>
+<div class='background'
+     style="background: url('{% static 'img/background.png' %}'width:100%;height:100vh;position:fixed;z-index:-1">
+</div>
+<nav>
     <div class='menu'>
-      <a href='{% url "home" %}' class='{% block nav-accueil %}{% endblock %}'>
-        <img class='accueil' src="{% static 'img/home.jpeg' %}" alt='Home'
-             style="width:1.4em;height:1.4em;" />
-      </a>
-      {% block nav %}{% endblock %}
-      <div class='filler'></div>
-      {% if user.is_authenticated %}
-        <a href='{% url "deconnexion" %}'>{% trans 'Logout'%}</a>
-      {% else %}
-        {% block nav-connexion %}
-        <a href='{% url "connexion" %}'>{% trans 'Login' %}</a>
-        {% endblock %}
-      {% endif %}
+        <a href='{% url "home" %}' class='{% block nav-accueil %}{% endblock %}'>
+            <img class='accueil' src="{% static 'img/home.jpeg' %}" alt='Home'
+                 style="width:1.4em;height:1.4em;"/>
+        </a>
+        {% block nav %}{% endblock %}
+        <div class='filler'></div>
+        {% if user.is_authenticated %}
+            <a href='{% url "deconnexion" %}'>{% trans 'Logout' %}</a>
+        {% else %}
+            {% block nav-connexion %}
+                <a href='{% url "connexion" %}'>{% trans 'Login' %}</a>
+            {% endblock %}
+        {% endif %}
     </div>
-  </nav>
-  <div class="nav-filler"></div>
-  <header>
-  {% block header %}{% endblock %}
-  </header>
-  {% block content %}{% endblock %}
-  <div class="footer-filler"></div>
-  <footer>ResCodex 2018.10.1</footer>
-  {% block script %}{% endblock %}
+</nav>
+<div class="nav-filler"></div>
+<header>
+    {% block header %}{% endblock %}
+</header>
+{% block content %}{% endblock %}
+<div class="footer-filler"></div>
+<footer>ResCodex 2018.10.1</footer>
+{% block script %}{% endblock %}
 </body>
 </html>

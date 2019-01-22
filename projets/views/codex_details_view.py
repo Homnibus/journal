@@ -5,7 +5,7 @@ from django.views.decorators.cache import never_cache
 from projets.commun.utils import get_object_or_not_found
 from ..commun.codex import Page as Page_container
 from ..commun.error import HttpMethodNotAllowed
-from ..forms import NoteForm, TaskForm
+from ..forms import NoteUpdateForm, NoteCreateFromSlugForm, TaskForm
 from ..models import get_current_timestamp, Page, Note, Task, Codex
 
 
@@ -25,12 +25,12 @@ def get_today_page(codex, today):
 
     # Get the note of the day (use filter and first to have one object or None)
     today_note = Note.objects.filter(page=today_page).first()
-    # If the note does not exist, create an empty one
+    # If the note does not exist, create an empty one use the creation form
     if not today_note:
-        today_note = Note(page=today_page)
-
-    # Add the note as a form to the page
-    output_page_data.note_form = NoteForm(instance=today_note)
+        output_page_data.note_form = NoteCreateFromSlugForm()
+    # If the note exist, use the update form
+    else:
+        output_page_data.note_form = NoteUpdateForm(instance=today_note)
 
     # Add a new task form to the page
     output_page_data.new_task_form = TaskForm()
@@ -62,7 +62,7 @@ def get_pages_before_today(codex, today):
         note = Note.objects.filter(page=page).first()
         # Add the note as a form to the page container
         if note:
-            page_container.note_form = NoteForm(instance=note)
+            page_container.note_form = NoteUpdateForm(instance=note)
 
         # Get the corresponding tasks
         tasks = list(Task.objects.filter(page=page).order_by("creation_date"))

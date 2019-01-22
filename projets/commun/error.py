@@ -1,8 +1,8 @@
 import logging
 
 from django.core.exceptions import SuspiciousOperation
-from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils.translation import gettext
 
 

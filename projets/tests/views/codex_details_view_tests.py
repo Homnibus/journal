@@ -1,13 +1,13 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
-import datetime
-
 from django.urls import reverse
 
 from projets.commun.codex import Page as Page_container
-from projets.commun.error import HttpStatus, HttpNotFound
-from projets.forms import TaskForm, NoteForm
+from projets.commun.error import HttpNotFound
+from projets.forms import TaskForm, NoteUpdateForm, NoteCreateFromSlugForm
 from projets.models import Codex, Page, get_current_timestamp, Note, Task
 from projets.views.codex_details_view import (
     get_today_page,
@@ -42,23 +42,25 @@ class GetTodayPageTest(TestCase):
         self.assertIsInstance(page_container, Page_container)
 
     def test_get_today_page_not_exist_assert_return_page(self):
+        """ Test if the method return a page_container with all his data loaded """
         page_container = get_today_page(self.empty_codex, self.today)
 
         self.assertEqual(page_container.date, self.today)
         self.assertIsNotNone(page_container.new_task_form)
         self.assertIsInstance(page_container.new_task_form, TaskForm)
         self.assertIsNotNone(page_container.note_form)
-        self.assertIsInstance(page_container.note_form, NoteForm)
+        self.assertIsInstance(page_container.note_form, NoteCreateFromSlugForm)
         self.assertEqual(len(page_container.tasks_form), 0)
 
     def test_get_today_page_exist_assert_return_page(self):
+        """ Test if the method return the page of the day """
         page_container = get_today_page(self.codex, self.today)
 
         self.assertEqual(page_container.date, self.today)
         self.assertIsNotNone(page_container.new_task_form)
         self.assertIsInstance(page_container.new_task_form, TaskForm)
         self.assertIsNotNone(page_container.note_form)
-        self.assertIsInstance(page_container.note_form, NoteForm)
+        self.assertIsInstance(page_container.note_form, NoteUpdateForm)
         self.assertEqual(len(page_container.tasks_form), 2)
         self.assertIsInstance(page_container.tasks_form[0], TaskForm)
 
@@ -80,13 +82,14 @@ class GetTodayPageTest(TestCase):
         self.assertIsInstance(old_pages[0], Page_container)
 
     def test_get_pages_before_today_assert_first_page_container_full(self):
+        """ Test if the method return a page container with data in it"""
         later = datetime.date(self.today.year + 1, self.today.month, self.today.day)
         old_pages = get_pages_before_today(self.codex, later)
         page_container = old_pages[0]
 
         self.assertEqual(page_container.date, self.today)
         self.assertIsNotNone(page_container.note_form)
-        self.assertIsInstance(page_container.note_form, NoteForm)
+        self.assertIsInstance(page_container.note_form, NoteUpdateForm)
         self.assertEqual(len(page_container.tasks_form), 2)
         self.assertIsInstance(page_container.tasks_form[0], TaskForm)
 

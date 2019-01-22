@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/information.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/information.css' %}"/>
 {% endblock %}
 
 {% block title %}{% trans 'General informations' %}{% endblock %}
@@ -11,28 +11,28 @@
 {% block nav-codex_info %}current{% endblock %}
 
 {% block header %}
-<h1>{% trans 'General informations - ' %}{{ codex.title|title }}</h1>
-<h4>{{ codex.description }}</h4>
-<div class="project-info">
-  <input type="hidden" id="slug" value={{ codex.slug }}/>
-  {% csrf_token %}
-</div>
+    <h1>{% trans 'General informations - ' %}{{ codex.title|title }}</h1>
+    <h4>{{ codex.description }}</h4>
+    <div class="project-info">
+        <input type="hidden" id="slug" value={{ codex.slug }}/>
+        {% csrf_token %}
+    </div>
 {% endblock %}
 
 {% block content %}
-<section class="information">
-  <header>
-    {% if information != None %}
-    <h2>{{ information.update_date|date:"j F Y" }}</h2>
-    {% endif %}
-    <div class="save-info" style="display:none">{% trans 'Saved' %}</div>
-  </header>
-  <form action="{% url 'information' codex_slug=codex.slug %}" method="post" class="auto_save_form">
-    {{ form.non_field_errors }}
-    {{ form.text.errors }}
-    {{ form.text }}
-  </form>
-</section>
+    <section class="information">
+        <header>
+            {% if information != None %}
+                <h2>{{ information.update_date|date:"j F Y" }}</h2>
+            {% endif %}
+            <div class="save-info" style="display:none">{% trans 'Saved' %}</div>
+        </header>
+        <form action="{% url 'information' codex_slug=codex.slug %}" method="post" class="auto_save_form">
+            {{ form.non_field_errors }}
+            {{ form.text.errors }}
+            {{ form.text }}
+        </form>
+    </section>
 {% endblock %}
 
 {% block script %}

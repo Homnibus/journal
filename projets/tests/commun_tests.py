@@ -1,8 +1,8 @@
 import json
 
+from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
 from django.test import TestCase, RequestFactory
-from django.core.exceptions import SuspiciousOperation
 
 from projets.commun.codex import Page
 from projets.commun.error import raise_suspicious_operation, HttpStatus, render_error

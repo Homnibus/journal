@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from projets.commun.error import HttpForbidden, HttpInvalidFormData, HttpNotFound
+from projets.commun.error import HttpForbidden, HttpInvalidFormData
 from projets.commun.utils import java_string_hashcode
 from projets.models import Codex, Page, Note
 from projets.views import (
@@ -147,21 +147,20 @@ class PostNoteTest(TestCase):
         with self.assertRaises(HttpInvalidFormData):
             post_note(request)
 
-    def test_post_note_view_without_slug_assert_return_400(self):
-        """ Test if the view return a 200 response to a get request"""
+    def test_post_note_view_without_slug_assert_raise_invalid_form_data(self):
+        """ Test if the view return a HttpInvalidFormData if the slug is empty """
         del self.form_data["codex_slug"]
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        response = post_note(request)
+        with self.assertRaises(HttpInvalidFormData):
+            post_note(request)
 
-        self.assertEqual(response.status_code, 400)
-
-    def test_post_note_view_codex_not_exist_assert_raise_not_found(self):
-        """ Test if the view return a HttpNotFound if the given slug does not exist """
+    def test_post_note_view_codex_not_exist_assert_raise_invalid_form_data(self):
+        """ Test if the view return a HttpInvalidFormData if the given slug does not exist """
         self.form_data["codex_slug"] = "slug-ko"
         request = self.factory.post(self.url_list, self.form_data)
         request.user = self.user
-        with self.assertRaises(HttpNotFound):
+        with self.assertRaises(HttpInvalidFormData):
             post_note(request)
 
     def test_post_note_of_other_user_assert_raise_forbidden(self):
@@ -365,14 +364,14 @@ class PutNoteTest(TestCase):
         with self.assertRaises(HttpInvalidFormData):
             put_note(request, self.note.id)
 
-    def test_put_note_does_not_exist_assert_raise_not_found(self):
-        """ Test if the method raise a HttpNotFound error if the note does not exist """
+    def test_put_note_does_not_exist_assert_raise_invalid_form_data(self):
+        """ Test if the method raise a HttpInvalidFormData error if the note does not exist """
         request = self.factory.post(self.url_details, self.form_data)
         print(request.POST)
         request.user = self.user
         request.method = "PUT"
         request.PUT = request.POST
-        with self.assertRaises(HttpNotFound):
+        with self.assertRaises(HttpInvalidFormData):
             put_note(request, note_id=0)
 
     def test_put_note_hash_invalid_assert_raise_invalid_form_data(self):

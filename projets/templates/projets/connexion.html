@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block css %}
-<link rel='stylesheet' href='{% static "css/connexion.css" %}' />
+    <link rel='stylesheet' href='{% static "css/connexion.css" %}'/>
 {% endblock %}
 
 {% block title %}Connexion{% endblock %}
@@ -11,7 +11,7 @@
 {% block nav-connexion %}{% endblock %}
 
 {% block header %}
-<h1>Connexion</h1>
+    <h1>Connexion</h1>
 {% endblock %}
 
 {% block content %}
@@ -29,9 +29,9 @@
             {{ form.username }}
             <div>{{ form.password.label }}</div>
             {{ form.password }}
-            <input type="hidden" name="next" value="{{ next }}" />
+            <input type="hidden" name="next" value="{{ next }}"/>
             <div class="button-disp">
-                <input type="submit" value="Connexion" />
+                <input type="submit" value="Connexion"/>
             </div>
         </form>
     {% endif %}

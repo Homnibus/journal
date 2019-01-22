@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from projets.models import Codex, Page, Note, Task, Information
 
 

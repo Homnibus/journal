@@ -4,9 +4,6 @@ from django.shortcuts import render
 from django.utils.translation import gettext
 
 from projets.commun.error import (
-    HttpStatus,
-    render_error,
-    raise_suspicious_operation,
     HttpInvalidFormData,
     HttpForbidden,
     HttpMethodNotAllowed,
@@ -257,7 +254,6 @@ def delete_task(request, task_id):
     task = get_object_or_not_found(Task, id=task_id)
 
     # Delete the task
-    # TODO : check if the object exist in the other view before deleting it
     task.delete()
 
     # Prepare the output data

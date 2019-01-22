@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
 from projets.commun.error import HttpStatus
 from projets.models import Codex
-from projets.views import get_information, post_information, get_codex
+from projets.views import get_codex
 
 
 class CodexListViewTest(TestCase):
