@@ -1,9 +1,58 @@
-task_hash = {};
+/** Add a new task at the start of the today-page task list  */
+function add_new_task_dom(text, id, hash) {
+    const task_list = $('.today-page .task-list');
+    // Create the article element
+    const article = document.createElement("article");
+    article.setAttribute("class", "task");
+
+    // Add the id hidden input
+    const id_input = document.createElement("input");
+    id_input.setAttribute("type", "hidden");
+    id_input.setAttribute("class", "id");
+    id_input.setAttribute("value", id);
+    article.append(id_input);
+
+    // Add the hash hidden input
+    const hash_input = document.createElement("input");
+    hash_input.setAttribute("type", "hidden");
+    hash_input.setAttribute("class", "hash");
+    hash_input.setAttribute("value", hash);
+    article.append(hash_input);
+
+    // Add the checkbox
+    const is_achieved_div = document.createElement("div");
+    is_achieved_div.setAttribute("class", "disp-task_is_achieved");
+    const is_achieved_input = document.createElement("input");
+    is_achieved_input.setAttribute("class", "task_is_achieved");
+    is_achieved_input.setAttribute("type", "checkbox");
+    is_achieved_div.append(is_achieved_input);
+    article.append(is_achieved_div);
+
+    // Add the textarea
+    const text_div = document.createElement("div");
+    text_div.setAttribute("class", "disp-task_text");
+    const text_input = document.createElement("textarea");
+    text_input.setAttribute("class", "task_text task_typewatch");
+    text_input.setAttribute("style", "overflow: hidden; overflow-wrap: break-word; height: 52px;");
+    text_input.value = text;
+    autosize(text_input);
+    text_div.append(text_input);
+    article.append(text_div);
+
+    // Add the article to the task list
+    task_list.prepend(article)
+}
+
 
 /** Update the hash corresponding to the id */
 function update_task_hash(text, id) {
     // Trim the text so it's the same as in the database
-    task_hash[id] = text.trim().hashCode();
+    $('.task .id[value=' + id + ']').parent().find('.hash').val(text.trim().hashCode());
+}
+
+/** Get the hash corresponding to the id */
+function get_task_hash(id) {
+    return $('.task .id[value=' + id + ']').parent().find('.hash').val();
 }
 
 /** Notice the user that the page was saved */
@@ -22,63 +71,37 @@ function show_task_error(parent_div, local_error) {
     parent_div.find('.task_text').addClass('textarea-error');
 }
 
-/** Add the new task to the dom */
-function show_new_task(result) {
-    // Get the old_tasks div
-    const old_tasks_div = $('.today-page .old-tasks');
-
-    // Add <div> to the returned form to navigate inside with Jquery
-    const out_form_str = '<div>' + result.out_form + '</div>';
-    // Add the returned form under the task add
-    const new_checkbox = $('.task_is_achieved', out_form_str).clone().wrap('<div>').parent().html();
-    const new_textarea = $('.task_text', out_form_str).clone().wrap('<div>').parent().html();
-    const new_id = $('.task_id', out_form_str).clone().wrap('<div>').parent().html();
-    old_tasks_div.prepend(
-        '<article class="task">' +
-        new_id +
-        '<div class="disp-task_is_achieved">' +
-        new_checkbox +
-        '</div>' +
-        '<div class="disp-task_text">' +
-        new_textarea +
-        '</div>' +
-        '</article>'
-    );
-}
-
 /** Create a new task */
 function post_task() {
     const parent_div = $(this).closest('.task');
     const text = get_text(parent_div.find('.task_text'));
-    const codex_slug = $('#slug').val();
 
     if (text !== '') {
+        //"codex/<slug:codex_slug>/tasks"
         // Set the csrf token
         $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
         // Do the ajax call
         $.ajax({
 
-            url: '/tasks',
+            url: '/codex/' + $('#slug').val() + '/tasks',
             data: {
                 'text': text,
-                'codex_slug': codex_slug,
             },
             dataType: 'json',
             method: 'POST',
             success: function (result) {
                 hide_error();
                 if (result.success) {
-                    // Update the hash of the text for the next update
-                    update_task_hash(text, result.id);
+                    console.log(text);
 
                     // Delete text from the initial from
                     $('.new-task .task_text').val('');
 
                     // Add the new task to the dom
-                    show_new_task(result);
+                    add_new_task_dom(text, result.id, result.hash);
 
                     //Set typeWatch event
-                    const jqry_textarea = $('.task_id[value = ' + result.id + ']').closest('article').find('.task_text');
+                    const jqry_textarea = $('.task .id[value = ' + result.id + ']').closest('article').find('.task_text');
                     jqry_textarea.typeWatch({
                         callback: put_or_delete_task,
                         wait: 500,
@@ -113,11 +136,7 @@ function post_task() {
 
 /** Update task */
 function put_task(parent_div, is_achieved, text, id) {
-    // If it's the first time the task is updated, set the task hash
-    if (typeof task_hash[id] === 'undefined') {
-        update_task_hash(text, id);
-    }
-    const hash = task_hash[id];
+    const hash = get_task_hash(id);
     // Update the hash of the text for the next update
     update_task_hash(text, id);
 
@@ -186,7 +205,7 @@ function put_or_delete_task() {
     const parent_div = $(this).closest('.task');
     const is_achieved = parent_div.find('.task_is_achieved').prop('checked');
     const text = get_text(parent_div.find('.task_text'));
-    const id = parent_div.find('.task_id').attr('value');
+    const id = parent_div.find('.id').attr('value');
     if (text !== '') {
         put_task(parent_div, is_achieved, text, id);
     }

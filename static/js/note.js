@@ -1,9 +1,12 @@
-note_hash = {};
-
 /** Update the hash corresponding to the id */
 function update_note_hash(text, id) {
     // Trim the text so it's the same as in the database
-    note_hash[id] = text.trim().hashCode();
+    $('.page-note .id[value=' + id + ']').parent().find('.hash').val(text.trim().hashCode());
+}
+
+/** Get the hash corresponding to the id */
+function get_note_hash(id) {
+    return $('.page-note .id[value=' + id + ']').parent().find('.hash').val();
 }
 
 /** Notice the user that the note was saved */
@@ -24,27 +27,24 @@ function show_note_error(parent_div, local_error) {
 
 /** Create a new note */
 function post_note(parent_div, text) {
-    const codex_slug = $('#slug').val();
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
     // Do the ajax call
     $.ajax({
-        url: '/notes',
+        url: '/codex/' + $('#slug').val() + '/notes',
         data: {
             'text': text,
-            'codex_slug': codex_slug,
         },
         dataType: 'json',
         method: 'POST',
         success: function (result) {
-
             hide_error();
             if (result.success) {
                 // Update the id of the note
-                parent_div.find('.note_id').attr('value', result.id);
+                parent_div.find('.id').val(result.id);
 
                 // Update the hash of the text for the next update
-                update_note_hash(text, result.id);
+                parent_div.find('.hash').val(result.hash);
 
                 // Give a feedback to the user
                 show_note_save(parent_div);
@@ -62,7 +62,7 @@ function post_note(parent_div, text) {
 
 /** Update a note */
 function put_note(parent_div, text, id) {
-    const hash = note_hash[id];
+    const hash = get_note_hash(id);
     // Update the hash of the text for the next update
     update_note_hash(text, id);
 
@@ -128,7 +128,7 @@ function delete_note(parent_div, id) {
 function post_put_or_delete_note() {
     const parent_div = $(this).closest('.page-note');
     const text = get_text(parent_div.find('.note_text'));
-    const id = parent_div.find('.note_id').attr('value');
+    const id = parent_div.find('.id').attr('value');
     if (text !== '') {
         if (id) {
             put_note(parent_div, text, id);
@@ -146,7 +146,7 @@ function post_put_or_delete_note() {
 function put_or_delete_note() {
     const parent_div = $(this).closest('.page-note');
     const text = get_text(parent_div.find('.note_text'));
-    const id = parent_div.find('.note_id').attr('value');
+    const id = parent_div.find('.id').attr('value');
     if (text !== '') {
         put_note(parent_div, text, id);
     }

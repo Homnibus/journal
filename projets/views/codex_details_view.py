@@ -5,7 +5,7 @@ from django.views.decorators.cache import never_cache
 from projets.commun.utils import get_object_or_not_found
 from ..commun.codex import Page as Page_container
 from ..commun.error import HttpMethodNotAllowed
-from ..forms import NoteUpdateForm, NoteCreateFromSlugForm, TaskForm
+from ..forms import NoteUpdateForm, TaskUpdateForm, TaskCreateForm
 from ..models import get_current_timestamp, Page, Note, Task, Codex
 
 
@@ -25,21 +25,16 @@ def get_today_page(codex, today):
 
     # Get the note of the day (use filter and first to have one object or None)
     today_note = Note.objects.filter(page=today_page).first()
-    # If the note does not exist, create an empty one use the creation form
-    if not today_note:
-        output_page_data.note_form = NoteCreateFromSlugForm()
-    # If the note exist, use the update form
-    else:
-        output_page_data.note_form = NoteUpdateForm(instance=today_note)
+    output_page_data.note_form = NoteUpdateForm(instance=today_note)
 
     # Add a new task form to the page
-    output_page_data.new_task_form = TaskForm()
+    output_page_data.new_task_form = TaskCreateForm()
 
     # Get the tasks of the day
     today_tasks = list(Task.objects.filter(page=today_page).order_by("creation_date"))
     # Add each task as a form to the page
     for task in today_tasks:
-        output_page_data.tasks_form.append(TaskForm(instance=task))
+        output_page_data.tasks_form.append(TaskUpdateForm(instance=task))
 
     return output_page_data
 
@@ -68,7 +63,7 @@ def get_pages_before_today(codex, today):
         tasks = list(Task.objects.filter(page=page).order_by("creation_date"))
         # Add each task as a form to the page container
         for task in tasks:
-            page_container.tasks_form.append(TaskForm(instance=task))
+            page_container.tasks_form.append(TaskUpdateForm(instance=task))
 
         # Add the current page container to the output page list
         output_old_pages.append(page_container)

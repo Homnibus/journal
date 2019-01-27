@@ -3,6 +3,6 @@
 
 {% block nav %}
     <a href='{% url "codex_add" %}' class='{% block nav-new_codex %}{% endblock %}'>{% trans 'New +' %}</a>
-    <a href='{% url "tasks" %}' class='{% block nav-taches %}{% endblock %}'>{% trans "Task" %}</a>
+    <a href='{% url "tasks_list" %}' class='{% block nav-taches %}{% endblock %}'>{% trans "Task" %}</a>
     <a href='{% url "text_editor" %}' class='{% block nav-text_editor %}{% endblock %}'>{% trans "Text Editor" %}</a>
 {% endblock %}

@@ -60,6 +60,25 @@ class HttpNotFound(HttpError):
         )
 
 
+class HttpConflict(HttpError):
+    """ This error might be raise when a database IntegrityError append"""
+
+    def __init__(self, resource_name=""):
+        # Call the base class constructor
+        if not isinstance(resource_name, str):
+            super().__init__()
+            return
+
+        super().__init__(
+            status_code=409,
+            message=gettext("Conflict with current state of the server."),
+            explanation=gettext(
+                "The requested action on the resource ({resource_name}) is in conflict with the current state of the "
+                "server. "
+            ).format(resource_name=resource_name),
+        )
+
+
 class HttpInvalidFormData(HttpError):
     def __init__(self, form_errors=None, fields_error=None):
         if fields_error is None:

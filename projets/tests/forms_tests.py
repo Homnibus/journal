@@ -4,10 +4,12 @@ from django.test import TestCase
 from projets.commun.utils import java_string_hashcode
 from projets.forms import (
     CodexForm,
-    InformationForm,
-    TaskForm,
+    InformationUpdateForm,
     NoteUpdateForm,
-    NoteCreateFromSlugForm,
+    NoteCreateForm,
+    TaskUpdateForm,
+    TaskCreateForm,
+    InformationCreateForm,
 )
 from projets.models import Codex, Information, Page, Note, Task
 
@@ -83,7 +85,7 @@ class CodexFormTest(TestCase):
         self.assertEqual(codexs[0].description, self.description)
 
 
-class InformationFormTest(TestCase):
+class InformationCreateFormTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="zamour", email="zamour@zamour.com", password="top_secret"
@@ -92,81 +94,119 @@ class InformationFormTest(TestCase):
             title="Test Codex 1", author=self.user, description="Description 1"
         )
         self.text = "Test Text"
-        self.information = Information.objects.create(codex=self.codex, text=self.text)
-        self.form = InformationForm(instance=self.information)
+        self.input_data = {"text": self.text}
 
     def test_creation_assert_needed_param_exist(self):
-        """ Test if the required parameters are added after the creation of the form """
-        self.assertEqual(self.form.initial["text"], self.text)
+        """ Test if the required parameters are added after the creation of the form. """
+        form = InformationCreateForm()
+        self.assertIsNotNone(form.fields["text"])
 
     def test_save_commit_false_assert_model_not_created(self):
-        """ Test if the save method with commit = false does not create the model """
-        text = "Test Text 2"
-        input_data = {"text": text}
-        form = InformationForm(input_data)
+        """ Test if the save method with commit = false does not create the model. """
+        form = InformationCreateForm(data=self.input_data, codex=self.codex)
         form.is_valid()
-        form.save(commit=False, codex=self.codex)
+        form.save(commit=False)
+        informations = Information.objects.all()
+
+        self.assertEqual(len(informations), 0)
+
+    def test_save_commit_true_assert_model_created(self):
+        """ Test if the save method with commit = true does create the model. """
+        form = InformationCreateForm(data=self.input_data, codex=self.codex)
+        form.is_valid()
+        form.save(commit=True)
+        informations = Information.objects.all()
+
+        self.assertEqual(len(informations), 1)
+        self.assertEqual(informations[0].text, self.text)
+        self.assertEqual(informations[0].codex, self.codex)
+
+    def test_save_text_empty_assert_text_validation_error(self):
+        """ Test if the save method raise a validation error if a note already exist for that day. """
+        self.input_data["text"] = ""
+        form = InformationCreateForm(data=self.input_data, codex=self.codex)
+        form.is_valid()
+
+        self.assertIsNotNone(form.errors["text"])
+
+
+class InformationUpdateFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="zamour", email="zamour@zamour.com", password="top_secret"
+        )
+        self.codex = Codex.objects.create(
+            title="Test Codex 1", author=self.user, description="Description 1"
+        )
+        self.text = "Test Text"
+        self.update_text = "Test Text 2"
+        self.hash = java_string_hashcode(self.text)
+        self.information = Information.objects.create(codex=self.codex, text=self.text)
+        self.input_data = {"text": self.update_text, "hash": self.hash}
+
+    def test_creation_assert_needed_param_exist(self):
+        """ Test if the required parameters are added after the creation of the form. """
+        form = InformationUpdateForm(instance=self.information)
+        self.assertEqual(form.initial["text"], self.text)
+        self.assertEqual(form.initial["hash"], self.hash)
+        self.assertEqual(form.initial["id"], self.information.id)
+
+    def test_save_assert_model_updated(self):
+        """ Test if the save method update the model. """
+        form = InformationUpdateForm(data=self.input_data, instance=self.information)
+        form.is_valid()
+        form.save()
+        informations = Information.objects.all()
+
+        self.assertEqual(len(informations), 1)
+        self.assertEqual(informations[0].text, self.update_text)
+
+    def test_save_hash_not_same_as_bdd_assert_form_validation_error(self):
+        """
+        Test if the is_valid method add a hash form error id the given hash does not correspond to the database
+        text hash.
+        """
+        input_data = self.input_data
+        input_data["hash"] = 0
+        form = InformationUpdateForm(data=input_data, instance=self.information)
+        form.is_valid()
+        self.assertIsNotNone(form.errors["hash"])
+
+    def test_save_commit_false_assert_model_not_created(self):
+        """ Test if the save method with commit = false does not create the model. """
+        form = InformationUpdateForm(data=self.input_data, instance=self.information)
+        form.is_valid()
+        form.save(commit=False)
         informations = Information.objects.all()
 
         self.assertEqual(len(informations), 1)
 
     def test_save_commit_false_assert_model_not_updated(self):
-        """ Test if the save method with commit = false does not update other model """
-        text = "Test Text 2"
-        input_data = {"text": text}
-        form = InformationForm(input_data)
+        """ Test if the save method with commit = false does not update other model. """
+        form = InformationUpdateForm(data=self.input_data, instance=self.information)
         form.is_valid()
-        form.save(commit=False, codex=self.codex)
+        form.save(commit=False)
         informations = Information.objects.all()
 
         self.assertEqual(informations[0].text, self.text)
 
-    def test_save_commit_true_assert_model_created(self):
-        """ Test if the save method with commit = true does create the model """
+    def test_save_assert_other_model_not_updated(self):
+        """ Test if the save method with commit = true does not update other model. """
         codex = Codex.objects.create(
             title="Test Codex 2", author=self.user, description="Description 2"
         )
-        text = "Test Text 2"
-        input_data = {"text": text}
-        form = InformationForm(input_data)
+        Information.objects.create(codex=codex, text=self.text)
+        form = InformationUpdateForm(data=self.input_data, instance=self.information)
         form.is_valid()
-        form.save(commit=True, codex=codex)
-        informartions = Information.objects.filter(text=text)
+        form.save(commit=True)
+        informations = Information.objects.all().order_by("id")
 
-        self.assertEqual(len(informartions), 1)
-        self.assertEqual(informartions[0].text, text)
-        self.assertEqual(informartions[0].codex, codex)
-
-    def test_save_commit_true_assert_model_not_updated(self):
-        """ Test if the save method with commit = true does update other model """
-        codex = Codex.objects.create(
-            title="Test Codex 2", author=self.user, description="Description 2"
-        )
-        text = "Test Text 2"
-        input_data = {"text": text}
-        form = InformationForm(input_data)
-        form.is_valid()
-        form.save(commit=True, codex=codex)
-        informartions = Information.objects.all().order_by("id")
-
-        self.assertEqual(len(informartions), 2)
-        self.assertEqual(informartions[0].text, self.text)
-        self.assertEqual(informartions[0].codex, self.codex)
-
-    def test_save_assert_model_updated(self):
-        """ Test if the save method update the model """
-        text = "Test Text 2"
-        input_data = {"text": text}
-        form = InformationForm(input_data)
-        form.is_valid()
-        form.save(codex=self.codex)
-        informations = Information.objects.all()
-
-        self.assertEqual(len(informations), 1)
-        self.assertEqual(informations[0].text, text)
+        self.assertEqual(len(informations), 2)
+        self.assertEqual(informations[1].text, self.text)
+        self.assertEqual(informations[1].codex, codex)
 
 
-class NoteCreateFromSlugFormTest(TestCase):
+class NoteCreateFormTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="zamour", email="zamour@zamour.com", password="top_secret"
@@ -175,17 +215,16 @@ class NoteCreateFromSlugFormTest(TestCase):
             title="Test Codex 1", author=self.user, description="Description 1"
         )
         self.text = "Test Text"
-        self.input_data = {"text": self.text, "codex_slug": self.codex.slug}
+        self.input_data = {"text": self.text}
 
     def test_creation_assert_fields_exist(self):
-        """ Test if the form has the right fields """
-        form = NoteCreateFromSlugForm()
+        """ Test if the form has the right fields. """
+        form = NoteCreateForm()
         self.assertIsNotNone(form.fields["text"])
-        self.assertIsNotNone(form.fields["codex_slug"])
 
     def test_save_commit_false_assert_model_not_created(self):
-        """ Test if the save method with commit = false does not create the model """
-        form = NoteCreateFromSlugForm(self.input_data)
+        """ Test if the save method with commit = false does not create the model. """
+        form = NoteCreateForm(data=self.input_data, codex=self.codex)
         form.is_valid()
         form.save(commit=False)
         notes = Note.objects.all()
@@ -193,8 +232,8 @@ class NoteCreateFromSlugFormTest(TestCase):
         self.assertEqual(len(notes), 0)
 
     def test_save_commit_true_assert_model_created(self):
-        """ Test if the save method with commit = true does create the model """
-        form = NoteCreateFromSlugForm(self.input_data)
+        """ Test if the save method with commit = true does create the model. """
+        form = NoteCreateForm(data=self.input_data, codex=self.codex)
         form.is_valid()
         form.save(commit=True)
         notes = Note.objects.all()
@@ -202,22 +241,13 @@ class NoteCreateFromSlugFormTest(TestCase):
         self.assertEqual(len(notes), 1)
         self.assertEqual(notes[0].text, self.text)
 
-    def test_save_codex_not_exist_assert_slug_validation_error(self):
-        """ Test if the save method raise a validation error if the codex does not exist """
-        input_data = self.input_data.copy()
-        input_data["codex_slug"] = "error-codex-slug"
-        form = NoteCreateFromSlugForm(input_data)
-        form.is_valid()
-        self.assertIsNotNone(form.errors["codex_slug"])
-
-    def test_save_commit_true_note_exist_assert_global_validation_error(self):
-        """ Test if the save method raise a validation error if a note already exist for that day """
-        page = Page.objects.create(codex=self.codex)
-        Note.objects.create(page=page, text="Test Text")
-        form = NoteCreateFromSlugForm(self.input_data)
+    def test_save_text_empty_assert_text_validation_error(self):
+        """ Test if the save method raise a validation error if the input text is empty. """
+        self.input_data["text"] = ""
+        form = NoteCreateForm(data=self.input_data, codex=self.codex)
         form.is_valid()
 
-        self.assertIsNotNone(form.errors["__all__"])
+        self.assertIsNotNone(form.errors["text"])
 
 
 class NoteUpdateFormTest(TestCase):
@@ -233,18 +263,18 @@ class NoteUpdateFormTest(TestCase):
         self.update_text = "Test Text 2"
         self.hash = java_string_hashcode(self.text)
         self.note = Note.objects.create(page=self.page, text=self.text)
-        self.input_data = {"text": self.update_text, "hash": self.hash, "id": 1}
+        self.input_data = {"text": self.update_text, "hash": self.hash}
 
     def test_creation_assert_needed_param_exist(self):
-        """ Test if the required parameters are added after the creation of the form """
+        """ Test if the required parameters are added after the creation of the form. """
         form = NoteUpdateForm(instance=self.note)
         self.assertEqual(form.initial["text"], self.text)
-        self.assertEqual(form.initial["id"], self.note.id)
         self.assertEqual(form.initial["hash"], self.hash)
+        self.assertEqual(form.initial["id"], self.note.id)
 
     def test_save_assert_model_updated(self):
-        """ Test if the save method update the model """
-        form = NoteUpdateForm(self.input_data)
+        """ Test if the save method update the model. """
+        form = NoteUpdateForm(data=self.input_data, instance=self.note)
         form.is_valid()
         form.save()
         notes = Note.objects.all()
@@ -252,31 +282,20 @@ class NoteUpdateFormTest(TestCase):
         self.assertEqual(len(notes), 1)
         self.assertEqual(notes[0].text, self.update_text)
 
-    def test_save_note_does_not_exist_assert_id_validation_error(self):
-        """
-        Test if the is_valid method add a form error on the id field if the given id does not refer to a data base
-        object
-        """
-        input_data = self.input_data
-        input_data["id"] = 0
-        form = NoteUpdateForm(self.input_data)
-        form.is_valid()
-        self.assertIsNotNone(form.errors["id"])
-
     def test_save_note_hash_not_same_as_bdd_assert_form_validation_error(self):
         """
-        Test if the si_valid method add a global form error id the given hash does not correspond to the database
-        text hash
+        Test if the is_valid method add a hash form error if the given hash does not correspond to the database
+        text hash.
         """
         input_data = self.input_data
         input_data["hash"] = 0
-        form = NoteUpdateForm(self.input_data)
+        form = NoteUpdateForm(data=input_data, instance=self.note)
         form.is_valid()
-        self.assertIsNotNone(form.errors["__all__"])
+        self.assertIsNotNone(form.errors["hash"])
 
     def test_save_commit_false_assert_model_not_created(self):
-        """ Test if the save method with commit = false does not create the model """
-        form = NoteUpdateForm(self.input_data)
+        """ Test if the save method with commit = false does not create the model. """
+        form = NoteUpdateForm(data=self.input_data, instance=self.note)
         form.is_valid()
         form.save(commit=False)
         notes = Note.objects.all()
@@ -284,34 +303,79 @@ class NoteUpdateFormTest(TestCase):
         self.assertEqual(len(notes), 1)
 
     def test_save_commit_false_assert_model_not_updated(self):
-        """ Test if the save method with commit = false does not update other model """
-        form = NoteUpdateForm(self.input_data)
+        """ Test if the save method with commit = false does not update other model. """
+        form = NoteUpdateForm(data=self.input_data, instance=self.note)
         form.is_valid()
         form.save(commit=False)
         notes = Note.objects.all()
 
         self.assertEqual(notes[0].text, self.text)
 
-    def test_save_commit_true_assert_model_not_updated(self):
-        """ Test if the save method with commit = true does not update other model """
+    def test_save_assert_other_model_not_updated(self):
+        """ Test if the save method with commit = true does not update other model. """
         codex = Codex.objects.create(
             title="Test Codex 2", author=self.user, description="Description 2"
         )
         page = Page.objects.create(codex=codex)
-        note = Note.objects.create(page=page, text=self.text)
-        input_data = self.input_data
-        input_data["id"] = note.id
-        form = NoteUpdateForm(input_data)
+        Note.objects.create(page=page, text=self.text)
+        form = NoteUpdateForm(data=self.input_data, instance=self.note)
         form.is_valid()
         form.save(commit=True)
         notes = Note.objects.all().order_by("id")
 
         self.assertEqual(len(notes), 2)
-        self.assertEqual(notes[0].text, self.text)
-        self.assertEqual(notes[0].page, self.page)
+        self.assertEqual(notes[1].text, self.text)
+        self.assertEqual(notes[1].page, page)
 
 
-class TaskFormTest(TestCase):
+class TaskCreateFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="zamour", email="zamour@zamour.com", password="top_secret"
+        )
+        self.codex = Codex.objects.create(
+            title="Test Codex 1", author=self.user, description="Description 1"
+        )
+        self.text = "Test Text"
+        self.is_achieved = False
+        self.input_data = {"text": self.text, "is_achieved": self.is_achieved}
+
+    def test_creation_assert_needed_param_exist(self):
+        """ Test if the form has the right fields. """
+        form = TaskCreateForm()
+        self.assertIsNotNone(form.fields["text"])
+        self.assertIsNotNone(form.fields["is_achieved"])
+
+    def test_save_commit_false_assert_model_not_created(self):
+        """ Test if the save method with commit = false does not create the model. """
+        form = TaskCreateForm(data=self.input_data, codex=self.codex)
+        form.is_valid()
+        form.save(commit=False)
+        tasks = Task.objects.all()
+
+        self.assertEqual(len(tasks), 0)
+
+    def test_save_commit_true_assert_model_created(self):
+        """ Test if the save method with commit = true does create the model. """
+        form = TaskCreateForm(data=self.input_data, codex=self.codex)
+        form.is_valid()
+        form.save(commit=True)
+        tasks = Task.objects.all()
+
+        self.assertEqual(len(tasks), 1)
+        self.assertEqual(tasks[0].text, self.text)
+        self.assertEqual(tasks[0].is_achieved, self.is_achieved)
+
+    def test_save_text_empty_assert_text_validation_error(self):
+        """ Test if the save method raise a validation error if the input text is empty. """
+        self.input_data["text"] = ""
+        form = TaskCreateForm(data=self.input_data, codex=self.codex)
+        form.is_valid()
+
+        self.assertIsNotNone(form.errors["text"])
+
+
+class TaskUpdateFormTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="zamour", email="zamour@zamour.com", password="top_secret"
@@ -322,75 +386,73 @@ class TaskFormTest(TestCase):
         self.page = Page.objects.create(codex=self.codex)
         self.text = "Test Text"
         self.is_achieved = False
+        self.update_is_achieved = True
+        self.update_text = "Test Text 2"
+        self.hash = java_string_hashcode(self.text)
         self.task = Task.objects.create(page=self.page, text=self.text)
-        self.form = TaskForm(instance=self.task)
+        self.input_data = {
+            "text": self.update_text,
+            "hash": self.hash,
+            "is_achieved": self.update_is_achieved,
+        }
 
     def test_creation_assert_needed_param_exist(self):
-        """ Test if the required parameters are added after the creation of the form """
-        self.assertEqual(self.form.initial["text"], self.text)
-        self.assertEqual(self.form.initial["is_achieved"], self.is_achieved)
-        self.assertEqual(self.form.initial["task_id"], self.task.id)
-
-    def test_save_commit_false_assert_model_not_created(self):
-        """ Test if the save method with commit = false does not create the model """
-        text = "Test Text 2"
-        input_data = {"text": text, "is_achieved": self.task.is_achieved}
-        form = TaskForm(input_data)
-        form.is_valid()
-        form.save(commit=False, page=self.page)
-        tasks = Task.objects.all()
-
-        self.assertEqual(len(tasks), 1)
-
-    def test_save_commit_false_assert_model_not_updated(self):
-        """ Test if the save method with commit = false does not update other model """
-        text = "Test Text 2"
-        input_data = {"text": text, "is_achieved": self.task.is_achieved}
-        form = TaskForm(input_data)
-        form.is_valid()
-        form.save(commit=False, page=self.page)
-        tasks = Task.objects.all()
-
-        self.assertEqual(tasks[0].text, self.text)
-
-    def test_save_commit_assert_new_model_created(self):
-        """ Test if the save method with commit = true does create the model """
-        text = "Test Text 2"
-        is_achieved = True
-        input_data = {"text": text, "is_achieved": is_achieved}
-        form = TaskForm(input_data)
-        form.is_valid()
-        form.save(commit=True, page=self.page)
-        tasks = Task.objects.filter(text=text)
-
-        self.assertEqual(len(tasks), 1)
-        self.assertEqual(tasks[0].text, text)
-        self.assertEqual(tasks[0].is_achieved, is_achieved)
-
-    def test_save_commit_assert_new_model_not_updated(self):
-        """ Test if the save method with commit = true does not update other model """
-        text = "Test Text 2"
-        is_achieved = True
-        input_data = {"text": text, "is_achieved": is_achieved}
-        form = TaskForm(input_data)
-        form.is_valid()
-        form.save(commit=True, page=self.page)
-        tasks = Task.objects.all().order_by("id")
-
-        self.assertEqual(len(tasks), 2)
-        self.assertEqual(tasks[0].text, self.text)
-        self.assertEqual(tasks[0].is_achieved, self.is_achieved)
+        """ Test if the required parameters are added after the creation of the form. """
+        form = TaskUpdateForm(instance=self.task)
+        self.assertEqual(form.initial["text"], self.text)
+        self.assertEqual(form.initial["is_achieved"], self.is_achieved)
+        self.assertEqual(form.initial["hash"], self.hash)
+        self.assertEqual(form.initial["id"], self.task.id)
 
     def test_save_assert_model_updated(self):
-        """ Test if the save method update the model """
-        text = "Test Text 2"
-        is_achieved = True
-        input_data = {"text": text, "task_id": self.task.id, "is_achieved": is_achieved}
-        form = TaskForm(input_data)
+        """ Test if the save method update the model. """
+        form = TaskUpdateForm(data=self.input_data, instance=self.task)
         form.is_valid()
         form.save()
         tasks = Task.objects.all()
 
         self.assertEqual(len(tasks), 1)
-        self.assertEqual(tasks[0].text, text)
-        self.assertEqual(tasks[0].is_achieved, is_achieved)
+        self.assertEqual(tasks[0].text, self.update_text)
+        self.assertEqual(tasks[0].is_achieved, self.update_is_achieved)
+
+    def test_save_task_hash_not_same_as_bdd_assert_form_validation_error(self):
+        """
+        Test if the is_valid method add a hash form error if the given hash does not correspond to the database
+        text hash.
+        """
+        self.input_data["hash"] = 0
+        form = TaskUpdateForm(data=self.input_data, instance=self.task)
+        form.is_valid()
+        self.assertIsNotNone(form.errors["hash"])
+
+    def test_save_commit_false_assert_model_not_created(self):
+        """ Test if the save method with commit = false does not create the model. """
+        form = TaskUpdateForm(data=self.input_data, instance=self.task)
+        form.is_valid()
+        form.save(commit=False)
+        tasks = Task.objects.all()
+
+        self.assertEqual(len(tasks), 1)
+
+    def test_save_commit_false_assert_model_not_updated(self):
+        """ Test if the save method with commit = false does not update other model. """
+        form = TaskUpdateForm(data=self.input_data, instance=self.task)
+        form.is_valid()
+        form.save(commit=False)
+        tasks = Task.objects.all()
+
+        self.assertEqual(tasks[0].text, self.text)
+
+    def test_save_assert_other_model_not_updated(self):
+        """ Test if the save method with commit = true does not update other model """
+        Task.objects.create(
+            page=self.page, text=self.text, is_achieved=self.is_achieved
+        )
+        form = TaskUpdateForm(data=self.input_data, instance=self.task)
+        form.is_valid()
+        form.save(commit=True)
+        tasks = Task.objects.all().order_by("id")
+
+        self.assertEqual(len(tasks), 2)
+        self.assertEqual(tasks[1].text, self.text)
+        self.assertEqual(tasks[1].is_achieved, self.is_achieved)

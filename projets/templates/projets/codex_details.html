@@ -31,12 +31,12 @@
                     <h2>{{ today_page.date }}</h2>
                     <div class='save-info' style='display:none'>{% trans 'Saved' %}</div>
                 </header>
-                {{ today_page.note_form.non_field_errors }}
-                {{ today_page.note_form.text.errors }}
-                {{ today_page.note_form.note_id.errors }}
-                {{ today_page.note_form.note_id }}
+                {{ today_page.note_form.id }}
+                {{ today_page.note_form.hash }}
                 <div class='disp-note_text'>
                     {{ today_page.note_form.text }}
+                    {{ today_page.note_form.id }}
+                    {{ today_page.note_form.hash }}
                 </div>
             </section>
 
@@ -46,7 +46,6 @@
                     <div class='save-info' style='display:none'>{% trans 'Saved' %}</div>
                 </header>
                 <section class='task new-task'>
-                    {{ today_page.new_task_form.text.errors }}
                     <div class='disp-add-item-button'>
                         <img class='add-item-button' src='{% static "img/add_button.png" %}'
                              alt='{% trans "Add" %}'/>
@@ -58,11 +57,8 @@
                 <section class='task-list old-tasks'>
                     {% for task in today_page.tasks_form reversed %}
                         <article class='task'>
-                            {{ task.non_field_errors }}
-                            {{ task.text.errors }}
-                            {{ task.task_id.errors }}
-                            {{ task.is_achieved.errors }}
-                            {{ task.task_id }}
+                            {{ task.id }}
+                            {{ task.hash }}
                             <div class='disp-task_is_achieved'>
                                 {{ task.is_achieved }}
                             </div>
@@ -87,10 +83,8 @@
                         <div class='line'></div>
                     </header>
                     {% if page.note_form %}
-                        {{ page.note_form.non_field_errors }}
-                        {{ page.note_form.text.errors }}
-                        {{ page.note_form.note_id.errors }}
-                        {{ page.note_form.note_id }}
+                        {{ page.note_form.id }}
+                        {{ page.note_form.hash }}
                         <div class='disp-note_text'>
                             <pre class='note_text disabled-textarea'>{{ page.note_form.text.value }}</pre>
                         </div>
@@ -108,11 +102,8 @@
                         <section class='task-list'>
                             {% for task in page.tasks_form %}
                                 <article class='task'>
-                                    {{ task.non_field_errors }}
-                                    {{ task.text.errors }}
-                                    {{ task.task_id.errors }}
-                                    {{ task.is_achieved.errors }}
-                                    {{ task.task_id }}
+                                    {{ task.id }}
+                                    {{ task.hash }}
                                     <div class='disp-task_is_achieved'>
                                         {{ task.is_achieved }}
                                     </div>

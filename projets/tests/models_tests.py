@@ -106,17 +106,6 @@ class NoteModelTest(TestCase):
         """ Test if the function return the url of the task detail """
         self.assertIsInstance(self.note.get_absolute_url(), str)
 
-    def test_creation_with_no_page_assert_non_needed_param_exist(self):
-        """ Test if the non required parameters are added after the creation of the model if the page does not exist"""
-        self.note.delete()
-        note = Note(text=self.text)
-        note.save(codex=self.codex)
-
-        self.assertIsNotNone(note)
-        self.assertEqual(note.page, self.page)
-        self.assertIsInstance(note.creation_date, datetime)
-        self.assertIsInstance(note.update_date, datetime)
-
 
 class TaskModelTest(TestCase):
     def setUp(self):
@@ -170,19 +159,6 @@ class TaskModelTest(TestCase):
 
         self.assertIsNone(self.task.achieved_date)
         self.assertEqual(self.task.is_achieved, False)
-
-    def test_creation_with_no_page_assert_non_needed_param_exist(self):
-        """ Test if the non required parameters are added after the creation of the model if the page does not exist"""
-        task = Task(text=self.text)
-        task.save(codex=self.codex)
-
-        self.assertIsNotNone(task)
-        self.assertEqual(task.page, self.page)
-        self.assertEqual(task.text, self.text)
-        self.assertIsInstance(task.creation_date, datetime)
-        self.assertIsInstance(task.update_date, datetime)
-        self.assertIsNone(task.achieved_date)
-        self.assertEqual(task.is_achieved, False)
 
 
 class InformationModelTest(TestCase):

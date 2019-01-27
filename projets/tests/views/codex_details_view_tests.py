@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from projets.commun.codex import Page as Page_container
 from projets.commun.error import HttpNotFound
-from projets.forms import TaskForm, NoteUpdateForm, NoteCreateFromSlugForm
+from projets.forms import TaskUpdateForm, TaskCreateForm, NoteUpdateForm, NoteCreateForm
 from projets.models import Codex, Page, get_current_timestamp, Note, Task
 from projets.views.codex_details_view import (
     get_today_page,
@@ -47,9 +47,9 @@ class GetTodayPageTest(TestCase):
 
         self.assertEqual(page_container.date, self.today)
         self.assertIsNotNone(page_container.new_task_form)
-        self.assertIsInstance(page_container.new_task_form, TaskForm)
+        self.assertIsInstance(page_container.new_task_form, TaskCreateForm)
         self.assertIsNotNone(page_container.note_form)
-        self.assertIsInstance(page_container.note_form, NoteCreateFromSlugForm)
+        self.assertIsInstance(page_container.note_form, NoteCreateForm)
         self.assertEqual(len(page_container.tasks_form), 0)
 
     def test_get_today_page_exist_assert_return_page(self):
@@ -58,11 +58,11 @@ class GetTodayPageTest(TestCase):
 
         self.assertEqual(page_container.date, self.today)
         self.assertIsNotNone(page_container.new_task_form)
-        self.assertIsInstance(page_container.new_task_form, TaskForm)
+        self.assertIsInstance(page_container.new_task_form, TaskCreateForm)
         self.assertIsNotNone(page_container.note_form)
         self.assertIsInstance(page_container.note_form, NoteUpdateForm)
         self.assertEqual(len(page_container.tasks_form), 2)
-        self.assertIsInstance(page_container.tasks_form[0], TaskForm)
+        self.assertIsInstance(page_container.tasks_form[0], TaskUpdateForm)
 
     def test_get_pages_before_today_new_codex_assert_empty_list(self):
         old_pages = get_pages_before_today(self.empty_codex, self.today)
@@ -91,7 +91,7 @@ class GetTodayPageTest(TestCase):
         self.assertIsNotNone(page_container.note_form)
         self.assertIsInstance(page_container.note_form, NoteUpdateForm)
         self.assertEqual(len(page_container.tasks_form), 2)
-        self.assertIsInstance(page_container.tasks_form[0], TaskForm)
+        self.assertIsInstance(page_container.tasks_form[0], TaskUpdateForm)
 
     def test_get_codex_assert_return_http_response(self):
         """ Test if the method return a HttpResponse """

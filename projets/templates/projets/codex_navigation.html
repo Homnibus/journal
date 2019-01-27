@@ -5,10 +5,10 @@
     <a href="{% url 'codex_details' codex_slug=codex.slug %}" class="{% block nav-codex %}{% endblock %}">
         {% trans 'Codex' %}
     </a>
-    <a href="{% url 'codex_tasks' codex_slug=codex.slug %}" class="{% block nav-taches %}{% endblock %}">
+    <a href="{% url 'tasks' codex_slug=codex.slug %}" class="{% block nav-taches %}{% endblock %}">
         {% trans 'Tasks' %}
     </a>
-    <a href="{% url 'information' codex_slug=codex.slug %}" class="{% block nav-codex_info %}{% endblock %}">
+    <a href="{% url 'informations' codex_slug=codex.slug %}" class="{% block nav-codex_info %}{% endblock %}">
         {% trans 'Info' %}
     </a>
 {% endblock %}

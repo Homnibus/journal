@@ -182,20 +182,12 @@ class Note(models.Model):
     def __str__(self):
         return "Note for the " + str(self.page.creation_date)
 
-    def save(self, codex=None, commit=True, *args, **kwargs):
+    def save(self, commit=True, *args, **kwargs):
         """
         Override the save method to generate the creation date.
-        codex parameter is used to create a note on a new page. This page will be the page of the day and should not
-        exist.
         """
         # At the creation of the note
         if not self.id:
-            # If there is a Page object, use it. Otherwise use the Codex object to get or create the page of the day
-            # TODO : manage the case where there isn't either a page or a codex
-            if not hasattr(self, "page") and codex:
-                # Get the page of the day date
-                date = get_current_timestamp().date()
-                self.page, created = Page.objects.get_or_create(codex=codex, date=date)
             # Set the creation date
             self.creation_date = get_current_timestamp()
 
@@ -251,18 +243,12 @@ class Task(models.Model):
     def __str__(self):
         return "Task " + str(self.id) + " for the " + str(self.page.creation_date)
 
-    def save(self, codex=None, *args, **kwargs):
+    def save(self, *args, **kwargs):
         """
-        Override the save method to generate the creation date.
+        Override the save method to generate the creation date and the is_achieved date.
         """
         # At the creation of the task
         if not self.id:
-            # If there is a Page object, use it. Otherwise use the Codex object to get or create the page of the day
-            # TODO : manage the case where there isn't either a page or a codex
-            if not hasattr(self, "page") and codex:
-                # Get the page of the day date
-                date = get_current_timestamp().date()
-                self.page, created = Page.objects.get_or_create(codex=codex, date=date)
             # Set the creation date
             self.creation_date = get_current_timestamp()
 
@@ -274,6 +260,7 @@ class Task(models.Model):
         if self.is_achieved is False and self.initial_is_achieved is True:
             self.achieved_date = None
             self.initial_is_achieved = False
+
         # Set the task update date
         self.update_date = get_current_timestamp()
         # Set the page nested_update_date
@@ -289,10 +276,11 @@ class Information(models.Model):
     General information of a given codex
     """
 
-    codex = models.ForeignKey(
+    codex = models.OneToOneField(
         Codex,
         related_name="information",
         on_delete=models.CASCADE,
+        primary_key=False,
         null=False,
         help_text="Codex of the information",
     )
