@@ -9,8 +9,8 @@ function show_error(jqXHR, exception) {
     hide_error();
     var data = jQuery.parseJSON(jqXHR.responseText);
     $('nav').append("<div class='error'>" +
-        "<div style='color:red'>Erreur " + jqXHR.status + " : " + data.message +
-        " -- " + data.explanation + "</div>" +
+        "Erreur " + jqXHR.status + " : " + data.message +
+        " -- " + data.explanation +
         "</div>"
     );
     $('.nav-filler').css('margin-top', '+=1em');

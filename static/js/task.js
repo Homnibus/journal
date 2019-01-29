@@ -65,10 +65,30 @@ function show_task_save(parent_div) {
 }
 
 /** Notice the user that the page couldn't be saved */
-function show_task_error(parent_div, local_error) {
-    const error = $('<div class="local-error">').text(local_error);
-    parent_div.closest('.page-task').find('header').append(error);
-    parent_div.find('.task_text').addClass('textarea-error');
+function show_task_error(parent_div, jqXHR, exception) {
+    hide_error();
+    if (jqXHR.status !== 400) {
+        show_error(jqXHR, exception);
+    }
+    const result = jqXHR.responseJSON;
+    const nb_global_error = result.form_errors.length;
+    for (let i = 0; i < nb_global_error; i++) {
+        const error = $('<div class="error">').text(result.form_errors[i]);
+        parent_div.closest('.page-tasks').find('header').after(error);
+        parent_div.find('.task_text').addClass('textarea-error');
+
+    }
+    jQuery.each(result.fields_error, function (field, error_list) {
+        const nb_error = error_list.length;
+        for (let i = 0; i < nb_error; i++) {
+            const error = $('<div class="local-error">').text(error_list[i]);
+            parent_div.closest('.page-tasks').find('header').after(error);
+            parent_div.find('.task_text').addClass('textarea-error');
+        }
+    });
+    if (nb_global_error === 0 && jQuery.isEmptyObject(result.fields_error)) {
+        show_error(jqXHR, exception);
+    }
 }
 
 /** Create a new task */
@@ -91,37 +111,31 @@ function post_task() {
             method: 'POST',
             success: function (result) {
                 hide_error();
-                if (result.success) {
-                    console.log(text);
 
-                    // Delete text from the initial from
-                    $('.new-task .task_text').val('');
+                // Delete text from the initial from
+                $('.new-task .task_text').val('');
 
-                    // Add the new task to the dom
-                    add_new_task_dom(text, result.id, result.hash);
+                // Add the new task to the dom
+                add_new_task_dom(text, result.id, result.hash);
 
-                    //Set typeWatch event
-                    const jqry_textarea = $('.task .id[value = ' + result.id + ']').closest('article').find('.task_text');
-                    jqry_textarea.typeWatch({
-                        callback: put_or_delete_task,
-                        wait: 500,
-                        highlight: false,
-                        allowSubmit: false,
-                        captureLength: 1,
-                    });
-                    // Give a success feedback to the user
-                    show_task_save(parent_div);
-                }
-                else {
-                    // Give an error feedback to the user
-                    show_task_error(parent_div, result.local_error);
-                }
+                //Set typeWatch event
+                const jqry_textarea = $('.task .id[value = ' + result.id + ']').closest('article').find('.task_text');
+                jqry_textarea.typeWatch({
+                    callback: put_or_delete_task,
+                    wait: 500,
+                    highlight: false,
+                    allowSubmit: false,
+                    captureLength: 1,
+                });
+                // Give a success feedback to the user
+                show_task_save(parent_div);
                 // At the end of the function, remove the unclickable class to allow the add of a new task
                 $('.add-item-button').removeClass('unclickable');
 
             },
             error: (jqXHR, exception) => {
-                show_error(jqXHR, exception);
+                // Give a feedback to the user
+                show_task_error(parent_div, jqXHR, exception);
                 // At the end of the function, remove the unclickable class to allow the add of a new task
                 $('.add-item-button').removeClass('unclickable');
 
@@ -152,19 +166,14 @@ function put_task(parent_div, is_achieved, text, id) {
         },
         dataType: 'json',
         method: 'PUT',
-        success: function (result) {
+        success: function () {
             hide_error();
-            if (result.success) {
-                // Give a feedback to the user
-                show_task_save(parent_div);
-            }
-            else {
-                // Give a feedback to the user
-                show_task_error(parent_div, result.local_error);
-            }
+            // Give a feedback to the user
+            show_task_save(parent_div);
         },
         error: function (jqXHR, exception) {
-            show_error(jqXHR, exception);
+            // Give a feedback to the user
+            show_task_error(parent_div, jqXHR, exception);
         }
     });
 }
@@ -182,20 +191,14 @@ function delete_task(parent_div, id) {
         data: {},
         dataType: 'json',
         method: 'DELETE',
-        success: function (result) {
+        success: function () {
             hide_error();
-            if (result.success) {
-
-                // Give a feedback to the user
-                show_task_save(parent_div);
-            }
-            else {
-                // Give a feedback to the user
-                show_task_error(parent_div, result.local_error);
-            }
+            // Give a feedback to the user
+            show_task_save(parent_div);
         },
         error: function (jqXHR, exception) {
-            show_error(jqXHR, exception);
+            // Give a feedback to the user
+            show_task_error(parent_div, jqXHR, exception);
         }
     });
 }

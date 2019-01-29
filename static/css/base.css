@@ -301,14 +301,20 @@ input:focus {
 
 /* textarea et input on error */
 
-textarea.textarea-error {
+.textarea-error {
   border: 1px solid #d72833;
   box-shadow: 0 .1em .2em 0 rgba(0, 0, 0, .16), 0 .1em .5em 0 rgba(0, 0, 0, .12);
 }
 
-textarea.textarea-error:focus {
+.textarea-error:focus {
   border: 1px solid #d72833;
   box-shadow: 0 .1em .2em 0 #6c141a, 0 .1em .5em 0 #e77e85;
+}
+
+.error, .local-error {
+  color: #6c141a;
+  display: list-item;
+  list-style: disc inside;
 }
 
 /* save-info */

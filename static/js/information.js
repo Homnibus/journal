@@ -9,11 +9,30 @@ function get_information_hash() {
     return $('.information .hash').val();
 }
 
-/** Notice the user that the note couldn't be saved */
-function show_information_error(parent_div, local_error) {
-    const error = $('<div class="local-error">').text(local_error);
-    parent_div.find('header').append(error);
-    parent_div.find('.information_text').addClass('textarea-error');
+/** Notice the user that the information couldn't be saved */
+function show_information_error(parent_div, jqXHR, exception) {
+    hide_error();
+    if (jqXHR.status !== 400) {
+        show_error(jqXHR, exception);
+    }
+    const result = jqXHR.responseJSON;
+    const nb_global_error = result.form_errors.length;
+    for (let i = 0; i < nb_global_error; i++) {
+        const error = $('<div class="error">').text(result.form_errors[i]);
+        parent_div.find('header').after(error);
+        parent_div.find('.information_text').addClass('textarea-error');
+    }
+    jQuery.each(result.fields_error, function (field, error_list) {
+        const nb_error = error_list.length;
+        for (let i = 0; i < nb_error; i++) {
+            const error = $('<div class="local-error">').text(error_list[i]);
+            parent_div.find('header').after(error);
+            parent_div.find('.note_text').addClass('textarea-error');
+        }
+    });
+    if (nb_global_error === 0 && jQuery.isEmptyObject(result.fields_error)) {
+        show_error(jqXHR, exception);
+    }
 }
 
 /** Notice the user that the information was saved */
@@ -41,31 +60,25 @@ function post_information(parent_div, text) {
         method: 'POST',
         success: function (result) {
             hide_error();
-            if (result.success) {
-                // Update the id of the information
-                $('.information .id').val(result.id);
+            // Update the id of the information
+            $('.information .id').val(result.id);
 
-                // Update the hash of the text for the next update
-                $('.information .hash').val(result.hash);
+            // Update the hash of the text for the next update
+            $('.information .hash').val(result.hash);
 
-                // Give a success feedback to the user
-                show_information_save()
-            }
-            else {
-                // Give a feedback to the user
-                show_information_error(parent_div, result.local_error);
-            }
-
+            // Give a success feedback to the user
+            show_information_save()
         },
         error: function (jqXHR, exception) {
-            show_error(jqXHR, exception);
+            // Give a feedback to the user
+            show_information_error(parent_div, jqXHR, exception)
         }
     });
 }
 
 
 /** Save the information text */
-function put_information(parent_div, text, id) {
+function put_information(parent_div, text) {
     const hash = get_information_hash();
     // Update the hash of the text for the next update
     update_information_hash(text);
@@ -81,32 +94,26 @@ function put_information(parent_div, text, id) {
         },
         dataType: 'json',
         method: 'PUT',
-        success: function (result) {
+        success: function () {
             hide_error();
-            if (result.success) {
-                // Give a success feedback to the user
-                show_information_save()
-            }
-            else {
-                // Give a feedback to the user
-                show_information_error(parent_div, result.local_error);
-            }
-
+            // Give a success feedback to the user
+            show_information_save()
         },
         error: function (jqXHR, exception) {
-            show_error(jqXHR, exception);
+            // Give a feedback to the user
+            show_information_error(parent_div, jqXHR, exception)
         }
     });
 }
 
 /** Do the according rest action on a information */
 function post_or_put_information() {
-    const parent_div = $(this).closest('article');
+    const parent_div = $(this).closest('.information');
     const text = get_text(parent_div.find('.information_text'));
     const id = parent_div.find('.id').attr('value');
     if (text !== '') {
         if (id) {
-            put_information(parent_div, text, id);
+            put_information(parent_div, text);
         }
         else {
             post_information(parent_div, text);

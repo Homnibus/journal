@@ -55,7 +55,7 @@ class HttpNotFound(HttpError):
             status_code=404,
             message=gettext("Resource not found."),
             explanation=gettext(
-                "The server can't find the requested resource ({resource_name})."
+                "The server can't find the requested resource {resource_name}."
             ).format(resource_name=resource_name),
         )
 
@@ -73,7 +73,7 @@ class HttpConflict(HttpError):
             status_code=409,
             message=gettext("Conflict with current state of the server."),
             explanation=gettext(
-                "The requested action on the resource ({resource_name}) is in conflict with the current state of the "
+                "The requested action on the resource {resource_name} is in conflict with the current state of the "
                 "server. "
             ).format(resource_name=resource_name),
         )

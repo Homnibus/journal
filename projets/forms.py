@@ -33,7 +33,7 @@ class AbstractHashFrom(ModelForm):
         if current_hash != input_hash:
             raise ValidationError(
                 gettext(
-                    "The ({resource_name}) have been modified since the last modification attempt."
+                    "The {resource_name} have been modified since the last modification attempt."
                 ).format(resource_name=self.Meta.model._meta.object_name)
             )
 

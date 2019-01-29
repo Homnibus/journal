@@ -55,7 +55,7 @@ def post_note(request, codex):
     if not input_form.is_valid():
         raise HttpInvalidFormData(
             form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors.as_json(),
+            fields_error=input_form.errors,
         )
 
     # Create the note
@@ -85,7 +85,7 @@ def put_note(request, note):
     if not input_form.is_valid():
         raise HttpInvalidFormData(
             form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors.as_json(),
+            fields_error=input_form.errors,
         )
 
     # Update the note

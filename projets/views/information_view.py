@@ -76,7 +76,7 @@ def post_information(request, codex):
     if not input_form.is_valid():
         raise HttpInvalidFormData(
             form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors.as_json(),
+            fields_error=input_form.errors,
         )
 
     # Create the information
@@ -88,7 +88,9 @@ def post_information(request, codex):
     # Get the created information hash to return it
     information_hash = java_string_hashcode(information.text)
 
-    return JsonResponse({"success": True, "hash": information_hash, "id": information.id})
+    return JsonResponse(
+        {"success": True, "hash": information_hash, "id": information.id}
+    )
 
 
 def put_information(request, information):
@@ -106,7 +108,7 @@ def put_information(request, information):
     if not input_form.is_valid():
         raise HttpInvalidFormData(
             form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors.as_json(),
+            fields_error=input_form.errors,
         )
 
     # Update the information
