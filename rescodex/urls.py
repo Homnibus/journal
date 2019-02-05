@@ -15,8 +15,8 @@ urlpatterns = [
     ),
     path(
         "deconnexion",
-        auth_views.LogoutView.as_view(template_name="projets/deconnexion.html"),
-        name="deconnexion",
+        auth_views.LogoutView.as_view(template_name="projets/disconnection.html"),
+        name="disconnection",
     ),
     path("", RedirectView.as_view(url="codex"), name="home"),
     path("", include("projets.urls")),

@@ -67,17 +67,17 @@ class RequestExceptionHandler:
         if isinstance(exception, HttpError):
             status_code = exception.status_code
             output_data.update(vars(exception))
-            del output_data["status_code"]
             logger.error("Error - " + str(status_code) + " : " + str(exception.message))
             logger.error("Explanation - " + str(exception.explanation))
             logger.exception("Traceback :")
         else:
             output_data.update({"message": "Unexpected error"})
             output_data.update({"explanation": "Unexpected server error"})
+            output_data.update({"status_code": status_code})
             logger.error("Error - 500 : Unexpected Error.")
             logger.exception("Traceback :")
 
         if request.is_ajax():
             return JsonResponse(output_data, status=status_code)
         else:
-            return render(request, "projets/400.html", output_data, status=status_code)
+            return render(request, "projets/error.html", output_data, status=status_code)

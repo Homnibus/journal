@@ -151,6 +151,7 @@ class Page(models.Model):
         self.nested_update_date = get_current_timestamp()
         # Set the codex update date
         self.codex.set_nested_update_date()
+        self.codex.save()
 
 
 class Note(models.Model):
@@ -182,7 +183,7 @@ class Note(models.Model):
     def __str__(self):
         return "Note for the " + str(self.page.creation_date)
 
-    def save(self, commit=True, *args, **kwargs):
+    def save(self, *args, **kwargs):
         """
         Override the save method to generate the creation date.
         """
@@ -195,6 +196,7 @@ class Note(models.Model):
         self.update_date = get_current_timestamp()
         # Set the page nested_update_date
         self.page.set_nested_update_date()
+        self.page.save()
         super(Note, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -265,6 +267,7 @@ class Task(models.Model):
         self.update_date = get_current_timestamp()
         # Set the page nested_update_date
         self.page.set_nested_update_date()
+        self.page.save()
         super(Task, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -315,6 +318,7 @@ class Information(models.Model):
         self.update_date = get_current_timestamp()
         # Set the codex nested_update_date
         self.codex.set_nested_update_date()
+        self.codex.save()
         super(Information, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

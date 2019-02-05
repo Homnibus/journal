@@ -1,4 +1,4 @@
-{% extends codex|yesno:"projets/codex_navigation.html,projets/accueil_navigation.html" %}
+{% extends codex|yesno:"projets/navigation_codex.html,projets/navigation_home.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -8,7 +8,7 @@
 
 {% block title %}{% trans 'Tasks' %}{% endblock %}
 
-{% block nav-taches %}current{% endblock %}
+{% block nav__task %}menu__current-active{% endblock %}
 
 {% block header %}
     <h1>{% trans 'All Tasks' %}</h1>

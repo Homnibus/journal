@@ -1,0 +1,16 @@
+{% extends "projets/base_template.html" %}
+{% load i18n %}
+
+{% block nav %}
+    <a href="{% url 'codex_details' codex_slug=codex.slug %}"
+       class="menu__link {% block nav__codex-details %}{% endblock %}">
+        {% trans 'Codex' %}
+    </a>
+    <a href="{% url 'tasks' codex_slug=codex.slug %}" class="menu__link {% block nav__task-todo-list %}{% endblock %}">
+        {% trans 'Tasks' %}
+    </a>
+    <a href="{% url 'informations' codex_slug=codex.slug %}"
+       class="menu__link {% block nav__information %}{% endblock %}">
+        {% trans 'Info' %}
+    </a>
+{% endblock %}

@@ -1,16 +1,12 @@
 /** Change a un-editable note to a editable one */
 function enable_edit_note() {
-    const parent_div = $(this).closest('.page-note');
-    const text = get_text(parent_div.find('.note_text'));
-    const editable_text = $('<textarea class="note_text note_typewatch" />');
-    const id = parent_div.find('.note_id').attr('value');
+    const parent_div = $(this).closest('.page__note-section');
+    const text = get_text(parent_div.find('.note__text'));
+    const editable_text = $('<textarea name="text" cols="40" rows="1" class="note__text typewatch" required="" id="id_text"></textarea>');
 
-    // Setting the text hash before it can be modified
-    update_note_hash(text, id);
-
-    // Replace <div> with <textarea>
+    // Replace <pre> with <textarea>
     editable_text.val(text);
-    parent_div.find('.note_text').replaceWith(editable_text);
+    parent_div.find('.note__text').replaceWith(editable_text);
 
     // Set the focus on the new <textarea>
     editable_text.focus();
@@ -41,30 +37,29 @@ function disable_edit_note() {
     // Before disabling the <texarea>, we save it
     put_or_delete_note.call(this);
     const html_content = $(this).val();
-    const viewable_text = $('<pre class="note_text disabled-textarea"/>');
+    const viewable_text = $('<pre class="note__text disabled-textarea"/>');
     viewable_text.text(html_content);
     $(this).replaceWith(viewable_text);
     // Show the pencil again
-    viewable_text.closest('.page').find('.edit-pen').show();
+    viewable_text.closest('.page__note-section').find('.edit-pen').show();
 }
 
 
 /** Change a un-editable task list to a editable one  */
 function enable_edit_tasks() {
     // Get the list of the task that we need to set editable
-    const task_list = $(this).closest('.page-tasks').find('.task-list .task_text');
+    const task_list = $(this).closest('.page__task-section').find('.task-list .task__text');
     task_list.each(function () {
         const parent_div = $(this);
         const text = get_text(parent_div);
-        const id = parent_div.closest('.task').find('.task_id').attr('value');
-
-        // Update the task hash
-        update_task_hash(text, id);
 
         // Replace the <div> by an editable <textarea>
-        const editable_text = $('<textarea class="task_text task_typewatch" />');
+        const editable_text = $('<textarea name="text" cols="40" rows="1" class="task__text typewatch left-border-box" required="" id="id_text"></textarea>');
         editable_text.val(text);
         parent_div.replaceWith(editable_text);
+
+        // Setup autosize event
+        autosize(editable_text);
 
         // Setup typeWatch event
         editable_text.typeWatch({
@@ -75,48 +70,30 @@ function enable_edit_tasks() {
             captureLength: 1,
         });
 
-        // Setup autosize event
-        autosize(editable_text);
     });
     // Hide the pencil
     task_list.find('.edit-pen').hide();
 }
 
 
-$(document).ready(function () {
-    // Maj of today_note hash after loading page
-    const today_note_id = $('.today-page .note_id').attr('value');
-    if (today_note_id !== undefined) {
-        note_hash[today_note_id] = $('.note_id[value = ' + today_note_id + ']').closest('.page-note').find('.note_text').val().trim().hashCode();
-    }
-    // When done, set the <textarea> editable
-    $('.today-page .note_text').removeAttr('readonly');
-});
+$(document).on('click', '.page__note-section .edit-pen', enable_edit_note);
 
-$(document).ready(function () {
-    // Maj of today_task hash after loading note
-    const today_task_list = $('.today-page .old-tasks');
-    enable_edit_tasks.call(today_task_list);
-});
+$(document).on('click', '.page__task-section .edit-pen', enable_edit_tasks);
 
-$(document).on('click', '.page-note .edit-pen', enable_edit_note);
-
-$(document).on('click', '.page-tasks .edit-pen', enable_edit_tasks);
-
-$(document).on('click', '.add-item-button:not(.unclickable)', function () {
+$(document).on('click', '.task__add-item-button:not(.unclickable)', function () {
     // Add the class 'unclickable' to prevent multi submission
     $(this).addClass('unclickable');
     post_task.call(this);
 });
 
-$(document).on('change', '.task_is_achieved', put_or_delete_task);
+$(document).on('change', '.task__is-achieved', put_or_delete_task);
 
-$(document).on('keypress', '.new-task .task_text',
+$(document).on('keypress', '.task--new .task__text',
     function (e) {
         // Ctrl-Enter pressed
         if (e.ctrlKey && e.keyCode === 13) {
             e.preventDefault();
-            const add_button = $(this).closest('.task').find('.add-item-button:not(.unclickable)');
+            const add_button = $(this).closest('.task').find('.task__add-item-button:not(.unclickable)');
             if (add_button !== null) {
                 add_button.addClass('unclickable');
                 post_task.call(add_button);
@@ -124,7 +101,7 @@ $(document).on('keypress', '.new-task .task_text',
         }
     });
 
-$(document).on('keypress', '.note_text:not(disabled-textarea)',
+$(document).on('keypress', '.note__text:not(disabled-textarea)',
     function (e) {
         // Tab pressed
         if (e.keyCode === 9) {
@@ -145,7 +122,7 @@ $(document).on('keypress', '.note_text:not(disabled-textarea)',
     }
 );
 
-$('.note_typewatch').typeWatch({
+$('.note .typewatch').typeWatch({
     callback: post_put_or_delete_note,
     wait: 500,
     highlight: false,
@@ -153,7 +130,7 @@ $('.note_typewatch').typeWatch({
     captureLength: 1,
 });
 
-$('.task:not(.new-task) .task_text').typeWatch({
+$('.task:not(.task--new) .typewatch').typeWatch({
     callback: put_or_delete_task,
     wait: 500,
     highlight: false,
@@ -161,4 +138,4 @@ $('.task:not(.new-task) .task_text').typeWatch({
     captureLength: 1,
 });
 
-autosize($('.today-page .note_text'));
+autosize($('.page--today .typewatch'));

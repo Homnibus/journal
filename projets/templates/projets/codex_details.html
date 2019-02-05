@@ -1,115 +1,101 @@
-{% extends "projets/codex_navigation.html" %}
-{% load i18n %}
+{% extends "projets/navigation_codex.html" %}
 {% load static %}
+{% load i18n %}
+
 
 {% block css %}
-    <link rel='stylesheet' href='{% static "css/codex_details.css" %}'/>
-{% endblock %}
-
-{% block meta %}
-    <meta http-equiv='Cache-control' content='no-store'>
+    <link rel="stylesheet" href="{% static "css/codex_details.css" %}"/>
 {% endblock %}
 
 {% block title %}{{ codex.title|truncatechars:14 }}{% endblock %}
 
-{% block nav-codex %}current{% endblock %}
+{% block nav__codex-details %}menu__current-active{% endblock %}
 
 {% block header %}
-    <h1>{% trans 'Codex - ' %}{{ codex.title|title }}</h1>
+    <h1>{% trans "Codex - " %}{{ codex.title|title }}</h1>
     <h4>{{ codex.description }}</h4>
-    <div class='codex-info'>
-        <input type='hidden' id='slug' value='{{ codex.slug }}'/>
+    <div class="codex-info">
+        <input type="hidden" id="slug" value="{{ codex.slug }}"/>
         {% csrf_token %}
     </div>
 {% endblock %}
 
 {% block content %}
-    <section class='today-page'>
-        <article class='page'>
-            <section class='page-note'>
-                <header>
-                    <h2>{{ today_page.date }}</h2>
-                    <div class='save-info' style='display:none'>{% trans 'Saved' %}</div>
-                </header>
+    <section class="page page--today">
+        <section class="page__note-section">
+            <header>
+                <h2>{{ today_page.date }}</h2>
+                <div class="save-info save-info--display-none">{% trans "Saved" %}</div>
+            </header>
+            <div class="note left-border-box">
                 {{ today_page.note_form.id }}
                 {{ today_page.note_form.hash }}
-                <div class='disp-note_text'>
-                    {{ today_page.note_form.text }}
-                    {{ today_page.note_form.id }}
-                    {{ today_page.note_form.hash }}
-                </div>
-            </section>
+                {{ today_page.note_form.text }}
+            </div>
+        </section>
 
-            <section class='page-tasks'>
-                <header>
-                    <h2>{% trans 'Tasks' %}</h2>
-                    <div class='save-info' style='display:none'>{% trans 'Saved' %}</div>
-                </header>
-                <section class='task new-task'>
-                    <div class='disp-add-item-button'>
-                        <img class='add-item-button' src='{% static "img/add_button.png" %}'
-                             alt='{% trans "Add" %}'/>
-                    </div>
-                    <div class='disp-task_text'>
-                        {{ today_page.new_task_form.text }}
-                    </div>
-                </section>
-                <section class='task-list old-tasks'>
-                    {% for task in today_page.tasks_form reversed %}
-                        <article class='task'>
-                            {{ task.id }}
-                            {{ task.hash }}
-                            <div class='disp-task_is_achieved'>
-                                {{ task.is_achieved }}
-                            </div>
-                            <div class='disp-task_text'>
-                                {{ task.text }}
-                            </div>
-                        </article>
-                    {% endfor %}
-                </section>
+        <section class="page__task-section">
+            <header>
+                <h2>{% trans "Tasks" %}</h2>
+                <div class="save-info save-info--display-none">{% trans "Saved" %}</div>
+            </header>
+            <div class="task task--new">
+                <img class="task__add-item-button left-border-box" src="{% static "img/add_button.png" %}"
+                     alt="{% trans "Add" %}"/>
+                <div class="task__connexion-line"></div>
+                {{ today_page.new_task_form.text }}
+            </div>
+            <section class="task-list">
+                {% for task in today_page.tasks_form reversed %}
+                    <article class="task">
+                        {{ task.id }}
+                        {{ task.hash }}
+                        <div class="left-border-box">{{ task.is_achieved }}</div>
+                        {# Div needed because an input checkbox can have a border#}
+                        <div class="task__connexion-line"></div>
+                        {{ task.text }}
+                    </article>
+                {% endfor %}
             </section>
-        </article>
+        </section>
     </section>
 
-    <section class='old-pages'>
+    <section class="page-list">
         {% for page in older_pages  reversed %}
-            <article class='page{% if not page.note_form and page.tasks_form %} flex-column{% endif %} '>
-                <section class='page-note'>
+            <article class="page{% if not page.note_form and page.tasks_form %} page--task-only{% endif %} ">
+                <section class="page__note-section">
                     <header>
                         <h2>{{ page.date }}</h2>{% if page.note_form %}
-                        <button class='edit-pen div-like-button'>&#128393;</button>{% endif %}
-                        <div class='save-info' style='display:none'>{% trans 'Saved' %}</div>
-                        <div class='line'></div>
+                        <button class="edit-pen div-like-button">&#128393;</button>{% endif %}
+                        <div class="save-info save-info--display-none">{% trans "Saved" %}</div>
+                        <div class="line"></div>
                     </header>
                     {% if page.note_form %}
-                        {{ page.note_form.id }}
-                        {{ page.note_form.hash }}
-                        <div class='disp-note_text'>
-                            <pre class='note_text disabled-textarea'>{{ page.note_form.text.value }}</pre>
+                        <div class="note left-border-box">
+                            {{ page.note_form.id }}
+                            {{ page.note_form.hash }}
+                            <pre class="note__text disabled-textarea">{{ page.note_form.text.value }}</pre>
                         </div>
                     {% endif %}
                 </section>
 
                 {% if page.tasks_form %}
-                    <section class='page-tasks'>
+                    <section class="page__task-section">
                         <header>
-                            <h2>{% trans 'Tasks' %}</h2>
-                            <button class='edit-pen div-like-button'>&#128393;</button>
-                            <div class='save-info' style='display:none'>{% trans 'Saved' %}</div>
-                            <div class='line'></div>
+                            <h2>{% trans "Tasks" %}</h2>
+                            <button class="edit-pen div-like-button">&#128393;</button>
+                            <div class="save-info save-info--display-none">{% trans "Saved" %}</div>
+                            <div class="line"></div>
                         </header>
-                        <section class='task-list'>
+                        <section class="task-list">
                             {% for task in page.tasks_form %}
-                                <article class='task'>
+                                <article class="task">
                                     {{ task.id }}
                                     {{ task.hash }}
-                                    <div class='disp-task_is_achieved'>
-                                        {{ task.is_achieved }}
-                                    </div>
-                                    <div class='disp-task_text'>
-                                        <div class='task_text disabled-textarea'>{{ task.text.value }}</div>
-                                    </div>
+                                    <div class="left-border-box">{{ task.is_achieved }}</div>
+                                    {# Div needed because an input checkbox can have a border#}
+                                    <div class="task__connexion-line"></div>
+                                    <pre class="task__text disabled-textarea left-border-box">{{ task.text.value }}</pre>
                                 </article>
                             {% endfor %}
                         </section>
@@ -121,11 +107,11 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'js/autosize.min.js' %}"></script>
-    <script src="{% static 'js/jquery.typewatch.min.js' %}"></script>
-    <script src="{% static 'js/basic.js' %}"></script>
-    <script src="{% static 'js/note.js' %}"></script>
-    <script src="{% static 'js/task.js' %}"></script>
-    <script src="{% static 'js/codex_details.js' %}"></script>
+    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static "js/autosize.min.js" %}"></script>
+    <script src="{% static "js/jquery.typewatch.min.js" %}"></script>
+    <script src="{% static "js/basic.js" %}"></script>
+    <script src="{% static "js/note.js" %}"></script>
+    <script src="{% static "js/task.js" %}"></script>
+    <script src="{% static "js/codex_details.js" %}"></script>
 {% endblock %}

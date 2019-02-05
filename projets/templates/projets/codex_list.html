@@ -1,4 +1,4 @@
-{% extends "projets/accueil_navigation.html" %}
+{% extends "projets/navigation_home.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -8,16 +8,14 @@
 
 {% block title %}{% trans 'Last Codex' %}{% endblock %}
 
-{% block nav-accueil %}current{% endblock %}
+{% block nav-accueil %}menu__current-active{% endblock %}
 
 {% block header %}
     <h1>{% trans 'Most recent Codex' %}</h1>
     <h4>
-        <div class="title">{% trans 'Search :' %}</div>
-        <div class="disp-codex-search">
-            <input class="codex-search" maxlength="256" placeholder="{% trans 'Codex title' %}"
-                   title="{% trans 'Search a Codex' %}" autocomplete="off" type="search">
-        </div>
+        {% trans 'Search :' %}
+        <input class="codex-search-input shadow-box-input" maxlength="256" placeholder="{% trans 'Codex title' %}"
+               title="{% trans 'Search a Codex' %}" autocomplete="off" type="search">
     </h4>
 {% endblock %}
 
@@ -25,15 +23,12 @@
     <section class="codex-list">
         {% for codex in codex_list %}
             <article class="codex">
-                <a href="{{ codex.get_absolute_url }}">
-                    <div class="codex-flex-content">
-                        <div class="title">
-                            {{ codex.title|title }}
-                        </div>
-                        <div class="filler"></div>
-                        <div class="date">
-                            {{ codex.nested_update_date|date:"j M Y" }}
-                        </div>
+                <a href="{{ codex.get_absolute_url }}" class="codex__link">
+                    <div class="codex__title title">
+                        {{ codex.title|title }}
+                    </div>
+                    <div class="codex__date">
+                        {{ codex.nested_update_date|date:"j M Y" }}
                     </div>
                 </a>
             </article>

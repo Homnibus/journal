@@ -1,31 +1,37 @@
-{% extends "projets/accueil_navigation.html" %}
+{% extends "projets/navigation_home.html" %}
 {% load static %}
 {% load i18n %}
 
 {% block css %}
-    <link rel='stylesheet' href='{% static "css/codex_add.css" %}'/>
+    <link rel="stylesheet" href="{% static "css/codex_add.css" %}"/>
 {% endblock %}
 
-{% block title %}{% trans 'New Codex' %}{% endblock %}
+{% block title %}{% trans "New Codex" %}{% endblock %}
 
-{% block nav-new_codex %}current{% endblock %}
+{% block nav__new-codex %}menu__current-active{% endblock %}
 
 {% block header %}
-    <h1>{% trans 'Creation of a new Codex' %}</h1>
-    <h4>{% trans 'Give a title and a short description to your Codex !' %}</h4>
+    <h1>{% trans "Creation of a new Codex" %}</h1>
+    <h4>{% trans "Give a title and a short description to your Codex !" %}</h4>
 {% endblock %}
 
 {% block content %}
-    <section class='new-codex'>
-        <form action='{% url "codex_add" %}' method='post'>
+    <section class="new-codex">
+        <form action="{% url "codex_add" %}" method="post">
             {% csrf_token %}
-            <h2>{% trans 'Title' %} :</h2>
-            {{ form.title }}
-            <h2>{% trans 'Description' %} :</h2>
-            {{ form.description }}
-            <div class="button-disp">
-                <input type='submit' value='Sauvegarder'/>
+            <div class="form-row">
+                <h2 class="form-row__label">{% trans "Title" %} :</h2>
+                <div class="form-row__input">
+                    {{ form.title }}
+                </div>
             </div>
+            <div class="form-row">
+                <h2 class="form-row__label">{% trans "Description" %} :</h2>
+                <div class="form-row__input">
+                    {{ form.description }}
+                </div>
+            </div>
+            <input type="submit" class="validate-button" value="{% trans "Create" %}"/>
         </form>
     </section>
 {% endblock %}

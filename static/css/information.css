@@ -6,3 +6,21 @@
 .information h2 {
   white-space: nowrap;
 }
+
+/* Left-border-box */
+.left-border-box {
+  resize: none;
+  margin: 0;
+  padding: .2em .2em .2em .5em;
+  border: 1px solid rgba(0, 0, 0, .13);
+  border-left: .3em solid #4D7385;
+  background-color: white;
+  font-size: 1em;
+  font-family: arial, serif;
+  overflow: hidden;
+}
+
+/* Save item */
+.save-info--display-none {
+  display: none;
+}

@@ -1,30 +1,32 @@
-nav {
+.menu {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: fixed;
   top: 0;
   right: 0;
   width: 100%;
   z-index: 999;
+  box-shadow: 0 0 .2em 0 rgba(0, 0, 0, .5), 0 0 .5em 0 rgba(0, 0, 0, .2);
 }
 
-.nav-filler {
+.menu__home-button {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+.menu__under {
   width: 100%;
   font-size: 1.1em;
   margin-top: 2.35em;
 }
 
-nav > div {
-  display: flex;
-}
-
-nav .filler {
+.menu__filler {
   flex: 1;
   background: #4D7385;
   border-bottom: 2px solid #2F4752;
 }
 
-nav a {
+.menu__link {
   font-size: 1.1em;
   line-height: 1.6em;
   padding: .3em;
@@ -33,32 +35,32 @@ nav a {
   border-bottom: 2px solid #2F4752;
 }
 
-nav .current {
+.menu__current-active {
   border-bottom: 2px solid #79B5D1;
 }
 
-nav a:link {
+.menu__link:link {
   color: white;
   text-decoration: none;
 }
 
-nav a:visited {
+.menu__link:visited {
   color: white;
   text-decoration: none;
 }
 
-nav a:hover {
+.menu__link:hover {
   background-color: #79B5D1;
   color: #2F4752;
   text-decoration: none;
   border-bottom: 2px solid #4D7385;
 }
 
-nav a:active, nav a:focus {
+.menu__link:active, .menu__link:focus {
   color: white;
   text-decoration: none;
 }
 
-nav .error {
+.menu .error {
   background-color: white;
 }

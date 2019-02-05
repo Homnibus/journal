@@ -6,34 +6,29 @@
     <link rel='stylesheet' href='{% static "css/connexion.css" %}'/>
 {% endblock %}
 
-{% block title %}Connexion{% endblock %}
-
-{% block nav-connexion %}{% endblock %}
+{% block title %}{% trans "Connexion" %}{% endblock %}
 
 {% block header %}
-    <h1>Connexion</h1>
+    <h1>{% trans "Connexion" %}</h1>
+    <h4></h4>
 {% endblock %}
 
 {% block content %}
-    {% if error %}
-        <p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
-    {% endif %}
-
     {% if user.is_authenticated %}
-        Vous êtes déjà connecté, {{ user.username }} !
-        <br><br>
+        <h2>{% blocktrans with username=user.username %}You are already connected as {{ username }}
+            .{% endblocktrans %}</h2>
     {% else %}
-        <form method="post" action="{% url 'connexion' %}">
+        {{ form.non_field_errors }}
+        <form class="connexion_form" method="post" action="{% url 'connexion' %}">
             {% csrf_token %}
-            <div>{{ form.username.label }}</div>
+            <h2>{{ form.username.label }}</h2>
+            {{ form.username.errors }}
             {{ form.username }}
-            <div>{{ form.password.label }}</div>
+            <h2>{{ form.password.label }}</h2>
+            {{ form.password.errors }}
             {{ form.password }}
             <input type="hidden" name="next" value="{{ next }}"/>
-            <div class="button-disp">
-                <input type="submit" value="Connexion"/>
-            </div>
+            <input type="submit" class="validate-button" value="{% trans "Connexion" %}"/>
         </form>
     {% endif %}
 {% endblock %}
-

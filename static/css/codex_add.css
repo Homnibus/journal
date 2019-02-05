@@ -1,3 +1,39 @@
-textarea, input[type="text"] {
-  margin: 0.5em 0 0.3em 0;
+/* Header */
+body > header {
+  max-width: 40em;
+}
+
+/* Form */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 40em;
+  margin: auto;
+}
+
+.form-row__label {
+  flex: 1;
+  min-width: 10em;
+  max-width: 32%;
+  white-space: nowrap;
+}
+
+.form-row__input {
+  flex: 1;
+  min-width: 68%;
+}
+
+.form-row__input, .form-row__label {
+  margin: 0.5em 0 0.5em 0;
+}
+
+.form-row__input > input, .form-row__input > textarea {
+  width: 100%;
+  margin: 0.5em 0 0.5em 0;
+}
+
+/* Button */
+.validate-button {
+  margin: 0.5em auto 0.5em auto;
 }

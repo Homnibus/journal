@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Textarea, HiddenInput, CheckboxInput, IntegerField
+from django.forms import ModelForm, Textarea, HiddenInput, CheckboxInput, IntegerField, TextInput
 from django.utils.translation import gettext
 
 from projets.commun.utils import java_string_hashcode
@@ -45,8 +45,11 @@ class CodexForm(ModelForm):
         model = Codex
         fields = ("title", "description")
         widgets = {
+            "title": TextInput(
+                attrs={"class": "codex__title shadow-box-input"}
+            ),
             "description": Textarea(
-                attrs={"rows": 3, "style": "resize:none;", "class": "codex_text"}
+                attrs={"rows": 3, "class": "codex__text shadow-box-input"}
             )
         }
 
@@ -66,7 +69,7 @@ class InformationCreateForm(ModelForm):
         fields = ("text",)
         widgets = {
             "text": Textarea(
-                attrs={"rows": 3, "style": "resize:none;", "class": "information_text"}
+                attrs={"rows": 3, "class": "information__text left-border-box"}
             )
         }
 
@@ -91,7 +94,7 @@ class InformationUpdateForm(AbstractHashFrom):
         hash_field = "text"
         widgets = {
             "text": Textarea(
-                attrs={"rows": 3, "style": "resize:none;", "class": "information_text"}
+                attrs={"rows": 3, "class": "information__text left-border-box"}
             )
         }
 
@@ -104,7 +107,7 @@ class NoteCreateForm(ModelForm):
             "text": Textarea(
                 attrs={
                     "rows": 3,
-                    "class": "note_text note_typewatch",
+                    "class": "note__text typewatch",
                     "placeholder": gettext("Note of the day"),
                 }
             )
@@ -150,9 +153,8 @@ class NoteUpdateForm(AbstractHashFrom):
             "text": Textarea(
                 attrs={
                     "rows": 3,
-                    "class": "note_text note_typewatch",
+                    "class": "note__text typewatch",
                     "placeholder": gettext("Note of the day"),
-                    "readonly": "",
                 }
             )
         }
@@ -166,11 +168,12 @@ class TaskCreateForm(ModelForm):
             "text": Textarea(
                 attrs={
                     "rows": 1,
-                    "class": "task_text",
+                    "class": "task__text typewatch left-border-box",
                     "placeholder": gettext("New task"),
                 }
             ),
-            "is_achieved": CheckboxInput(attrs={"class": "task_is_achieved"}),
+            "is_achieved": CheckboxInput(
+                attrs={"class": "task__is-achieved"}),
         }
 
     def __init__(self, codex=None, *args, **kwargs):
@@ -213,9 +216,9 @@ class TaskUpdateForm(AbstractHashFrom):
             "text": Textarea(
                 attrs={
                     "rows": 1,
-                    "class": "task_text",
+                    "class": "task__text typewatch left-border-box",
                     "placeholder": gettext("New task"),
                 }
             ),
-            "is_achieved": CheckboxInput(attrs={"class": "task_is_achieved"}),
+            "is_achieved": CheckboxInput(attrs={"class": "task__is-achieved"}),
         }

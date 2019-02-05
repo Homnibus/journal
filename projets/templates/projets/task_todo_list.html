@@ -1,0 +1,52 @@
+{% extends codex|yesno:"projets/navigation_codex.html,projets/navigation_home.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/task_todo_list.css" %}"/>
+{% endblock %}
+
+{% block title %}{% trans "Tasks" %}{% endblock %}
+
+{% block nav__task %}current{% endblock %}
+{% block nav__task-todo-list %}menu__current-active{% endblock %}
+
+{% block header %}
+    <h1>{% trans "To achieve Tasks" %}</h1>
+    {% csrf_token %}
+{% endblock %}
+
+{% block content %}
+    <section class="page-list">
+        {% for page in page_list reversed %}
+            <article class="page page--task-only">
+                <header>
+                    <h2>{{ page.date }}</h2>
+                    <div class="save-info save-info--display-none">{% trans "Saved" %}</div>
+                    <div class="line"></div>
+                </header>
+                <section class="task-list">
+                    {% for task in page.tasks_form %}
+                        <article class="task">
+                            {{ task.id }}
+                            {{ task.hash }}
+                            <div class="left-border-box">{{ task.is_achieved }}</div>
+                            {# Div needed because an input checkbox can have a border#}
+                            <div class="task__connexion-line"></div>
+                            <pre class="task__text disabled-textarea left-border-box">{{ task.text.value }}</pre>
+                        </article>
+                    {% endfor %}
+                </section>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static "js/autosize.min.js" %}"></script>
+    <script src="{% static "js/jquery.typewatch.min.js" %}"></script>
+    <script src="{% static "js/basic.js" %}"></script>
+    <script src="{% static "js/task.js" %}"></script>
+    <script src="{% static "js/task_todo_list.js" %}"></script>
+{% endblock %}

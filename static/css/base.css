@@ -251,13 +251,12 @@ h4 {
   border-bottom: 1px solid #2F4752;
 }
 
-/* textarea et input*/
-textarea,
-input:not([type="submit"]) {
+/* Base text input */
+.connexion_form input,
+.shadow-box-input {
   padding: 0.45em;
   box-shadow: 0 .1em .2em 0 rgba(0, 0, 0, .16), 0 .1em .5em 0 rgba(0, 0, 0, .12);
   border: 1px solid white;
-  width: 100%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -280,7 +279,7 @@ input[type="submit"] {
   font-size: 1em;
   line-height: 1.2em;
   padding: 0.4em 0.8em 0.2em 0.8em;
-  margin: 0.3em;
+  display: block;
   border-bottom: 2px solid #2F4752;
   border-top: none;
   border-left: none;
@@ -293,8 +292,8 @@ input[type="submit"] {
   white-space: pre-wrap;
 }
 
-textarea:focus,
-input:focus {
+.connexion_form input:focus,
+.shadow-box-input:focus {
   border: 1px solid #2F4752;
   box-shadow: 0 .1em .2em 0 #4D7385, 0 .1em .5em 0 #79B5D1;
 }

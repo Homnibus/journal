@@ -145,6 +145,86 @@ class TaskListTest(TestCase):
         )
 
 
+class TaskTodoListTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username="zamour", email="zamour@zamour.com", password="top_secret"
+        )
+        self.client.login(username="zamour", password="top_secret")
+        self.codex = Codex.objects.create(
+            title="Test Codex 1", author=self.user, description="Description 1"
+        )
+        self.page = Page.objects.create(codex=self.codex)
+        self.task = Task.objects.create(page=self.page, text="Test text")
+        self.task = Task.objects.create(page=self.page, text="Test text2")
+        self.task = Task.objects.create(page=self.page, text="Test text3", is_achieved=True)
+        self.url_list = reverse("tasks_list")
+        self.url_list_filtered = reverse(
+            "tasks", kwargs={"codex_slug": self.codex.slug}
+        )
+        self.url_details = reverse("task_details", kwargs={"task_id": self.task.id})
+
+    def test_get_list_task_assert_return_http_response(self):
+        """ Test if the method return a HttpResponse """
+        request = self.factory.get(self.url_list)
+        request.user = self.user
+        response = get_list_task(request)
+
+        self.assertIsInstance(response, HttpResponse)
+
+    def test_get_task_list_view_assert_return_200(self):
+        """ Test if the view return a 200 response to a get request"""
+        response = self.client.get(self.url_list)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_task_list_with_sort_by_view_assert_return_200(self):
+        """ Test if the view return a 200 response to a get request"""
+        form = {"sort_by": "is_achieved"}
+        response = self.client.get(self.url_list, form)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_task_list_with_sort_by_and_sort_way_view_assert_return_200(self):
+        """ Test if the view return a 200 response to a get request"""
+        form = {"sort_by": "is_achieved", "sort_way": "desc"}
+        response = self.client.get(self.url_list, form)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_task_list_with_negative_page_number_assert_return_200(self):
+        """ Test if the view return a 200 response to a get request"""
+        form = {"page_number": "-1"}
+        response = self.client.get(self.url_list, form)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_task_list_filtered_view_assert_return_200(self):
+        """ Test if the view return a 200 response to a get request"""
+        response = self.client.get(self.url_list_filtered)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_task_list_filtered_view_assert_return_405(self):
+        """ Test if the view return a 200 response to a get request"""
+        response = self.client.delete(self.url_list_filtered)
+
+        self.assertEqual(response.status_code, 405)
+
+    def test_task_list_view_not_connected_assert_return_connexion_page(self):
+        """ Test if a un-connected user can list the tasks """
+        self.client.logout()
+        response = self.client.delete(self.url_list_filtered)
+
+        self.assertRedirects(
+            response,
+            "/connexion" + "?next=" + self.url_list_filtered,
+            status_code=302,
+            target_status_code=200,
+        )
+
+
 class PostTaskTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()

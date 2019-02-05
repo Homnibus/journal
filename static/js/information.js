@@ -20,14 +20,14 @@ function show_information_error(parent_div, jqXHR, exception) {
     for (let i = 0; i < nb_global_error; i++) {
         const error = $('<div class="error">').text(result.form_errors[i]);
         parent_div.find('header').after(error);
-        parent_div.find('.information_text').addClass('textarea-error');
+        parent_div.find('.information__text').addClass('textarea-error');
     }
     jQuery.each(result.fields_error, function (field, error_list) {
         const nb_error = error_list.length;
         for (let i = 0; i < nb_error; i++) {
             const error = $('<div class="local-error">').text(error_list[i]);
             parent_div.find('header').after(error);
-            parent_div.find('.note_text').addClass('textarea-error');
+            parent_div.find('.information__text').addClass('textarea-error');
         }
     });
     if (nb_global_error === 0 && jQuery.isEmptyObject(result.fields_error)) {
@@ -109,7 +109,7 @@ function put_information(parent_div, text) {
 /** Do the according rest action on a information */
 function post_or_put_information() {
     const parent_div = $(this).closest('.information');
-    const text = get_text(parent_div.find('.information_text'));
+    const text = get_text(parent_div.find('.information__text'));
     const id = parent_div.find('.id').attr('value');
     if (text !== '') {
         if (id) {
@@ -121,9 +121,9 @@ function post_or_put_information() {
     }
 }
 
-autosize($('.information_text'));
+autosize($('.information__text'));
 
-$('.information_text').typeWatch({
+$('.information__text').typeWatch({
     callback: post_or_put_information,
     wait: 500,
     highlight: false,

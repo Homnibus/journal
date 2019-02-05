@@ -1,11 +1,9 @@
 import json
 
-from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 
 from projets.commun.codex import Page
-from projets.commun.error import raise_suspicious_operation, HttpStatus, render_error
 from projets.commun.utils import (
     JsonResponseContainer,
     java_string_hashcode,
@@ -22,76 +20,6 @@ class CommunTest(TestCase):
         self.assertIsNone(page.note_form)
         self.assertIsNone(page.new_task_form)
         self.assertEqual(page.tasks_form, [])
-
-
-class ErrorTest(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-
-    def test_http_status_assert_init(self):
-        http_status = HttpStatus()
-        self.assertEqual(http_status.status, 200)
-        self.assertEqual(http_status.message, "")
-        self.assertEqual(http_status.explanation, "")
-
-    def test_raise_suspicious_operation_assert_raise(self):
-        with self.assertRaises(SuspiciousOperation):
-            raise_suspicious_operation()
-
-    def test_raise_suspicious_operation_assert_http_status_not_empty(self):
-        http_status = HttpStatus()
-        try:
-            raise_suspicious_operation(http_status)
-        except SuspiciousOperation:
-            pass
-        self.assertEqual(http_status.status, 405)
-        self.assertNotEqual(http_status.explanation, "")
-        self.assertNotEqual(http_status.message, "")
-
-    def test_render_error_assert_expected_error(self):
-        message = "ERROR MESSAGE"
-        explanation = "ERROR EXPLANATION"
-        status = 430
-
-        http_status = HttpStatus()
-        http_status.status = status
-        http_status.message = message
-        http_status.explanation = explanation
-        request = self.factory.get("/", HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-
-        response = render_error(request, None, http_status)
-
-        self.assertEqual(response.status_code, 430)
-        self.assertEqual(json.loads(response.content)["status"], 430)
-        self.assertEqual(json.loads(response.content)["message"], message)
-        self.assertEqual(json.loads(response.content)["explanation"], explanation)
-
-    def test_render_error_assert_unexpected_error(self):
-        http_status = HttpStatus()
-        request = self.factory.get("/", HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-
-        response = render_error(request, None, http_status)
-
-        self.assertEqual(response.status_code, 500)
-        self.assertEqual(json.loads(response.content)["status"], 500)
-        self.assertIsNotNone(json.loads(response.content)["message"])
-        self.assertIsNotNone(json.loads(response.content)["explanation"])
-
-    def test_render_error_assert_return_json(self):
-        http_status = HttpStatus()
-        request = self.factory.get("/", HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-
-        response = render_error(request, None, http_status)
-
-        self.assertIsInstance(response, JsonResponse)
-
-    def test_render_error_assert_return_http(self):
-        http_status = HttpStatus()
-        request = self.factory.get("/")
-
-        response = render_error(request, None, http_status)
-
-        self.assertNotIsInstance(response, JsonResponse)
 
 
 class UtilsTest(TestCase):

@@ -1,0 +1,65 @@
+/* Page */
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: .3em;
+}
+
+/* header */
+.page header {
+  flex-direction: row;
+}
+
+.page h2 {
+  white-space: nowrap;
+}
+
+/* Task */
+.task {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: .5em
+}
+
+.task__is-achieved {
+  font-size: 1em;
+  margin: .5em;
+}
+
+.task__connexion-line {
+  width: .5em;
+  border: 1px solid rgba(0, 0, 0, .13);
+}
+
+.task__text {
+  flex: 1;
+  border: none;
+  resize: none;
+  margin: 0;
+  padding: .2em .2em .2em .4em;
+  font-size: 1em;
+  font-family: arial, serif;
+  overflow: hidden;
+}
+
+/* Text box decoration */
+.left-border-box {
+  border: 1px solid rgba(0, 0, 0, .13);
+  background-color: white;
+}
+
+.page:nth-child(odd) .left-border-box {
+  border-left: .3em solid #4D7385;
+}
+
+.page:nth-child(even) .left-border-box {
+  border-left: .3em solid #f0f3f5;
+}
+
+/* Save item */
+.save-info--display-none {
+  display: none;
+}

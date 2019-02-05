@@ -1,63 +1,28 @@
 /** Add a new task at the start of the today-page task list  */
 function add_new_task_dom(text, id, hash) {
-    const task_list = $('.today-page .task-list');
-    // Create the article element
-    const article = document.createElement("article");
-    article.setAttribute("class", "task");
+    const task_list = $('.page--today .task-list');
+    const task = $('' +
+        '<article class="task">' +
+        '<input type="hidden" name="id" class="id" id="id_id">' +
+        '<input type="hidden" name="hash" class="hash" id="id_hash">' +
+        '<div class="left-border-box">' +
+        '<input type="checkbox" name="is_achieved" class="task__is-achieved" id="id_is_achieved">' +
+        '</div>' +
+        '<div class="task__connexion-line"></div>' +
+        '<textarea name="text" cols="40" rows="1" class="task__text typewatch left-border-box" required="" id="id_text"></textarea>' +
+        '</article>'
+    );
+    task.find('.id').val(id);
+    task.find('.hash').val(hash);
+    task.find('.task__text').val(text);
+    task_list.prepend(task);
 
-    // Add the id hidden input
-    const id_input = document.createElement("input");
-    id_input.setAttribute("type", "hidden");
-    id_input.setAttribute("class", "id");
-    id_input.setAttribute("value", id);
-    article.append(id_input);
-
-    // Add the hash hidden input
-    const hash_input = document.createElement("input");
-    hash_input.setAttribute("type", "hidden");
-    hash_input.setAttribute("class", "hash");
-    hash_input.setAttribute("value", hash);
-    article.append(hash_input);
-
-    // Add the checkbox
-    const is_achieved_div = document.createElement("div");
-    is_achieved_div.setAttribute("class", "disp-task_is_achieved");
-    const is_achieved_input = document.createElement("input");
-    is_achieved_input.setAttribute("class", "task_is_achieved");
-    is_achieved_input.setAttribute("type", "checkbox");
-    is_achieved_div.append(is_achieved_input);
-    article.append(is_achieved_div);
-
-    // Add the textarea
-    const text_div = document.createElement("div");
-    text_div.setAttribute("class", "disp-task_text");
-    const text_input = document.createElement("textarea");
-    text_input.setAttribute("class", "task_text task_typewatch");
-    text_input.setAttribute("style", "overflow: hidden; overflow-wrap: break-word; height: 52px;");
-    text_input.value = text;
-    autosize(text_input);
-    text_div.append(text_input);
-    article.append(text_div);
-
-    // Add the article to the task list
-    task_list.prepend(article)
-}
-
-
-/** Update the hash corresponding to the id */
-function update_task_hash(text, id) {
-    // Trim the text so it's the same as in the database
-    $('.task .id[value=' + id + ']').parent().find('.hash').val(text.trim().hashCode());
-}
-
-/** Get the hash corresponding to the id */
-function get_task_hash(id) {
-    return $('.task .id[value=' + id + ']').parent().find('.hash').val();
+    return task;
 }
 
 /** Notice the user that the page was saved */
-function show_task_save(parent_div) {
-    const save_task = parent_div.closest('.page-tasks').find('.save-info');
+function show_task_save(task) {
+    const save_task = task.closest('.task-list').parent().find('.save-info');
     // Animate the save div
     save_task.fadeIn('slow', function () {
         save_task.fadeOut('slow');
@@ -65,7 +30,7 @@ function show_task_save(parent_div) {
 }
 
 /** Notice the user that the page couldn't be saved */
-function show_task_error(parent_div, jqXHR, exception) {
+function show_task_error(task, jqXHR, exception) {
     hide_error();
     if (jqXHR.status !== 400) {
         show_error(jqXHR, exception);
@@ -74,16 +39,16 @@ function show_task_error(parent_div, jqXHR, exception) {
     const nb_global_error = result.form_errors.length;
     for (let i = 0; i < nb_global_error; i++) {
         const error = $('<div class="error">').text(result.form_errors[i]);
-        parent_div.closest('.page-tasks').find('header').after(error);
-        parent_div.find('.task_text').addClass('textarea-error');
+        task.closest('.page__task-section').find('header').after(error);
+        task.find('.task__text').addClass('textarea-error');
 
     }
     jQuery.each(result.fields_error, function (field, error_list) {
         const nb_error = error_list.length;
         for (let i = 0; i < nb_error; i++) {
             const error = $('<div class="local-error">').text(error_list[i]);
-            parent_div.closest('.page-tasks').find('header').after(error);
-            parent_div.find('.task_text').addClass('textarea-error');
+            task.closest('.page__task-section').find('header').after(error);
+            task.find('.task__text').addClass('textarea-error');
         }
     });
     if (nb_global_error === 0 && jQuery.isEmptyObject(result.fields_error)) {
@@ -93,11 +58,10 @@ function show_task_error(parent_div, jqXHR, exception) {
 
 /** Create a new task */
 function post_task() {
-    const parent_div = $(this).closest('.task');
-    const text = get_text(parent_div.find('.task_text'));
+    const task = $(this).closest('.task');
+    const text = get_text(task.find('.task__text'));
 
     if (text !== '') {
-        //"codex/<slug:codex_slug>/tasks"
         // Set the csrf token
         $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
         // Do the ajax call
@@ -113,14 +77,17 @@ function post_task() {
                 hide_error();
 
                 // Delete text from the initial from
-                $('.new-task .task_text').val('');
+                const task_creation_input = $('.task--new .task__text');
+                task_creation_input.val('');
 
                 // Add the new task to the dom
-                add_new_task_dom(text, result.id, result.hash);
+                const new_task = add_new_task_dom(text, result.id, result.hash);
+                const new_task_text = new_task.find('.task__text');
+
+                autosize(new_task_text);
 
                 //Set typeWatch event
-                const jqry_textarea = $('.task .id[value = ' + result.id + ']').closest('article').find('.task_text');
-                jqry_textarea.typeWatch({
+                new_task_text.typeWatch({
                     callback: put_or_delete_task,
                     wait: 500,
                     highlight: false,
@@ -128,31 +95,31 @@ function post_task() {
                     captureLength: 1,
                 });
                 // Give a success feedback to the user
-                show_task_save(parent_div);
+                show_task_save(task);
                 // At the end of the function, remove the unclickable class to allow the add of a new task
-                $('.add-item-button').removeClass('unclickable');
+                $('.task__add-item-button').removeClass('unclickable');
 
             },
             error: (jqXHR, exception) => {
                 // Give a feedback to the user
-                show_task_error(parent_div, jqXHR, exception);
+                show_task_error(task, jqXHR, exception);
                 // At the end of the function, remove the unclickable class to allow the add of a new task
-                $('.add-item-button').removeClass('unclickable');
+                $('.task__add-item-button').removeClass('unclickable');
 
             }
         });
     }
     else {
         // At the end of the function, remove the unclickable class to allow the add of a new task
-        $('.add-item-button').removeClass('unclickable');
+        $('.task__add-item-button').removeClass('unclickable');
     }
 }
 
 /** Update task */
-function put_task(parent_div, is_achieved, text, id) {
-    const hash = get_task_hash(id);
+function put_task(task, is_achieved, text, id, hash) {
+
     // Update the hash of the text for the next update
-    update_task_hash(text, id);
+    task.find('.hash').val(text.trim().hashCode());
 
     // Set the crsf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
@@ -169,19 +136,19 @@ function put_task(parent_div, is_achieved, text, id) {
         success: function () {
             hide_error();
             // Give a feedback to the user
-            show_task_save(parent_div);
+            show_task_save(task);
         },
         error: function (jqXHR, exception) {
             // Give a feedback to the user
-            show_task_error(parent_div, jqXHR, exception);
+            show_task_error(task, jqXHR, exception);
         }
     });
 }
 
 /** Delete a task */
-function delete_task(parent_div, id) {
+function delete_task(task, id, hash) {
     // Delete task from the dom
-    parent_div.remove();
+    task.remove();
 
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
@@ -194,25 +161,26 @@ function delete_task(parent_div, id) {
         success: function () {
             hide_error();
             // Give a feedback to the user
-            show_task_save(parent_div);
+            show_task_save(task);
         },
         error: function (jqXHR, exception) {
             // Give a feedback to the user
-            show_task_error(parent_div, jqXHR, exception);
+            show_task_error(task, jqXHR, exception);
         }
     });
 }
 
 /** Do the according rest action on a note */
 function put_or_delete_task() {
-    const parent_div = $(this).closest('.task');
-    const is_achieved = parent_div.find('.task_is_achieved').prop('checked');
-    const text = get_text(parent_div.find('.task_text'));
-    const id = parent_div.find('.id').attr('value');
+    const task = $(this).closest('.task');
+    const is_achieved = task.find('.task__is-achieved').prop('checked');
+    const text = get_text(task.find('.task__text'));
+    const id = task.find('.id').attr('value');
+    const hash = task.find('.hash').val();
     if (text !== '') {
-        put_task(parent_div, is_achieved, text, id);
+        put_task(task, is_achieved, text, id, hash);
     }
     else {
-        delete_task(parent_div, id);
+        delete_task(task, id, hash);
     }
 }

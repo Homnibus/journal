@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from projets.commun.codex import Page as PageContainer
 from projets.commun.error import (
     HttpInvalidFormData,
     HttpForbidden,
@@ -15,7 +16,7 @@ from projets.commun.utils import (
     java_string_hashcode,
 )
 from projets.forms import TaskUpdateForm, TaskCreateForm
-from projets.models import Codex, Task
+from projets.models import Codex, Task, Page
 
 
 def is_authorized_to_get_task(user, codex):
@@ -58,9 +59,6 @@ def is_authorized_to_delete_task(user, task):
 def get_list_task(request, codex=None):
     """
     Get the list of all task owned by the user and matching the filters
-    :param request: The input HTTP request
-    :param codex_slug: The input HTTP request
-    :return: the output HTTP request
     """
     # Initialize the output data
     output_data = {}
@@ -120,7 +118,7 @@ def get_list_task(request, codex=None):
     # Update the output data with the current page
     output_data.update({"task_list": paginator_page})
 
-    # TODO: Set this prop as a Global Const and put it in a conf file
+    # TODO: Set this prop as a Const and put it in a conf file
     step = 2
     min_rang = min_paginator_rang(paginator_page_number, paginator.num_pages, step)
     max_rang = max_paginator_rang(paginator_page_number, paginator.num_pages, step)
@@ -136,6 +134,39 @@ def get_list_task(request, codex=None):
     output_data.update({"paginator_range": paginator_range})
 
     return render(request, "projets/task_list.html", output_data)
+
+
+def get_task_todo_list(request, codex=None):
+    """
+    Get the list of all task owned by the user that are not achieved
+    """
+    # Initialize the output data
+    output_data = {}
+
+    # Get the page that have un-achieved task
+    page_list = Page.objects.filter(tasks__is_achieved=False).distinct().order_by("creation_date")
+
+    # If the request is made on a specific codex
+    if codex:
+        # Check if the user has the permission to perform the action
+        if not is_authorized_to_get_task(request.user, codex):
+            raise HttpForbidden
+        # Filter the initial QuerySet
+        page_list = page_list.filter(codex=codex)
+        # Add the slug to the output date to filter the table
+        output_data.update({"codex": codex})
+
+    page_container_list = []
+    # Change the model list to a form list
+    for page in page_list:
+        page_container = PageContainer(page.date)
+        for task in list(page.tasks.filter(is_achieved=False)):
+            page_container.tasks_form.append(TaskUpdateForm(instance=task))
+        page_container_list.append(page_container)
+    # Update the output data with the current page
+    output_data.update({"page_list": page_container_list})
+
+    return render(request, "projets/task_todo_list.html", output_data)
 
 
 def post_task(request, codex):
@@ -230,7 +261,7 @@ def task_list_view(request, codex_slug):
     codex = get_object_or_not_found(Codex, slug=codex_slug)
 
     if request.method == "GET" and not request.is_ajax():
-        response = get_list_task(request, codex)
+        response = get_task_todo_list(request, codex)
     elif request.method == "POST" and request.is_ajax():
         response = post_task(request, codex)
     else:
