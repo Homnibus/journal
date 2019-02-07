@@ -98,7 +98,12 @@ function put_note(note, text, id) {
 /** Delete a note */
 function delete_note(note, id) {
     // Delete note from the dom
-    note.find('.note__text').remove();
+
+    // Update the id of the note
+    note.find('.id').val("");
+
+    // Update the hash of the text for the next update
+    note.find('.hash').val("");
 
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});

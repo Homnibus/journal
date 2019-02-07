@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models, connection
 from django.template.defaultfilters import slugify
 from django.urls import reverse
+from django.utils.translation import gettext
 
 
 class Codex(models.Model):
@@ -12,7 +13,7 @@ class Codex(models.Model):
     """
 
     title = models.CharField(
-        "title", max_length=50, blank=False, null=False, help_text="Title of the codex"
+        "title", max_length=50, blank=False, null=False, help_text=gettext("Title of the codex")
     )
     slug = models.SlugField(
         "title slug",
@@ -20,14 +21,14 @@ class Codex(models.Model):
         max_length=50,
         blank=False,
         null=False,
-        help_text="Slug created from the title",
+        help_text=gettext("Slug created from the title"),
     )
     description = models.TextField(
         "description",
         blank=True,
         null=False,
         max_length=500,
-        help_text="Description of the codex",
+        help_text=gettext("Description of the codex"),
     )
     author = models.ForeignKey(
         User,
@@ -35,25 +36,25 @@ class Codex(models.Model):
         editable=False,
         on_delete=models.SET_NULL,
         null=True,
-        help_text="Creator of the codex",
+        help_text=gettext("Creator of the codex"),
     )
     creation_date = models.DateTimeField(
         "creation date",
         editable=False,
         null=False,
-        help_text="Date of creation of the codex",
+        help_text=gettext("Date of creation of the codex"),
     )
     update_date = models.DateTimeField(
         "update date",
         editable=False,
         null=False,
-        help_text="Date of last modification one of the codex information",
+        help_text=gettext("Date of last modification one of the codex information"),
     )
     nested_update_date = models.DateTimeField(
         "nested update date",
         editable=False,
         null=False,
-        help_text="Date of last modification one of the codex element",
+        help_text=gettext("Date of last modification one of the codex element"),
     )
 
     class Meta:
@@ -106,22 +107,22 @@ class Page(models.Model):
         unique_for_date="date",
         on_delete=models.CASCADE,
         null=False,
-        help_text="Codex of the page",
+        help_text=gettext("Codex of the page"),
     )
     date = models.DateField(
-        "date", editable=False, null=False, help_text="Date of the page"
+        "date", editable=False, null=False, help_text=gettext("Date of the page")
     )
     creation_date = models.DateTimeField(
         "creation date",
         editable=False,
         null=False,
-        help_text="Date of creation of the page",
+        help_text=gettext("Date of creation of the page"),
     )
     nested_update_date = models.DateTimeField(
         "update date",
         editable=False,
         null=False,
-        help_text="Date of last modification of an element of the page",
+        help_text=gettext("Date of last modification of an element of the page"),
     )
 
     class Meta:
@@ -130,7 +131,7 @@ class Page(models.Model):
         unique_together = ("codex", "date")
 
     def __str__(self):
-        return "Page for the " + str(self.creation_date)
+        return gettext("Page for the {page_date}").format(page_date=self.creation_date)
 
     def save(self, *args, **kwargs):
         """
@@ -164,24 +165,24 @@ class Note(models.Model):
         related_name="note",
         on_delete=models.CASCADE,
         null=False,
-        help_text="Note of the page",
+        help_text=gettext("Note of the page"),
     )
-    text = models.TextField("text", blank=False, null=False, help_text="Note text")
+    text = models.TextField("text", blank=False, null=False, help_text=gettext("Note text"))
     creation_date = models.DateTimeField(
         "creation date",
         editable=False,
         null=False,
-        help_text="Date of creation of the note",
+        help_text=gettext("Date of creation of the note"),
     )
     update_date = models.DateTimeField(
         "update date",
         editable=False,
         null=False,
-        help_text="Date of last modification of the note text",
+        help_text=gettext("Date of last modification of the note text"),
     )
 
     def __str__(self):
-        return "Note for the " + str(self.page.creation_date)
+        return gettext("Note for the {note_date}").format(self.page.creation_date)
 
     def save(self, *args, **kwargs):
         """
@@ -215,27 +216,27 @@ class Task(models.Model):
         null=False,
         help_text="Tasks of the page",
     )
-    text = models.TextField("text", blank=False, null=False, help_text="Task text")
+    text = models.TextField("text", blank=False, null=False, help_text=gettext("Task text"))
     is_achieved = models.BooleanField(
-        "achieved", default=False, null=False, help_text="Task is achieved"
+        "achieved", default=False, null=False, help_text=gettext("Task is achieved")
     )
     creation_date = models.DateTimeField(
         "creation date",
         editable=False,
         null=False,
-        help_text="Date of creation of the task",
+        help_text=gettext("Date of creation of the task"),
     )
     update_date = models.DateTimeField(
         "update date",
         editable=False,
         null=False,
-        help_text="Date of last modification of the task text or achievement status",
+        help_text=gettext("Date of last modification of the task text or achievement status"),
     )
     achieved_date = models.DateTimeField(
         "achieved date",
         editable=False,
         null=True,
-        help_text="Date of achievement of the task",
+        help_text=gettext("Date of achievement of the task"),
     )
 
     def __init__(self, *args, **kwargs):
@@ -243,7 +244,7 @@ class Task(models.Model):
         self.initial_is_achieved = self.is_achieved
 
     def __str__(self):
-        return "Task " + str(self.id) + " for the " + str(self.page.creation_date)
+        return gettext("Task {task_id} for the {task_date}").format(task_id=self.id, task_date=self.page.creation_date)
 
     def save(self, *args, **kwargs):
         """
@@ -285,26 +286,26 @@ class Information(models.Model):
         on_delete=models.CASCADE,
         primary_key=False,
         null=False,
-        help_text="Codex of the information",
+        help_text=gettext("Codex of the information"),
     )
     text = models.TextField(
-        "text", blank=False, null=False, help_text="Information text"
+        "text", blank=False, null=False, help_text=gettext("Information text")
     )
     creation_date = models.DateTimeField(
         "creation date",
         editable=False,
         null=False,
-        help_text="Date of creation of the information",
+        help_text=gettext("Date of creation of the information"),
     )
     update_date = models.DateTimeField(
         "update date",
         editable=False,
         null=False,
-        help_text="Date of last modification of the information text",
+        help_text=gettext("Date of last modification of the information text"),
     )
 
     def __str__(self):
-        return "Information for the codex " + str(self.codex)
+        return gettext("Information for the codex {codex_name}").format(codex_name=self.codex)
 
     def save(self, *args, **kwargs):
         """

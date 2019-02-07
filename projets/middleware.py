@@ -67,8 +67,8 @@ class RequestExceptionHandler:
         if isinstance(exception, HttpError):
             status_code = exception.status_code
             output_data.update(vars(exception))
-            logger.error("Error - " + str(status_code) + " : " + str(exception.message))
-            logger.error("Explanation - " + str(exception.explanation))
+            logger.error(f"Error - {{status_code}} : {{exception.message}}")
+            logger.error(f"Explanation - {{exception.explanation}}")
             logger.exception("Traceback :")
         else:
             output_data.update({"message": "Unexpected error"})

@@ -102,6 +102,12 @@
   background-color: white;
 }
 
+.left-border-box:focus,
+.left-border-box:focus-within {
+  border: 1px solid #2F4752;
+  box-shadow: 0 .1em .2em 0 #4D7385, 0 .1em .5em 0 #79B5D1;
+}
+
 .page:nth-child(odd) .left-border-box {
   border-left: .3em solid #4D7385;
 }
@@ -110,11 +116,9 @@
   border-left: .3em solid #f0f3f5;
 }
 
-/* Save item */
-.save-info--display-none {
-  display: none;
+.page.page--today .left-border-box {
+  border-left: .3em solid #79B5D1;
 }
-
 
 /* edit pen */
 .edit-pen {
@@ -125,11 +129,4 @@
 
 .edit-pen:hover {
   color: #79B5D1;
-}
-
-/* old */
-.old .note textarea:focus,
-.old .task:focus-within {
-  border: 1px solid #2F4752;
-  box-shadow: 0 .1em .2em 0 #4D7385, 0 .1em .5em 0 #79B5D1;
 }

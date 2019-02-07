@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-10 12:57+0100\n"
+"POT-Creation-Date: 2019-02-06 23:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,72 +18,269 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\projets\templates\projets\400.html:4
-#: .\projets\templates\projets\400.html:7
-msgid "Error "
-msgstr "Erreur "
+#: .\projets\commun\error.py:8
+msgid "Unexpected error"
+msgstr "Error non prévue"
 
-#: .\projets\templates\projets\accueil_navigation.html:5
-msgid "New +"
+#: .\projets\commun\error.py:9
+msgid "An unexpected error occurred"
+msgstr "Une erreur non prévue est survenue"
+
+#: .\projets\commun\error.py:23
+msgid "Method not allowed."
+msgstr "Method non autorisée"
+
+#: .\projets\commun\error.py:25
+msgid ""
+"The request method is known by the server but is not supported by the target "
+"resource."
+msgstr "La méthode de la requête est connu du serveur mais n'est pas supportée par la ressource cible."
+
+#: .\projets\commun\error.py:35
+msgid "Forbidden."
+msgstr "Interdit"
+
+#: .\projets\commun\error.py:37
+msgid "The server understood the request but refuses to authorize it"
+msgstr "Le serveur a compris la requête mais resufe de l'autorisée."
+
+#: .\projets\commun\error.py:51
+msgid "Resource not found."
+msgstr "Ressource non trouvée."
+
+#: .\projets\commun\error.py:53
+#, python-brace-format
+msgid "The server can't find the requested resource {resource_name}."
+msgstr "Le serveur ne peut pas trouver la ressource {resource_name} demandée."
+
+#: .\projets\commun\error.py:69
+msgid "Conflict with current state of the server."
+msgstr "Conflit avec l'état actuel du serveur."
+
+#: .\projets\commun\error.py:71
+#, python-brace-format
+msgid ""
+"The requested action on the resource {resource_name} is in conflict with the "
+"current state of the server. "
+msgstr "L'action demandée sur la ressource {resource_name} est en conflit avec l'état actuel du serveur."
+
+#: .\projets\commun\error.py:92
+msgid "Bad request"
+msgstr "Mauvaise requête "
+
+#: .\projets\commun\error.py:94
+msgid "The server could not understand the request due to invalid syntax."
+msgstr "Le serveur ne peut pas comprendre la requête a cause d'une syntaxe non valide."
+
+#: .\projets\forms.py:36
+#, fuzzy, python-brace-format
+#| msgid "The Note have been modified since the last modification attempt."
+msgid ""
+"The {resource_name} have been modified since the last modification attempt."
+msgstr "La ressource {resource_name} a été modifiée depuis la dernière tentative de modification."
+
+#: .\projets\forms.py:111 .\projets\forms.py:157
+msgid "Note of the day"
+msgstr "Note du jour"
+
+#: .\projets\forms.py:172 .\projets\forms.py:220
+#, fuzzy
+#| msgid "New +"
+msgid "New task"
 msgstr "Nouveau +"
 
-#: .\projets\templates\projets\accueil_navigation.html:6
-#: .\projets\templates\projets\task_list.html:19
-msgid "Task"
-msgstr "Tache"
+#: .\projets\models.py:16
+msgid "Title of the codex"
+msgstr "Titre du codex"
+
+#: .\projets\models.py:24
+msgid "Slug created from the title"
+msgstr "Slug créé à partir du titre"
+
+#: .\projets\models.py:31
+#, fuzzy
+#| msgid "Creation of a new Codex"
+msgid "Description of the codex"
+msgstr "Description du codex"
+
+#: .\projets\models.py:39
+#, fuzzy
+#| msgid "Creation of a new Codex"
+msgid "Creator of the codex"
+msgstr "Createur du codex"
+
+#: .\projets\models.py:45
+#, fuzzy
+#| msgid "Creation of a new Codex"
+msgid "Date of creation of the codex"
+msgstr "Date de création du codex"
+
+#: .\projets\models.py:51
+msgid "Date of last modification one of the codex information"
+msgstr "Date de la dernière modification d'une des informations du codex"
+
+#: .\projets\models.py:57
+msgid "Date of last modification one of the codex element"
+msgstr "Date de la dernière modification d'un des elements du codex"
+
+#: .\projets\models.py:110
+msgid "Codex of the page"
+msgstr "Codex de la page"
+
+#: .\projets\models.py:113
+msgid "Date of the page"
+msgstr "Date de la page"
+
+#: .\projets\models.py:119
+msgid "Date of creation of the page"
+msgstr "Date de création de la page"
+
+#: .\projets\models.py:125
+msgid "Date of last modification of an element of the page"
+msgstr "Date de la dernière modification d'un element de la page"
+
+#: .\projets\models.py:134
+#, python-brace-format
+msgid "Page for the {page_date}"
+msgstr "Page du {page_date}"
+
+#: .\projets\models.py:168
+msgid "Note of the page"
+msgstr "Note de la page"
+
+#: .\projets\models.py:170
+msgid "Note text"
+msgstr "Text de la note"
+
+#: .\projets\models.py:175
+msgid "Date of creation of the note"
+msgstr "Date de création de la note"
+
+#: .\projets\models.py:181
+msgid "Date of last modification of the note text"
+msgstr "Date de la dernière modification du texte de la note"
+
+#: .\projets\models.py:185
+#, python-brace-format
+msgid "Note for the {note_date}"
+msgstr "Note du {note_date}"
+
+#: .\projets\models.py:219
+#, fuzzy
+#| msgid "Task"
+msgid "Task text"
+msgstr "Text de la tache"
+
+#: .\projets\models.py:221
+msgid "Task is achieved"
+msgstr "Tache est réalisée"
+
+#: .\projets\models.py:227
+msgid "Date of creation of the task"
+msgstr "Date de création de la tache"
+
+#: .\projets\models.py:233
+msgid "Date of last modification of the task text or achievement status"
+msgstr "Date de dernière modification du text de la tache ou de l'état de réalisation"
+
+#: .\projets\models.py:239
+msgid "Date of achievement of the task"
+msgstr "Date de réalisation de la tache"
+
+#: .\projets\models.py:247
+#, python-brace-format
+msgid "Task {task_id} for the {task_date}"
+msgstr "Tache {task_id} du {task_date}"
+
+#: .\projets\models.py:289
+#, fuzzy
+#| msgid "General informations"
+msgid "Codex of the information"
+msgstr "Codex de l'information"
+
+#: .\projets\models.py:292
+#, fuzzy
+#| msgid "Creation date"
+msgid "Information text"
+msgstr "Texte de l'information"
+
+#: .\projets\models.py:298
+msgid "Date of creation of the information"
+msgstr "Date de création de l'information"
+
+#: .\projets\models.py:304
+msgid "Date of last modification of the information text"
+msgstr "Date de la dernière modification du texte de l'information"
+
+#: .\projets\models.py:308
+#, python-brace-format
+msgid "Information for the codex {codex_name}"
+msgstr "Information pour le code {codex_name}"
 
 #: .\projets\templates\projets\base_template.html:11
 msgid "ResCodex - "
 msgstr "ResCodex - "
 
-#: .\projets\templates\projets\base_template.html:31
+#: .\projets\templates\projets\base_template.html:25
+msgid "Home"
+msgstr "Accueil"
+
+#: .\projets\templates\projets\base_template.html:30
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: .\projets\templates\projets\base_template.html:34
+#: .\projets\templates\projets\base_template.html:33
 msgid "Login"
 msgstr "Connexion"
 
-#: .\projets\templates\projets\codex_add.html:5
+#: .\projets\templates\projets\codex_add.html:9
 msgid "New Codex"
 msgstr "Nouveau Codex"
 
-#: .\projets\templates\projets\codex_add.html:10
+#: .\projets\templates\projets\codex_add.html:14
 msgid "Creation of a new Codex"
 msgstr "Creation d'un nouveau Codex"
 
-#: .\projets\templates\projets\codex_add.html:11
+#: .\projets\templates\projets\codex_add.html:15
 msgid "Give a title and a short description to your Codex !"
 msgstr "Donnez un titre et une courte description à votre Codex !"
 
-#: .\projets\templates\projets\codex_add.html:18
+#: .\projets\templates\projets\codex_add.html:23
 msgid "Title"
 msgstr "Titre"
 
-#: .\projets\templates\projets\codex_add.html:20
+#: .\projets\templates\projets\codex_add.html:29
 msgid "Description"
 msgstr "Description"
 
-#: .\projets\templates\projets\codex_details.html:18
+#: .\projets\templates\projets\codex_add.html:34
+#, fuzzy
+#| msgid "Creation date"
+msgid "Create"
+msgstr "Date création"
+
+#: .\projets\templates\projets\codex_details.html:15
 msgid "Codex - "
 msgstr "Codex - "
 
-#: .\projets\templates\projets\codex_details.html:32
-#: .\projets\templates\projets\codex_details.html:46
-#: .\projets\templates\projets\codex_details.html:85
-#: .\projets\templates\projets\codex_details.html:103
+#: .\projets\templates\projets\codex_details.html:28
+#: .\projets\templates\projets\codex_details.html:40
+#: .\projets\templates\projets\codex_details.html:70
+#: .\projets\templates\projets\codex_details.html:87
 #: .\projets\templates\projets\information.html:28
+#: .\projets\templates\projets\task_todo_list.html:25
 msgid "Saved"
 msgstr "Sauvegardé"
 
-#: .\projets\templates\projets\codex_details.html:45
-#: .\projets\templates\projets\codex_details.html:102
-#: .\projets\templates\projets\codex_navigation.html:9
+#: .\projets\templates\projets\codex_details.html:39
+#: .\projets\templates\projets\codex_details.html:85
+#: .\projets\templates\projets\navigation_codex.html:10
 #: .\projets\templates\projets\task_list.html:9
+#: .\projets\templates\projets\task_todo_list.html:9
 msgid "Tasks"
 msgstr "Taches"
 
-#: .\projets\templates\projets\codex_details.html:52
+#: .\projets\templates\projets\codex_details.html:44
 msgid "Add"
 msgstr "Ajouter"
 
@@ -99,7 +296,7 @@ msgstr "Codex récents"
 msgid "Search :"
 msgstr "Rechercher :"
 
-#: .\projets\templates\projets\codex_list.html:18
+#: .\projets\templates\projets\codex_list.html:17
 msgid "Codex title"
 msgstr "Titre du Codex"
 
@@ -107,14 +304,35 @@ msgstr "Titre du Codex"
 msgid "Search a Codex"
 msgstr "Rechercher un Codex"
 
-#: .\projets\templates\projets\codex_navigation.html:6
-#: .\projets\templates\projets\task_list.html:20
-msgid "Codex"
-msgstr "Codex "
+#: .\projets\templates\projets\connexion.html:9
+#: .\projets\templates\projets\connexion.html:12
+#: .\projets\templates\projets\connexion.html:31
+msgid "Connexion"
+msgstr "Connexion"
 
-#: .\projets\templates\projets\codex_navigation.html:12
-msgid "Info"
-msgstr "Info"
+#: .\projets\templates\projets\connexion.html:18
+#, python-format
+msgid ""
+"You are already connected as %(username)s\n"
+"            ."
+msgstr "Vous étes déjà connecté en tant que %(username)s"
+
+#: .\projets\templates\projets\disconnection.html:9
+msgid "Disconnection"
+msgstr "Déconnexion"
+
+#: .\projets\templates\projets\disconnection.html:12
+msgid "Disconnected"
+msgstr "Déconnecté"
+
+#: .\projets\templates\projets\disconnection.html:17
+msgid "You are disconnected."
+msgstr "Vous étes déconnecté"
+
+#: .\projets\templates\projets\error.html:9
+#: .\projets\templates\projets\error.html:12
+msgid "Error "
+msgstr "Erreur "
 
 #: .\projets\templates\projets\information.html:9
 msgid "General informations"
@@ -124,99 +342,97 @@ msgstr "Information générale"
 msgid "General informations - "
 msgstr "Information générale - "
 
+#: .\projets\templates\projets\navigation_codex.html:7
+msgid "Codex"
+msgstr "Codex "
+
+#: .\projets\templates\projets\navigation_codex.html:14
+msgid "Info"
+msgstr "Info"
+
+#: .\projets\templates\projets\navigation_home.html:5
+msgid "New +"
+msgstr "Nouveau +"
+
+#: .\projets\templates\projets\navigation_home.html:6
+msgid "Task"
+msgstr "Tache"
+
 #: .\projets\templates\projets\task_list.html:14
 msgid "All Tasks"
 msgstr "Toutes les taches"
 
-#: .\projets\templates\projets\task_list.html:18
-msgid "Achieved"
-msgstr "Réalisée"
+#: .\projets\templates\projets\task_todo_list.html:15
+msgid "To achieve Tasks"
+msgstr "Taches à réaliser"
 
-#: .\projets\templates\projets\task_list.html:21
-msgid "Achieved date"
-msgstr "Date réalisation"
-
-#: .\projets\templates\projets\task_list.html:22
-msgid "Creation date"
-msgstr "Date création"
-
-#: .\projets\templates\projets\task_list.html:69
-msgid "Previous"
-msgstr "Précedent"
-
-#: .\projets\templates\projets\task_list.html:79
-msgid "Next"
-msgstr "Suivant"
-
-#: .\projets\views\codex_details_view.py:95
-#: .\projets\views\information_view.py:25 .\projets\views\note_view.py:78
-#: .\projets\views\task_view.py:158
-msgid "The Codex does not exist."
-msgstr "Le Codex n'existe pas."
-
-#: .\projets\views\codex_details_view.py:96
-msgid "The Codex you are trying to access does not exist."
-msgstr "Le Codex n'existe pas."
-
-#: .\projets\views\information_view.py:26
-msgid "The codex you are trying to access does not exist."
-msgstr "Le Codex n'existe pas."
-
-#: .\projets\views\information_view.py:52
-msgid "The Codex does not exist"
-msgstr "Le Codex n'existe pas."
-
-#: .\projets\views\information_view.py:66 .\projets\views\note_view.py:52
-#: .\projets\views\note_view.py:65 .\projets\views\note_view.py:143
-#: .\projets\views\task_view.py:119 .\projets\views\task_view.py:146
-#: .\projets\views\task_view.py:214
-msgid "Form validation error."
-msgstr "Erreur de validation du formulaire."
-
-#: .\projets\views\note_view.py:96
-msgid "A Note already exist for today."
+#: .\projets\templates\projets\text_editor.html:9
+#: .\projets\templates\projets\text_editor.html:14
+msgid "Text editor Demo"
 msgstr ""
 
-#: .\projets\views\note_view.py:106
-msgid "You are not allowed to create this Note"
-msgstr "Vous n'etes pas autorisé à créer cette Note."
+#: .\projets\templates\projets\text_editor.html:16
+msgid "Demo of the rescodex text editor :"
+msgstr ""
 
-#: .\projets\views\note_view.py:159
-msgid "The Note does not exist."
-msgstr "Cette Note n'existe pas."
+#: .\projets\templates\projets\text_editor.html:36
+msgid "Reset"
+msgstr ""
 
-#: .\projets\views\note_view.py:171
-msgid "The Note have been modified since the last modification attempt."
-msgstr "Cette Note a été modifié depuis la dernière tentative de modification."
+#~ msgid "Achieved"
+#~ msgstr "Réalisée"
 
-#: .\projets\views\note_view.py:183
-msgid "You are note authorized to modify this Note."
-msgstr "Vous n'etes pas autorisé à modifier cette Note."
+#~ msgid "Achieved date"
+#~ msgstr "Date réalisation"
 
-#: .\projets\views\note_view.py:212
-msgid "You are note authorized to delete this Note."
-msgstr "Vous n'etes pas autorisé à supprimer cette Note."
+#~ msgid "Previous"
+#~ msgstr "Précedent"
 
-#: .\projets\views\task_view.py:133
-msgid "Can't create an empty Task."
-msgstr "Vous ne pouvez pas créer une Tache vide."
+#~ msgid "Next"
+#~ msgstr "Suivant"
 
-#: .\projets\views\task_view.py:168
-msgid "You are not allowed to create this Task."
-msgstr "Vous n'etes pas autorisé à créer cette Tache."
+#~ msgid "The Codex does not exist."
+#~ msgstr "Le Codex n'existe pas."
 
-#: .\projets\views\task_view.py:231
-msgid "The Task you are trying to modify does not exist."
-msgstr "La Tache que vous voulez modifier n'existe pas."
+#~ msgid "The Codex you are trying to access does not exist."
+#~ msgstr "Le Codex n'existe pas."
 
-#: .\projets\views\task_view.py:244
-msgid "The Task has been modified since the last attempt of modification."
-msgstr "La Tache a été modifiée depuis la dernière tentative de modification."
+#~ msgid "The codex you are trying to access does not exist."
+#~ msgstr "Le Codex n'existe pas."
 
-#: .\projets\views\task_view.py:255
-msgid "You are not allowed to modify this Task"
-msgstr "Vous n'etes pas autorisé à modifier cette Tache."
+#~ msgid "The Codex does not exist"
+#~ msgstr "Le Codex n'existe pas."
 
-#: .\projets\views\task_view.py:285
-msgid "You are not allowed to delete this Task."
-msgstr "Vous n'etes pas autorisé à modifier cette Tache."
+#~ msgid "Form validation error."
+#~ msgstr "Erreur de validation du formulaire."
+
+#~ msgid "You are not allowed to create this Note"
+#~ msgstr "Vous n'etes pas autorisé à créer cette Note."
+
+#~ msgid "The Note does not exist."
+#~ msgstr "Cette Note n'existe pas."
+
+#~ msgid "You are note authorized to modify this Note."
+#~ msgstr "Vous n'etes pas autorisé à modifier cette Note."
+
+#~ msgid "You are note authorized to delete this Note."
+#~ msgstr "Vous n'etes pas autorisé à supprimer cette Note."
+
+#~ msgid "Can't create an empty Task."
+#~ msgstr "Vous ne pouvez pas créer une Tache vide."
+
+#~ msgid "You are not allowed to create this Task."
+#~ msgstr "Vous n'etes pas autorisé à créer cette Tache."
+
+#~ msgid "The Task you are trying to modify does not exist."
+#~ msgstr "La Tache que vous voulez modifier n'existe pas."
+
+#~ msgid "The Task has been modified since the last attempt of modification."
+#~ msgstr ""
+#~ "La Tache a été modifiée depuis la dernière tentative de modification."
+
+#~ msgid "You are not allowed to modify this Task"
+#~ msgstr "Vous n'etes pas autorisé à modifier cette Tache."
+
+#~ msgid "You are not allowed to delete this Task."
+#~ msgstr "Vous n'etes pas autorisé à modifier cette Tache."

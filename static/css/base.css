@@ -398,3 +398,8 @@ div.pagination {
 .pagination a:active, .pagination a:focus {
   text-decoration: none;
 }
+
+/* Save item */
+.save-info--display-none {
+  display: none;
+}

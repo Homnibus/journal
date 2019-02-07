@@ -19,8 +19,3 @@
   font-family: arial, serif;
   overflow: hidden;
 }
-
-/* Save item */
-.save-info--display-none {
-  display: none;
-}
