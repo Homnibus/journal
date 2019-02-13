@@ -9,7 +9,7 @@ from projets.commun.error import (
     HttpConflict,
 )
 from projets.commun.utils import get_object_or_not_found, java_string_hashcode
-from projets.forms import NoteUpdateForm, NoteCreateForm
+from projets.forms import NoteUpdateForm, NoteCreateForm, NoteDeleteForm
 from projets.models import Note, Codex
 
 
@@ -101,6 +101,16 @@ def delete_note(request, note):
     # Check if the user has the permission to perform the action
     if not is_authorized_to_delete_note(request.user, note):
         raise HttpForbidden
+
+    # Initialise the django representation of a form with the input data
+    input_form = NoteDeleteForm(request.DELETE, instance=note)
+
+    # Check if the input data are valid
+    if not input_form.is_valid():
+        raise HttpInvalidFormData(
+            form_errors=input_form.non_field_errors(),
+            fields_error=input_form.errors,
+        )
 
     # Delete the note
     note.delete()

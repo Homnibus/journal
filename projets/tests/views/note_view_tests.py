@@ -342,9 +342,14 @@ class DeleteNoteTest(TestCase):
         self.text = "Test Text"
         self.page = Page.objects.create(codex=self.codex)
         self.note = Note.objects.create(page=self.page, text=self.text)
+        self.form_hash = str(java_string_hashcode(self.text))
+        self.form_data = {"hash": self.form_hash}
         self.url = reverse("note_details", kwargs={"note_id": self.note.id})
-        self.request = self.factory.delete(self.url)
+        self.request = self.factory.post(self.url, self.form_data)
+        print(self.request.POST)
         self.request.user = self.user
+        self.request.method = "DELETE"
+        self.request.DELETE = self.request.POST
 
     def test_delete_note_assert_return_json_response(self):
         """ Test if the method return a JsonResponse. """
@@ -359,6 +364,20 @@ class DeleteNoteTest(TestCase):
         note = Note.objects.all()
 
         self.assertEqual(len(note), 0)
+
+    def test_delete_note_hash_invalid_assert_raise_invalid_form_data(self):
+        """
+        Test if the method raise a HttpInvalidFormData error if the text hash is not the same as the one of the
+        database text.
+        """
+        self.form_data["hash"] = "1"
+        self.request = self.factory.post(self.url, self.form_data)
+        print(self.request.POST)
+        self.request.user = self.user
+        self.request.method = "PUT"
+        self.request.DELETE = self.request.POST
+        with self.assertRaises(HttpInvalidFormData):
+            delete_note(self.request, self.note)
 
     def test_delete_note_assert_other_note_not_deleted(self):
         """ Test if the method does not delete other model. """

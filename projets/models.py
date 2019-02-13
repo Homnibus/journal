@@ -182,7 +182,7 @@ class Note(models.Model):
     )
 
     def __str__(self):
-        return gettext("Note for the {note_date}").format(self.page.creation_date)
+        return gettext("Note for the {note_date}").format(note_date=self.page.creation_date)
 
     def save(self, *args, **kwargs):
         """

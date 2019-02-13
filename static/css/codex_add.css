@@ -24,8 +24,8 @@ body > header {
   min-width: 68%;
 }
 
-.form-row__input, .form-row__label {
-  margin: 0.5em 0 0.5em 0;
+.form-row .form-row__input, .form-row .form-row__label {
+  margin: 0.3em;
 }
 
 .form-row__input > input, .form-row__input > textarea {

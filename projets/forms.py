@@ -49,7 +49,7 @@ class CodexForm(ModelForm):
                 attrs={"class": "codex__title shadow-box-input"}
             ),
             "description": Textarea(
-                attrs={"rows": 3, "class": "codex__text shadow-box-input"}
+                attrs={"rows": 3, "cols": 0, "class": "codex__text shadow-box-input"}
             )
         }
 
@@ -69,7 +69,7 @@ class InformationCreateForm(ModelForm):
         fields = ("text",)
         widgets = {
             "text": Textarea(
-                attrs={"rows": 3, "class": "information__text left-border-box"}
+                attrs={"rows": 3, "cols": 0, "class": "information__text left-border-box"}
             )
         }
 
@@ -94,9 +94,16 @@ class InformationUpdateForm(AbstractHashFrom):
         hash_field = "text"
         widgets = {
             "text": Textarea(
-                attrs={"rows": 3, "class": "information__text left-border-box"}
+                attrs={"rows": 3, "cols": 0, "class": "information__text left-border-box"}
             )
         }
+
+
+class InformationDeleteForm(AbstractHashFrom):
+    class Meta:
+        model = Information
+        fields = []
+        hash_field = "text"
 
 
 class NoteCreateForm(ModelForm):
@@ -107,6 +114,7 @@ class NoteCreateForm(ModelForm):
             "text": Textarea(
                 attrs={
                     "rows": 3,
+                    "cols": 0,
                     "class": "note__text typewatch",
                     "placeholder": gettext("Note of the day"),
                 }
@@ -153,11 +161,19 @@ class NoteUpdateForm(AbstractHashFrom):
             "text": Textarea(
                 attrs={
                     "rows": 3,
+                    "cols": 0,
                     "class": "note__text typewatch",
                     "placeholder": gettext("Note of the day"),
                 }
             )
         }
+
+
+class NoteDeleteForm(AbstractHashFrom):
+    class Meta:
+        model = Note
+        hash_field = "text"
+        fields = []
 
 
 class TaskCreateForm(ModelForm):
@@ -168,6 +184,7 @@ class TaskCreateForm(ModelForm):
             "text": Textarea(
                 attrs={
                     "rows": 1,
+                    "cols": 0,
                     "class": "task__text typewatch left-border-box",
                     "placeholder": gettext("New task"),
                 }
@@ -216,9 +233,17 @@ class TaskUpdateForm(AbstractHashFrom):
             "text": Textarea(
                 attrs={
                     "rows": 1,
+                    "cols": 0,
                     "class": "task__text typewatch left-border-box",
                     "placeholder": gettext("New task"),
                 }
             ),
             "is_achieved": CheckboxInput(attrs={"class": "task__is-achieved"}),
         }
+
+
+class TaskDeleteForm(AbstractHashFrom):
+    class Meta:
+        model = Task
+        hash_field = "text"
+        fields = []

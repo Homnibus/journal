@@ -64,10 +64,7 @@ function post_note(note, text) {
 }
 
 /** Update a note */
-function put_note(note, text, id) {
-
-    // Get the note hash
-    const hash = note.find('.hash').val();
+function put_note(note, text, id, hash) {
 
     // Update the hash of the text for the next update
     note.find('.hash').val(text.trim().hashCode());
@@ -96,31 +93,46 @@ function put_note(note, text, id) {
 }
 
 /** Delete a note */
-function delete_note(note, id) {
-    // Delete note from the dom
+function delete_note(note, id, hash) {
+    // Hide the note from so it can't be update after sending the delete request to the server
+    if (!note.closest(".page").hasClass("page--today")) {
+        note.hide()
+    }
+    else {
+        // Update the id of the note
+        note.find('.id').val("");
 
-    // Update the id of the note
-    note.find('.id').val("");
-
-    // Update the hash of the text for the next update
-    note.find('.hash').val("");
+        // Update the hash of the text for the next update
+        note.find('.hash').val("");
+    }
 
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
     // Do the ajax call
     $.ajax({
         url: '/notes/' + id,
-        data: {},
+        data: {
+            'hash': hash,
+        },
         dataType: 'json',
         method: 'DELETE',
         success: function () {
             hide_error();
             // Give a feedback to the user
             show_note_save(note);
+            // Delete note from the dom if it's not the note of the day
+            if (!note.closest(".page").hasClass("page--today")) {
+                note.remove();
+            }
+
         },
         error: function (jqXHR, exception) {
             // Give a feedback to the user
             show_note_error(note, jqXHR, exception);
+            if (note.closest(".page").hasClass("page--today")) {
+                note.show();
+            }
+
         }
     });
 }
@@ -130,16 +142,17 @@ function post_put_or_delete_note() {
     const note = $(this).closest('.note');
     const text = get_text(note.find('.note__text'));
     const id = note.find('.id').attr('value');
+    const hash = note.find('.hash').val();
     if (text !== '') {
         if (id) {
-            put_note(note, text, id);
+            put_note(note, text, id, hash);
         }
         else {
             post_note(note, text);
         }
     }
     else {
-        delete_note(note, id);
+        delete_note(note, id, hash);
     }
 }
 
@@ -148,10 +161,11 @@ function put_or_delete_note() {
     const note = $(this).closest('.note');
     const text = get_text(note.find('.note__text'));
     const id = note.find('.id').attr('value');
+    const hash = note.find('.hash').val();
     if (text !== '') {
         put_note(note, text, id);
     }
     else {
-        delete_note(note, id);
+        delete_note(note, id, hash);
     }
 }

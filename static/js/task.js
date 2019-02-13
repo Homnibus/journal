@@ -95,7 +95,7 @@ function post_task() {
                     captureLength: 1,
                 });
                 // Give a success feedback to the user
-                show_task_save(task);
+                show_task_save(new_task);
                 // At the end of the function, remove the unclickable class to allow the add of a new task
                 $('.task__add-item-button').removeClass('unclickable');
 
@@ -147,25 +147,31 @@ function put_task(task, is_achieved, text, id, hash) {
 
 /** Delete a task */
 function delete_task(task, id, hash) {
-    // Delete task from the dom
-    task.remove();
+    //Hide the task so it can't be changed after sending the delete request to the server
+    task.hide();
 
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
     // Do the ajax call
     $.ajax({
         url: '/tasks/' + id,
-        data: {},
+        data: {
+            'hash': hash,
+        },
         dataType: 'json',
         method: 'DELETE',
         success: function () {
             hide_error();
             // Give a feedback to the user
             show_task_save(task);
+            // Delete task from the dom
+            task.remove();
+
         },
         error: function (jqXHR, exception) {
             // Give a feedback to the user
             show_task_error(task, jqXHR, exception);
+            task.show();
         }
     });
 }

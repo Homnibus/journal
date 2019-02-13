@@ -1,3 +1,7 @@
+.information {
+  padding: 0.3em;
+}
+
 /* header */
 .information header {
   flex-direction: row;
@@ -10,7 +14,7 @@
 /* Left-border-box */
 .left-border-box {
   resize: none;
-  margin: 0;
+  margin: 0.3em;
   padding: .2em .2em .2em .5em;
   border: 1px solid rgba(0, 0, 0, .13);
   border-left: .3em solid #4D7385;
@@ -19,3 +23,4 @@
   font-family: arial, serif;
   overflow: hidden;
 }
+

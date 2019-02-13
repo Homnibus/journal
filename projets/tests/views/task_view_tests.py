@@ -399,7 +399,7 @@ class PutTaskTest(TestCase):
         self.assertEqual(tasks[1].text, text)
         self.assertEqual(tasks[1].is_achieved, False)
 
-    def test_put_note_form_valid_assert_return_200(self):
+    def test_put_task_form_valid_assert_return_200(self):
         """ Test if the method return a 200 response if the form is valid. """
         response = self.client.put(
             self.url, self.form_data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
@@ -498,9 +498,14 @@ class DeleteTaskTest(TestCase):
         self.text = "Test Text"
         self.page = Page.objects.create(codex=self.codex)
         self.task = Task.objects.create(page=self.page, text=self.text)
+        self.form_hash = str(java_string_hashcode(self.text))
+        self.form_data = {"hash": self.form_hash}
         self.url = reverse("task_details", kwargs={"task_id": self.task.id})
-        self.request = self.factory.delete(self.url)
+        self.request = self.factory.post(self.url, self.form_data)
+        print(self.request.POST)
         self.request.user = self.user
+        self.request.method = "DELETE"
+        self.request.DELETE = self.request.POST
 
     def test_delete_task_assert_return_http_response(self):
         """ Test if the method return a JsonResponse """
@@ -525,6 +530,20 @@ class DeleteTaskTest(TestCase):
 
         self.assertEqual(len(tasks), 1)
         self.assertEqual(tasks[0].text, text)
+
+    def test_delete_task_hash_invalid_assert_raise_invalid_form_data(self):
+        """
+        Test if the method raise a HttpInvalidFormData error if the text hash is not the same as the one of the
+        database text.
+        """
+        self.form_data["hash"] = "1"
+        self.request = self.factory.post(self.url, self.form_data)
+        print(self.request.POST)
+        self.request.user = self.user
+        self.request.method = "PUT"
+        self.request.DELETE = self.request.POST
+        with self.assertRaises(HttpInvalidFormData):
+            delete_task(self.request, self.task)
 
     def test_delete_task_of_other_user_assert_raise_forbidden(self):
         """ Try to delete the ask of an other user and assert the method raise an HttpForbidden error"""

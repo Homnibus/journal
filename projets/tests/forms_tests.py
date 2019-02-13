@@ -10,7 +10,7 @@ from projets.forms import (
     TaskUpdateForm,
     TaskCreateForm,
     InformationCreateForm,
-)
+    TaskDeleteForm, NoteDeleteForm, InformationDeleteForm)
 from projets.models import Codex, Information, Page, Note, Task
 
 
@@ -206,6 +206,36 @@ class InformationUpdateFormTest(TestCase):
         self.assertEqual(informations[1].codex, codex)
 
 
+class InformationDeleteFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="zamour", email="zamour@zamour.com", password="top_secret"
+        )
+        self.codex = Codex.objects.create(
+            title="Test Codex 1", author=self.user, description="Description 1"
+        )
+        self.text = "Test Text"
+        self.hash = java_string_hashcode(self.text)
+        self.information = Information.objects.create(codex=self.codex, text=self.text)
+        self.input_data = {"hash": self.hash}
+
+    def test_creation_assert_needed_param_exist(self):
+        """ Test if the required parameters are added after the creation of the form. """
+        form = InformationDeleteForm(instance=self.information)
+        self.assertEqual(form.initial["hash"], self.hash)
+        self.assertEqual(form.initial["id"], self.information.id)
+
+    def test_delete_information_hash_not_same_as_bdd_assert_form_validation_error(self):
+        """
+        Test if the is_valid method add a hash form error if the given hash does not correspond to the database
+        text hash.
+        """
+        self.input_data["hash"] = 0
+        form = InformationDeleteForm(data=self.input_data, instance=self.information)
+        form.is_valid()
+        self.assertIsNotNone(form.errors["hash"])
+
+
 class NoteCreateFormTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -326,6 +356,39 @@ class NoteUpdateFormTest(TestCase):
         self.assertEqual(len(notes), 2)
         self.assertEqual(notes[1].text, self.text)
         self.assertEqual(notes[1].page, page)
+
+
+class NoteDeleteFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="zamour", email="zamour@zamour.com", password="top_secret"
+        )
+        self.codex = Codex.objects.create(
+            title="Test Codex 1", author=self.user, description="Description 1"
+        )
+        self.page = Page.objects.create(codex=self.codex)
+        self.text = "Test Text"
+        self.hash = java_string_hashcode(self.text)
+        self.note = Note.objects.create(page=self.page, text=self.text)
+        self.input_data = {
+            "hash": self.hash,
+        }
+
+    def test_creation_assert_needed_param_exist(self):
+        """ Test if the required parameters are added after the creation of the form. """
+        form = NoteDeleteForm(instance=self.note)
+        self.assertEqual(form.initial["hash"], self.hash)
+        self.assertEqual(form.initial["id"], self.note.id)
+
+    def test_delete_note_hash_not_same_as_bdd_assert_form_validation_error(self):
+        """
+        Test if the is_valid method add a hash form error if the given hash does not correspond to the database
+        text hash.
+        """
+        self.input_data["hash"] = 0
+        form = NoteDeleteForm(data=self.input_data, instance=self.note)
+        form.is_valid()
+        self.assertIsNotNone(form.errors["hash"])
 
 
 class TaskCreateFormTest(TestCase):
@@ -456,3 +519,37 @@ class TaskUpdateFormTest(TestCase):
         self.assertEqual(len(tasks), 2)
         self.assertEqual(tasks[1].text, self.text)
         self.assertEqual(tasks[1].is_achieved, self.is_achieved)
+
+
+class TaskDeleteFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="zamour", email="zamour@zamour.com", password="top_secret"
+        )
+        self.codex = Codex.objects.create(
+            title="Test Codex 1", author=self.user, description="Description 1"
+        )
+        self.page = Page.objects.create(codex=self.codex)
+        self.text = "Test Text"
+        self.is_achieved = False
+        self.hash = java_string_hashcode(self.text)
+        self.task = Task.objects.create(page=self.page, text=self.text)
+        self.input_data = {
+            "hash": self.hash,
+        }
+
+    def test_creation_assert_needed_param_exist(self):
+        """ Test if the required parameters are added after the creation of the form. """
+        form = TaskDeleteForm(instance=self.task)
+        self.assertEqual(form.initial["hash"], self.hash)
+        self.assertEqual(form.initial["id"], self.task.id)
+
+    def test_delete_task_hash_not_same_as_bdd_assert_form_validation_error(self):
+        """
+        Test if the is_valid method add a hash form error if the given hash does not correspond to the database
+        text hash.
+        """
+        self.input_data["hash"] = 0
+        form = TaskDeleteForm(data=self.input_data, instance=self.task)
+        form.is_valid()
+        self.assertIsNotNone(form.errors["hash"])

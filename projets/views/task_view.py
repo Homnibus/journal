@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.cache import never_cache
 
 from projets.commun.codex import Page as PageContainer
 from projets.commun.error import (
@@ -15,7 +16,7 @@ from projets.commun.utils import (
     get_object_or_not_found,
     java_string_hashcode,
 )
-from projets.forms import TaskUpdateForm, TaskCreateForm
+from projets.forms import TaskUpdateForm, TaskCreateForm, TaskDeleteForm
 from projets.models import Codex, Task, Page
 
 
@@ -228,6 +229,16 @@ def delete_task(request, task):
     if not is_authorized_to_delete_task(request.user, task):
         raise HttpForbidden
 
+    # Initialise the django representation of a form with the input data
+    input_form = TaskDeleteForm(request.DELETE, instance=task)
+
+    # Check if the input data are valid
+    if not input_form.is_valid():
+        raise HttpInvalidFormData(
+            form_errors=input_form.non_field_errors(),
+            fields_error=input_form.errors,
+        )
+
     # Delete the task
     task.delete()
 
@@ -252,6 +263,7 @@ def task_details_view(request, task_id):
     return response
 
 
+@never_cache
 @login_required
 def task_list_view(request, codex_slug):
     """

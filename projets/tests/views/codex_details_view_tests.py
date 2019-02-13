@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from projets.commun.codex import Page as Page_container
 from projets.commun.error import HttpNotFound
-from projets.forms import TaskUpdateForm, TaskCreateForm, NoteUpdateForm, NoteCreateForm
+from projets.forms import TaskUpdateForm, TaskCreateForm, NoteUpdateForm
 from projets.models import Codex, Page, get_current_timestamp, Note, Task
 from projets.views.codex_details_view import (
     get_today_page,
@@ -49,7 +49,7 @@ class GetTodayPageTest(TestCase):
         self.assertIsNotNone(page_container.new_task_form)
         self.assertIsInstance(page_container.new_task_form, TaskCreateForm)
         self.assertIsNotNone(page_container.note_form)
-        self.assertIsInstance(page_container.note_form, NoteCreateForm)
+        self.assertIsInstance(page_container.note_form, NoteUpdateForm)
         self.assertEqual(len(page_container.tasks_form), 0)
 
     def test_get_today_page_exist_assert_return_page(self):

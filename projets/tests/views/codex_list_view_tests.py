@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from projets.commun.error import HttpStatus
 from projets.models import Codex
 from projets.views import get_codex
 
@@ -18,7 +17,6 @@ class CodexListViewTest(TestCase):
         self.codex = Codex.objects.create(
             title="Test Codex 1", author=self.user, description="Description 1"
         )
-        self.http_status = HttpStatus()
         self.text = "Test Text"
         self.form_data = {"text": self.text}
         self.url = reverse("codex")
