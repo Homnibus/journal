@@ -50,7 +50,7 @@ function post_information(parent_div, text) {
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
     // Do the ajax call
-    $.ajax({
+    $.ajaxq('InformationQueue', {
         url: '/codex/' + codex_slug + 'informations',
         data: {
             'text': text,
@@ -86,7 +86,7 @@ function put_information(parent_div, text) {
     // Set the csrf token
     $.ajaxSetup({headers: {'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val()}});
     // Do the ajax call
-    $.ajax({
+    $.ajaxq('InformationQueue', {
         url: '/codex/' + $('#slug').val() + 'information',
         data: {
             'text': text,

@@ -35,13 +35,14 @@ function enable_edit_note() {
 /** Change a editable note to a un-editable one */
 function disable_edit_note() {
     // Before disabling the <texarea>, we save it
-    put_or_delete_note.call(this);
+    const textarea = $(this);
     const html_content = $(this).val();
     const viewable_text = $('<pre class="note__text disabled-textarea"/>');
     viewable_text.text(html_content);
-    $(this).replaceWith(viewable_text);
+    textarea.replaceWith(viewable_text);
     // Show the pencil again
     viewable_text.closest('.page__note-section').find('.edit-pen').show();
+    put_or_delete_note.call(viewable_text);
 }
 
 

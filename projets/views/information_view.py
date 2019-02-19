@@ -75,8 +75,7 @@ def post_information(request, codex):
     # Check if the input data are valid
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Create the information
@@ -107,8 +106,7 @@ def put_information(request, information):
     # If the form is not valid, return an error status
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Update the information
