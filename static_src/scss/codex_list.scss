@@ -1,0 +1,94 @@
+@import "theme/color";
+@import "base/reset";
+@import "base/base";
+@import "layout/navigation";
+@import "components/simple-card--no-header";
+@import "components/simple-text-input";
+
+/* Header */
+.header__main h4 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: .6em;
+  white-space: nowrap;
+}
+
+/* Search field */
+.codex-search {
+  max-width: 11em;
+  margin-left: 0.5em;
+}
+
+/* Codex box */
+.codex-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.codex {
+  width: auto;
+}
+
+.codex__link {
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+  width: 8.75em;
+  height: 8.75em;
+  padding: 0.5em;
+  margin: 0.5em;
+  background-color: $white-blue;
+  border: 2px solid $dark-blue;
+  transition: background-color $transition-short;
+}
+
+.codex__title {
+  flex: 1 1 auto;
+  font-size: 1.4em;
+  overflow: hidden;
+}
+
+.codex__date {
+  text-align: right;
+  font-size: 0.9em;
+}
+
+/* Link box interaction */
+.codex__link:link,
+.codex__link:visited,
+.codex__link:hover,
+.codex__link:active,
+.codex__link:focus {
+  color: $black;
+  text-decoration: none;
+}
+
+.codex__link:hover,
+.codex__link:active,
+.codex__link:focus {
+  background-color: $mid-blue;
+}
+
+.codex__link:link .codex__title {
+  color: $dark-blue;
+  text-decoration: none;
+}
+
+.codex__link:visited .codex__title {
+  color: $dark-blue;
+  text-decoration: none;
+}
+
+.codex__link:hover .codex__title {
+  color: $white;
+  text-decoration: none;
+}
+
+.codex__link:active .title,
+.codex__link:focus .title {
+  color: $white;
+  text-decoration: none;
+  background-color: $mid-blue;
+}

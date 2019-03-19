@@ -1,4 +1,4 @@
-{% extends 'projets/base_template.html' %}
+{% extends 'projets/_base_template.html' %}
 {% load static %}
 {% load i18n %}
 
@@ -10,7 +10,6 @@
 
 {% block header %}
     <h1>{% trans 'Error ' %}{{ status_code }}: {{ message }} </h1>
-    <h4></h4>
 {% endblock %}
 
 {% block content %}

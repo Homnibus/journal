@@ -1,0 +1,39 @@
+@import "../theme/color";
+
+/* Base text input */
+.simple-text-input {
+  flex: 1;
+  display: flex;
+}
+
+.simple-text-input input[type="text"],
+.simple-text-input input[type="password"],
+.simple-text-input input[type="search"],
+.simple-text-input textarea {
+  flex: 1;
+  resize: none;
+  padding: 0.4em 0.4em 0.4em 0.6em;
+  font-size: 1em;
+  font-family: arial, serif;
+  overflow: hidden;
+  caret-color: $light-blue;
+  border: none;
+  border-left: 1px solid $mid-blue;
+  border-bottom: 1px solid $mid-blue;
+  border-top-left-radius: 10px;
+  box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
+  transition: border $transition-short, background-color $transition-short;
+
+  &:hover {
+    background: $white-grey;
+  }
+  &:focus {
+    background: $light-grey;
+    border-left: 0.3em solid $light-blue;
+    border-bottom: 1px solid $light-blue;
+  }
+}
+
+//.disabled-textarea {
+//  white-space: pre-wrap;
+//}

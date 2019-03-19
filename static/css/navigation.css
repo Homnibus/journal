@@ -9,6 +9,7 @@
   box-shadow: 0 0 .2em 0 rgba(0, 0, 0, .5), 0 0 .5em 0 rgba(0, 0, 0, .2);
 }
 
+.save-info__saving-image,
 .menu__home-button {
   width: 1.4em;
   height: 1.4em;

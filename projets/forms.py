@@ -69,7 +69,7 @@ class InformationCreateForm(ModelForm):
         fields = ("text",)
         widgets = {
             "text": Textarea(
-                attrs={"rows": 3, "cols": 0, "class": "information__text left-border-box"}
+                attrs={"rows": 3, "cols": 0, "class": "information__text inline-text-input"}
             )
         }
 
@@ -94,7 +94,7 @@ class InformationUpdateForm(AbstractHashFrom):
         hash_field = "text"
         widgets = {
             "text": Textarea(
-                attrs={"rows": 3, "cols": 0, "class": "information__text left-border-box"}
+                attrs={"rows": 3, "cols": 0, "class": "information__text inline-text-input"}
             )
         }
 
@@ -115,7 +115,7 @@ class NoteCreateForm(ModelForm):
                 attrs={
                     "rows": 3,
                     "cols": 0,
-                    "class": "note__text typewatch",
+                    "class": "note__text typewatch inline-text-input",
                     "placeholder": gettext("Note of the day"),
                 }
             )
@@ -162,7 +162,7 @@ class NoteUpdateForm(AbstractHashFrom):
                 attrs={
                     "rows": 3,
                     "cols": 0,
-                    "class": "note__text typewatch",
+                    "class": "note__text typewatch inline-text-input",
                     "placeholder": gettext("Note of the day"),
                 }
             )
@@ -185,7 +185,7 @@ class TaskCreateForm(ModelForm):
                 attrs={
                     "rows": 1,
                     "cols": 0,
-                    "class": "task__text typewatch left-border-box",
+                    "class": "task__text typewatch simple-list__text inline-text-input",
                     "placeholder": gettext("New task"),
                 }
             ),
@@ -234,7 +234,7 @@ class TaskUpdateForm(AbstractHashFrom):
                 attrs={
                     "rows": 1,
                     "cols": 0,
-                    "class": "task__text typewatch left-border-box",
+                    "class": "task__text typewatch simple-list__text inline-text-input",
                     "placeholder": gettext("New task"),
                 }
             ),

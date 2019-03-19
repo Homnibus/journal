@@ -1,0 +1,54 @@
+@import "../theme/color";
+
+/* pagination */
+div.pagination {
+  display: flex;
+  text-align: center;
+  margin: 1em auto 1em auto;
+  background-color: $mid-blue;
+  border-radius: 0.5em;
+}
+
+.pagination-first {
+  border-bottom-left-radius: 0.5em;
+  border-top-left-radius: 0.5em;
+}
+
+.pagination-last {
+  border-bottom-right-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.pagination a {
+  color: $white;
+  font-size: 1em;
+  line-height: 1.2em;
+  padding: 0.4em 0.4em 0.2em 0.4em;
+  border-bottom: 2px solid $dark-blue;
+}
+
+.pagination a.current {
+  color: $white;
+  text-decoration: none;
+  border-bottom: 2px solid $light-blue;
+  background-color: $dark-blue;
+}
+
+.pagination a:link {
+  text-decoration: none;
+}
+
+.pagination a:visited {
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  color: $dark-blue;
+  text-decoration: none;
+  border-bottom: 2px solid $mid-blue;
+  background-color: $light-blue;
+}
+
+.pagination a:active, .pagination a:focus {
+  text-decoration: none;
+}

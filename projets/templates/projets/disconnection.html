@@ -1,4 +1,4 @@
-{% extends "projets/base_template.html" %}
+{% extends "projets/_base_template.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -8,11 +8,14 @@
 
 {% block title %}{% trans "Disconnection" %}{% endblock %}
 
+{% block header-size %}header__size--small{% endblock %}
 {% block header %}
     <h1>{% trans "Disconnected" %}</h1>
-    <h4></h4>
 {% endblock %}
 
+{% block section-class %}body-small{% endblock %}
 {% block content %}
-    <h2>{% trans "You are disconnected." %}</h2>
+    <section class="simple-card simple-card--no-header">
+        <h4>{% trans "You are disconnected." %}</h4>
+    </section>
 {% endblock %}

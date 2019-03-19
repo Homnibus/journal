@@ -1,0 +1,141 @@
+@import "theme/color";
+@import "base/reset";
+@import "base/base";
+@import "layout/navigation";
+@import "components/simple-card--multiple-header";
+@import "components/simple-text-input";
+@import "layout/error";
+@import "components/button";
+@import "components/simple-list-base";
+@import "components/inline-text-input";
+
+/* Page */
+.page {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.page--task-only,
+.page--today {
+  flex-direction: column;
+}
+
+.page header {
+  flex-direction: row;
+}
+
+.page h2 {
+  white-space: nowrap;
+}
+
+.page__note-section,
+.page__task-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 256px;
+  align-self: auto;
+}
+
+.page__task-section {
+  margin-top: -1px;
+}
+
+/* Note */
+.note {
+  flex: 1;
+  display: flex;
+}
+
+.note__text {
+  flex: 1;
+  resize: none;
+  margin: 0;
+  font-size: 1em;
+  font-family: arial, serif;
+  overflow: hidden;
+}
+
+/* Task list */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Task */
+.task {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.task__is-achieved {
+  font-size: 1em;
+  margin: .5em;
+}
+
+.task__connexion-line {
+  width: .5em;
+  border: 1px solid $light-grey;
+}
+
+.task__add-item-button {
+  font-size: 1em;
+  width: 21px;
+  height: 21px;
+}
+
+.task__text {
+  flex: 1;
+  resize: none;
+  margin: 0;
+  font-size: 1em;
+  font-family: arial, serif;
+  overflow: hidden;
+}
+
+.task__text:required {
+  text-decoration: none;
+  outline: none 0;
+  box-shadow: none;
+}
+
+/* Left-border-box */
+.left-border-box {
+  border: 1px solid $light-grey;
+  background-color: $white;
+}
+
+.left-border-box:focus,
+.left-border-box:focus-within {
+  border: 1px solid $dark-blue;
+  box-shadow: 0 .1em .2em 0 $mid-blue, 0 .1em .5em 0 $light-blue;
+}
+
+.page:nth-child(odd) .left-border-box {
+  border-left: .3em solid $mid-blue;
+}
+
+.page:nth-child(even) .left-border-box {
+  border-left: .3em solid $white-blue;
+}
+
+.page.page--today .left-border-box {
+  border-left: .3em solid $light-blue;
+}
+
+/* edit pen */
+.edit-pen {
+  font-size: 1.5em;
+  line-height: 0.66;
+  margin-left: .3em;
+}
+
+.edit-pen:hover {
+  color: $light-blue;
+}

@@ -1,4 +1,4 @@
-{% extends "projets/navigation_home.html" %}
+{% extends "projets/_navigation_home.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -10,28 +10,40 @@
 
 {% block nav__new-codex %}menu__current-active{% endblock %}
 
+{% block header-size %}header__size--small{% endblock %}
 {% block header %}
-    <h1>{% trans "Creation of a new Codex" %}</h1>
-    <h4>{% trans "Give a title and a short description to your Codex !" %}</h4>
+    <div class="headline-container">
+        <h1>{% trans "Creation of a new Codex" %}</h1>
+        <h4>{% trans "Give a title and a short description to your Codex !" %}</h4>
+    </div>
 {% endblock %}
 
+{% block section-class %}body-small{% endblock %}
 {% block content %}
-    <section class="new-codex">
+    <section class="simple-card simple-card--no-header new-codex">
         <form action="{% url "codex_add" %}" method="post">
             {% csrf_token %}
             <div class="form-row">
-                <h2 class="form-row__label">{% trans "Title" %} :</h2>
+                <h4 class="form-row__label">{% trans "Title" %} :</h4>
                 <div class="form-row__input">
-                    {{ form.title }}
+                    {{ form.title.errors }}
+                    <div class="simple-text-input">
+                        {{ form.title }}
+                    </div>
                 </div>
             </div>
             <div class="form-row">
-                <h2 class="form-row__label">{% trans "Description" %} :</h2>
+                <h4 class="form-row__label">{% trans "Description" %} :</h4>
                 <div class="form-row__input">
-                    {{ form.description }}
+                    {{ form.description.errors }}
+                    <div class="simple-text-input">
+                        {{ form.description }}
+                    </div>
                 </div>
             </div>
-            <input type="submit" class="validate-button" value="{% trans "Create" %}"/>
+            <div class="button-container validate-button">
+                <input type="submit" class="button" value="{% trans "Create" %}"/>
+            </div>
         </form>
     </section>
 {% endblock %}

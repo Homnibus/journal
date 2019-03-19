@@ -1,0 +1,9 @@
+{% extends "projets/_base_template.html" %}
+{% load i18n %}
+
+{% block nav %}
+    <a href="{% url "codex_add" %}"
+       class="menu__item menu__link {% block nav__new-codex %}{% endblock %}">{% trans "New +" %}</a>
+    <a href="{% url "tasks_list" %}"
+       class="menu__item menu__link {% block nav__task %}{% endblock %}">{% trans "Task" %}</a>
+{% endblock %}

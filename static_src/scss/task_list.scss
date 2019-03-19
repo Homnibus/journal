@@ -1,0 +1,83 @@
+@import "theme/color";
+@import "base/reset";
+@import "base/base";
+@import "layout/navigation";
+@import "components/simple-card--single-header";
+@import "components/pagination";
+
+/* flex-table */
+.flex-table {
+  margin: 0.4em 0.8em 0.4em 0.8em;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.flex-row:nth-of-type(odd) {
+  background-color: $white;
+}
+
+.flex-row:nth-of-type(even) {
+  background-color: $white-blue;
+}
+
+.flex-cell-header {
+  background-color: $mid-blue;
+  color: $white;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  text-align: left;
+}
+
+a.flex-cell-header {
+  color: $white;
+}
+
+a.flex-cell-header:link, a.flex-cell-header:visited {
+  color: $white;
+  text-decoration: none;
+}
+
+a.flex-cell-header:hover {
+  color: $dark-blue;
+  text-decoration: none;
+}
+
+a.flex-cell-header:active, a.flex-cell-header:focus {
+  color: $white;
+  text-decoration: none;
+}
+
+.flex-cell {
+  padding: .4em .6em;
+  border-bottom: 1px solid $light-grey;
+  display: flex;
+  align-items: center;
+}
+
+.flex-cell-text {
+  width: 30em;
+  min-width: 15em;
+  justify-content: left;
+}
+
+.flex-cell-checkbox {
+  min-width: 5em;
+  justify-content: center;
+}
+
+.flex-cell-date {
+  min-width: 7em;
+  justify-content: center;
+}

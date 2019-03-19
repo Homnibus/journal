@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 
-from projets.commun.codex import Page as PageContainer
 from projets.commun.error import (
     HttpInvalidFormData,
     HttpForbidden,
@@ -17,7 +16,7 @@ from projets.commun.utils import (
     java_string_hashcode,
 )
 from projets.forms import TaskUpdateForm, TaskCreateForm, TaskDeleteForm
-from projets.models import Codex, Task, Page
+from projets.models import Codex, Task
 
 
 def is_authorized_to_get_task(user, codex):
@@ -144,8 +143,8 @@ def get_task_todo_list(request, codex=None):
     # Initialize the output data
     output_data = {}
 
-    # Get the page that have un-achieved task
-    page_list = Page.objects.filter(tasks__is_achieved=False).distinct().order_by("creation_date")
+    # Get the un-achieved task
+    task_list = Task.objects.filter(is_achieved=False).order_by('creation_date')
 
     # If the request is made on a specific codex
     if codex:
@@ -153,19 +152,17 @@ def get_task_todo_list(request, codex=None):
         if not is_authorized_to_get_task(request.user, codex):
             raise HttpForbidden
         # Filter the initial QuerySet
-        page_list = page_list.filter(codex=codex)
+        task_list = task_list.filter(page__codex=codex)
         # Add the slug to the output date to filter the table
         output_data.update({"codex": codex})
 
-    page_container_list = []
+    task_form_list = []
     # Change the model list to a form list
-    for page in page_list:
-        page_container = PageContainer(page.date)
-        for task in list(page.tasks.filter(is_achieved=False)):
-            page_container.tasks_form.append(TaskUpdateForm(instance=task))
-        page_container_list.append(page_container)
+    for task in task_list:
+        task_form_list.append(TaskUpdateForm(instance=task))
+
     # Update the output data with the current page
-    output_data.update({"page_list": page_container_list})
+    output_data.update({"task_list": task_form_list})
 
     return render(request, "projets/task_todo_list.html", output_data)
 

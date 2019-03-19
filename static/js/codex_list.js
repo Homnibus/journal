@@ -30,7 +30,7 @@ function codex_search() {
     }).closest('.codex').hide();
 }
 
-$('.codex-search-input').typeWatch({
+$('.codex-search_input').typeWatch({
     callback: codex_search,
     wait: 350,
     highlight: false,

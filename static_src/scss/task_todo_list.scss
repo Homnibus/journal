@@ -1,0 +1,64 @@
+@import "theme/color";
+@import "base/reset";
+@import "base/base";
+@import "layout/navigation";
+@import "components/simple-card--single-header";
+@import "components/simple-list-base";
+@import "components/simple-text-input";
+
+// Page
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* header */
+.page header {
+  flex-direction: row;
+}
+
+.page h2 {
+  white-space: nowrap;
+}
+
+/* Task */
+.task {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.task__is-achieved {
+  font-size: 1em;
+  margin: .5em;
+}
+
+.task__connexion-line {
+  width: .5em;
+  border: 1px solid $light-grey;
+}
+
+.task__text {
+  flex: 1;
+  resize: none;
+  margin: 0;
+  font-size: 1em;
+  font-family: arial, serif;
+  overflow: hidden;
+}
+
+/* Text box decoration */
+.left-border-box {
+  border: 1px solid $light-grey;
+  background-color: $white;
+}
+
+.page:nth-child(odd) .left-border-box {
+  border-left: .3em solid $mid-blue;
+}
+
+.page:nth-child(even) .left-border-box {
+  border-left: .3em solid $white-blue;
+}

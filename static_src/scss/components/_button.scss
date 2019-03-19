@@ -1,0 +1,42 @@
+@import "../theme/color";
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3em;
+  margin: 0.5em auto 0.5em auto;
+}
+
+.button {
+  cursor: pointer;
+  color: $white;
+  background-color: $mid-blue;
+  font-size: 1em;
+  line-height: 1.2em;
+  padding: 0.4em 0.8em 0.2em 0.8em;
+  display: block;
+  border-top: none;
+  border-right: none;
+  border-bottom: 2px solid $dark-blue;
+  border-left: none;
+  border-radius: 0.5em;
+  box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
+}
+
+.button:focus {
+  margin-top: 2px;
+  border: none;
+  box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
+}
+
+/* div like button */
+.div-like-button {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+}

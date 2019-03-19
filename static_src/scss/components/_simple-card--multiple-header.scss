@@ -1,0 +1,29 @@
+@import "simple-card-base";
+
+.simple-card--multiple-header:nth-child(odd) {
+  border-bottom: .3em solid $mid-blue;
+}
+
+.simple-card--multiple-header:nth-child(even) {
+  border-bottom: .3em solid $dark-blue;
+}
+
+.simple-card--multiple-header > *:not(:first-child) header {
+  border-top: 1px solid $white-blue;
+}
+
+.simple-card--multiple-header > *:nth-child(3n+1) .header__image {
+  background: url("http://localhost:8000/static/img/background-1.png");
+}
+
+.simple-card--multiple-header > *:nth-child(3n+2) .header__image {
+  background: url("http://localhost:8000/static/img/background-2.png");
+}
+
+.simple-card--multiple-header > *:nth-child(3n+3) .header__image {
+  background: url("http://localhost:8000/static/img/background-3.png");
+}
+
+.simple-card--multiple-header > > * {
+  padding: 0.3em
+}

@@ -6,6 +6,7 @@ function hide_error() {
     $('.local-error').remove();
     $('.nav-filler').removeAttr('style');
     $('.textarea-error').removeClass('textarea-error');
+    $('.save-info__not-saved-image').fadeOut(0);
 }
 
 function show_error(jqXHR) {
@@ -33,7 +34,7 @@ function show_element_error(element, element_header, jqXHR, exception) {
     jQuery.each(result.fields_error, function (field, error_list) {
         const nb_error = error_list.length;
         for (let i = 0; i < nb_error; i++) {
-            const error = $('<div class="local-error">').text(error_list[i]);
+            const error = $('<div class="local-error">').text(error_list[i] + " ( field: " + field + ")");
             element_header.after(error);
             element.addClass('textarea-error');
         }
@@ -43,13 +44,20 @@ function show_element_error(element, element_header, jqXHR, exception) {
     }
 }
 
-function show_element_save(element) {
+function show_save() {
     hide_error();
-    const save_div = element.parent().find('.save-info');
-    // Animate the save div
-    save_div.fadeIn('slow', function () {
-        save_div.fadeOut('slow');
-    });
+    $('.save-info__saving-image').stop(true).fadeIn('slow');
+}
+
+function hide_save() {
+    if ($.ajaxq.queueLength() === 1) {
+        $('.save-info__saving-image').fadeOut('slow');
+    }
+}
+
+function show_not_saved() {
+    $('.save-info__saving-image').fadeOut(0);
+    $('.save-info__not-saved-image').fadeIn(0);
 }
 
 function get_text(element) {
@@ -60,29 +68,4 @@ function get_text(element) {
         text = element.text();
     }
     return text
-}
-
-String.prototype.hashCode = function () {
-    let hash = 0;
-    if (this.length === 0) return hash;
-    for (let i = 0; i < this.length; i++) {
-        const char = this.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-};
-
-function update_hash(element, text) {
-    element.find('.hash').val(text.trim().hashCode());
-}
-
-function update_hash_and_id(element, hash, id) {
-    element.find('.id').val(id);
-    element.find('.hash').val(hash);
-}
-
-function reset_hash_and_id(element) {
-    element.find('.id').val("");
-    element.find('.hash').val("");
 }

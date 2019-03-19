@@ -1,4 +1,4 @@
-{% extends "projets/navigation_home.html" %}
+{% extends "projets/_navigation_home.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -14,8 +14,10 @@
     <h1>{% trans 'Most recent Codex' %}</h1>
     <h4>
         {% trans 'Search :' %}
-        <input class="codex-search-input shadow-box-input" maxlength="256" placeholder="{% trans 'Codex title' %}"
-               title="{% trans 'Search a Codex' %}" autocomplete="off" type="search">
+        <div class="codex-search simple-text-input">
+            <input class="codex-search_input" maxlength="256" placeholder="{% trans 'Codex title' %}"
+                   title="{% trans 'Search a Codex' %}" autocomplete="off" type="search">
+        </div>
     </h4>
 {% endblock %}
 

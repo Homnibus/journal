@@ -1,4 +1,4 @@
-{% extends codex|yesno:"projets/navigation_codex.html,projets/navigation_home.html" %}
+{% extends codex|yesno:"projets/_navigation_codex.html,projets/_navigation_home.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -11,35 +11,31 @@
 {% block nav__task %}current{% endblock %}
 {% block nav__task-todo-list %}menu__current-active{% endblock %}
 
+{% block header-size %}header__size--small{% endblock %}
 {% block header %}
     <h1>{% trans "To achieve Tasks" %}</h1>
     <h4></h4>
     {% csrf_token %}
 {% endblock %}
 
+{% block section-class %}body-small{% endblock %}
 {% block content %}
-    <section class="page-list">
-        {% for page in page_list reversed %}
-            <article class="page page--task-only">
-                <header>
-                    <h2>{{ page.date }}</h2>
-                    <div class="save-info save-info--display-none">{% trans "Saved" %}</div>
-                    <div class="line"></div>
-                </header>
-                <section class="task-list">
-                    {% for task in page.tasks_form %}
-                        <article class="task">
-                            {{ task.id }}
-                            {{ task.hash }}
-                            <div class="left-border-box">{{ task.is_achieved }}</div>
-                            {# Div needed because an input checkbox can have a border#}
-                            <div class="task__connexion-line"></div>
-                            <pre class="task__text disabled-textarea left-border-box">{{ task.text.value }}</pre>
-                        </article>
-                    {% endfor %}
-                </section>
-            </article>
-        {% endfor %}
+    <section class="simple-card simple-card--single-header page-list">
+        <header>
+            <h2>{% blocktrans with count=task_list|length %}Still {{ count }} to go !{% endblocktrans %}</h2>
+            <div class="header__image"></div>
+        </header>
+        <section class="task-list simple-list">
+            {% for task in task_list reversed %}
+                <article class="task simple-list__row">
+                    {{ task.id }}
+                    {{ task.hash }}
+                    <pre class="simple-list__text task__text disabled-textarea">{{ task.text.value|capfirst }}</pre>
+                    <div class="simple-list__right-icon">{{ task.is_achieved }}</div>
+                </article>
+                <div class="simple-list__separator"></div>
+            {% endfor %}
+        </section>
     </section>
 {% endblock %}
 
@@ -49,6 +45,7 @@
     <script src="{% static "js/jquery.typewatch.min.js" %}"></script>
     <script src="{% static 'js/ajaxq.js' %}"></script>
     <script src="{% static "js/basic.js" %}"></script>
+    <script src="{% static "js/hash.js" %}"></script>
     <script src="{% static "js/task.js" %}"></script>
     <script src="{% static "js/task_todo_list.js" %}"></script>
 {% endblock %}
