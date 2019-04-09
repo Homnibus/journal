@@ -60,6 +60,10 @@ function put_information(information, text) {
         dataType: 'json',
         method: 'PUT',
     }).error(function (jqXHR, exception) {
+        // If the user is not authenticated, redirect to the connexion page
+        if (jqXHR.status === 401) {
+            window.location.replace(jqXHR.responseJSON.connexion_url + "?next=" + window.location.pathname);
+        }
         // Give a feedback to the user
         show_information_error(information, jqXHR, exception)
     }).success(function () {

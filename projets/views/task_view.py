@@ -8,6 +8,7 @@ from projets.commun.error import (
     HttpInvalidFormData,
     HttpForbidden,
     HttpMethodNotAllowed,
+    HttpNotAuthorized,
 )
 from projets.commun.utils import (
     min_paginator_rang,
@@ -144,7 +145,7 @@ def get_task_todo_list(request, codex=None):
     output_data = {}
 
     # Get the un-achieved task
-    task_list = Task.objects.filter(is_achieved=False).order_by('creation_date')
+    task_list = Task.objects.filter(is_achieved=False).order_by("creation_date")
 
     # If the request is made on a specific codex
     if codex:
@@ -208,8 +209,7 @@ def put_task(request, task):
     # Check if the input data are valid
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Update the task
@@ -232,8 +232,7 @@ def delete_task(request, task):
     # Check if the input data are valid
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Delete the task
@@ -242,11 +241,14 @@ def delete_task(request, task):
     return JsonResponse({"success": True})
 
 
-@login_required
 def task_details_view(request, task_id):
     """
     Manage the update and deletion of a task.
     """
+    # Manually check if the user is connected to return a 401 error.
+    if not request.user.is_authenticated:
+        raise HttpNotAuthorized
+
     # Check if the requested resource exist
     task = get_object_or_not_found(Task, id=task_id)
 

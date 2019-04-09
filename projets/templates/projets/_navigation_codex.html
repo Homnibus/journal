@@ -16,9 +16,11 @@
         {% trans 'Info' %}
     </a>
     <div class="menu__item menu__save-info">
-        <img class="menu__icon save-info--display-none save-info__saving-image" src="{% static "img/home.jpeg" %}"
+        <img class="menu__icon save-info--display-none save-info__saving-image"
+             src="{% static "img/svg/save-regular.svg" %}"
              alt={% trans "Save" %}/>
-        <img class="menu__icon save-info--display-none save-info__not-saved-image" src="{% static "img/home.jpeg" %}"
+        <img class="menu__icon save-info--display-none save-info__not-saved-image"
+             src="{% static "img/svg/save-regular.svg" %}"
              alt={% trans "Not Saved" %}/>
     </div>
 {% endblock %}

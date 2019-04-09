@@ -6,15 +6,16 @@
 @import "components/simple-text-input";
 @import "layout/error";
 @import "components/button";
+@import "components/checkbox";
 @import "components/simple-list-base";
 @import "components/inline-text-input";
 
 /* Page */
 .page {
   display: flex;
-  flex-direction: row;
   overflow: hidden;
   align-items: stretch;
+  flex-direction: row;
   flex-wrap: wrap;
 }
 
@@ -33,45 +34,45 @@
 
 .page__note-section,
 .page__task-section {
-  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: stretch;
-  min-width: 256px;
   align-self: auto;
+  flex: 1;
+  flex-direction: column;
+  min-width: 256px;
 }
 
-.page__task-section {
-  margin-top: -1px;
+.page:not(.page--today) .page__task-section {
+  margin: -1px;
 }
 
 /* Note */
 .note {
-  flex: 1;
   display: flex;
+  flex: 1;
 }
 
 .note__text {
-  flex: 1;
-  resize: none;
-  margin: 0;
-  font-size: 1em;
   font-family: arial, serif;
+  font-size: 1em;
   overflow: hidden;
+  flex: 1;
+  margin: 0;
+  resize: none;
 }
 
 /* Task list */
 .task-list {
   display: flex;
-  flex-direction: column;
   align-items: stretch;
+  flex-direction: column;
 }
 
 /* Task */
 .task {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  flex-direction: row;
 }
 
 .task__is-achieved {
@@ -84,19 +85,30 @@
   border: 1px solid $light-grey;
 }
 
-.task__add-item-button {
+.add-item-button {
   font-size: 1em;
-  width: 21px;
-  height: 21px;
+  width: 1.5em;
+  height: 1.5em;
+  background-image: url("/static/img/plus-square-regular.svg");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.task__text {
-  flex: 1;
-  resize: none;
-  margin: 0;
+.add-item-button-svg {
   font-size: 1em;
+  width: 2em;
+  height: 2em;
+  fill: orange;
+}
+
+
+.task__text {
   font-family: arial, serif;
+  font-size: 1em;
   overflow: hidden;
+  flex: 1;
+  margin: 0;
+  resize: none;
 }
 
 .task__text:required {

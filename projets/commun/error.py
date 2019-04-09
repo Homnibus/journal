@@ -1,12 +1,13 @@
+from django.conf import settings
 from django.utils.translation import gettext
 
 
 class HttpError(Exception):
     def __init__(
-        self,
-        status_code=500,
-        message=gettext("Unexpected error"),
-        explanation=gettext("An unexpected error occurred"),
+            self,
+            status_code=500,
+            message=gettext("Unexpected error"),
+            explanation=gettext("An unexpected error occurred"),
     ):
         # Call the base class constructor
         super().__init__(message)
@@ -20,11 +21,26 @@ class HttpMethodNotAllowed(HttpError):
         # Call the base class constructor
         super().__init__(
             status_code=405,
-            message=gettext("Method not allowed."),
+            message=gettext("Method not allowed"),
             explanation=gettext(
                 "The request method is known by the server but is not supported by the target resource."
             ),
         )
+
+
+class HttpNotAuthorized(HttpError):
+    def __init__(self):
+        # Call the base class constructor
+        super().__init__(
+            status_code=401,
+            message=gettext("Not authorized"),
+            explanation=gettext(
+                "The request has not been applied because it lacks valid authentication credentials for the target "
+                "resource "
+            ),
+        )
+        # Add the connexion url
+        self.connexion_url = settings.LOGIN_URL
 
 
 class HttpForbidden(HttpError):
@@ -32,9 +48,9 @@ class HttpForbidden(HttpError):
         # Call the base class constructor
         super().__init__(
             status_code=403,
-            message=gettext("Forbidden."),
+            message=gettext("Forbidden"),
             explanation=gettext(
-                "The server understood the request but refuses to authorize it"
+                "The server understood the request but refuses to authorize it."
             ),
         )
 

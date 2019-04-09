@@ -3,31 +3,31 @@
 
 // Navigation bar container
 .menu {
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  z-index: 999;
-  box-shadow: 0 0 .2em 0 $dark-grey, 0 0 .5em 0 $grey;
   font-size: 1.1em;
   line-height: 1.6em;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  box-shadow: 0 0 .2em 0 $dark-grey, 0 0 .5em 0 $grey;
 }
 
 // Place holder under the nav bar
 .menu__under {
-  width: 100%;
   font-size: 1.1em;
+  width: 100%;
   margin-top: 2.35em;
 }
 
 // Any item of the nav bar
 .menu__item {
-  padding: .3em;
   margin: 0;
-  background: $mid-blue;
+  padding: .3em;
   border-bottom: 2px solid $dark-blue;
+  background: $mid-blue;
 }
 
 // Any icon of the nav bar
@@ -46,26 +46,26 @@
   }
 
   &:link {
-    color: $white;
     text-decoration: none;
+    color: $white;
   }
 
   &:visited {
-    color: $white;
     text-decoration: none;
+    color: $white;
   }
 
   &:hover {
-    background-color: $light-blue;
-    color: $dark-blue;
     text-decoration: none;
+    color: $dark-blue;
     border-bottom: 2px solid $mid-blue;
+    background-color: $light-blue;
   }
 
   &:active,
   &:focus {
-    color: $white;
     text-decoration: none;
+    color: $white;
   }
 }
 

@@ -51,6 +51,10 @@ function put_note(note, text, id, hash) {
         dataType: 'json',
         method: 'PUT',
     }).error(function (jqXHR, exception) {
+        // If the user is not authenticated, redirect to the connexion page
+        if (jqXHR.status === 401) {
+            window.location.replace(jqXHR.responseJSON.connexion_url + "?next=" + window.location.pathname);
+        }
         // Give a feedback to the user
         show_note_error(note, jqXHR, exception);
     }).success(function () {
@@ -63,7 +67,7 @@ function put_note(note, text, id, hash) {
 function delete_note(note, id, hash) {
     // Hide the note from so it can't be update after sending the delete request to the server
     if (!note.closest(".page").hasClass("page--today")) {
-        note.hide()
+        note.slideUp();
     }
     else {
         reset_hash_and_id(note);
@@ -81,12 +85,11 @@ function delete_note(note, id, hash) {
         },
         dataType: 'json',
         method: 'DELETE',
-    }).success(function () {
-        // Delete note from the dom if it's not the note of the day
-        if (!note.closest(".page").hasClass("page--today")) {
-            note.remove();
-        }
     }).error(function (jqXHR, exception) {
+        // If the user is not authenticated, redirect to the connexion page
+        if (jqXHR.status === 401) {
+            window.location.replace(jqXHR.responseJSON.connexion_url + "?next=" + window.location.pathname);
+        }
         // Give a feedback to the user
         show_note_error(note, jqXHR, exception);
         if (note.closest(".page").hasClass("page--today")) {

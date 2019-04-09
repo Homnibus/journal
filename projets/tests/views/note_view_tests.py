@@ -314,19 +314,14 @@ class PutNoteTest(TestCase):
 
         self.assertEqual(response.status_code, 405)
 
-    def test_put_user_not_connected_assert_redirect_to_connexion_page(self):
-        """ Test if a un-connected user is redirected to the connexion page. """
+    def test_put_user_not_connected_assert_return_401(self):
+        """ Test if a un-connected user is prompted to reconnect. """
         self.client.logout()
         response = self.client.put(
             self.url, self.form_data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
         )
 
-        self.assertRedirects(
-            response,
-            "/connexion" + "?next=" + self.url,
-            status_code=302,
-            target_status_code=200,
-        )
+        self.assertEqual(response.status_code, 401)
 
 
 class DeleteNoteTest(TestCase):
@@ -421,14 +416,9 @@ class DeleteNoteTest(TestCase):
 
         self.assertEqual(response.status_code, 405)
 
-    def test_delete_note_view_not_connected_assert_return_connexion_page(self):
-        """ Test if a un-connected user can list the notes """
+    def test_delete_note_view_not_connected_assert_return_401(self):
+        """ Test if a un-connected user is prompted to reconnect. """
         self.client.logout()
         response = self.client.delete(self.url, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
 
-        self.assertRedirects(
-            response,
-            "/connexion" + "?next=" + self.url,
-            status_code=302,
-            target_status_code=200,
-        )
+        self.assertEqual(response.status_code, 401)

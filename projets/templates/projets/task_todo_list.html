@@ -20,7 +20,7 @@
 
 {% block section-class %}body-small{% endblock %}
 {% block content %}
-    <section class="simple-card simple-card--single-header page-list">
+    <section class="simple-card simple-card--single-header">
         <header>
             <h2>{% blocktrans with count=task_list|length %}Still {{ count }} to go !{% endblocktrans %}</h2>
             <div class="header__image"></div>
@@ -31,7 +31,9 @@
                     {{ task.id }}
                     {{ task.hash }}
                     <pre class="simple-list__text task__text disabled-textarea">{{ task.text.value|capfirst }}</pre>
-                    <div class="simple-list__right-icon">{{ task.is_achieved }}</div>
+                    <div class="simple-list__right-icon">
+                        {% include "projets/_checkbox.html" with input_class="task__is-achieved" input_name="is_achieved" input_id_name="task_checkbox_" input_id_counter=task.id.value input_is_checked=task.is_achieved.value only %}
+                    </div>
                 </article>
                 <div class="simple-list__separator"></div>
             {% endfor %}

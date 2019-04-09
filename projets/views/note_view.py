@@ -7,6 +7,7 @@ from projets.commun.error import (
     HttpForbidden,
     HttpMethodNotAllowed,
     HttpConflict,
+    HttpNotAuthorized,
 )
 from projets.commun.utils import get_object_or_not_found, java_string_hashcode
 from projets.forms import NoteUpdateForm, NoteCreateForm, NoteDeleteForm
@@ -54,8 +55,7 @@ def post_note(request, codex):
     # Check if the input data are valid
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Create the note
@@ -84,8 +84,7 @@ def put_note(request, note):
     # Check if the input data are valid
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Update the note
@@ -108,8 +107,7 @@ def delete_note(request, note):
     # Check if the input data are valid
     if not input_form.is_valid():
         raise HttpInvalidFormData(
-            form_errors=input_form.non_field_errors(),
-            fields_error=input_form.errors,
+            form_errors=input_form.non_field_errors(), fields_error=input_form.errors
         )
 
     # Delete the note
@@ -118,11 +116,14 @@ def delete_note(request, note):
     return JsonResponse({"success": True})
 
 
-@login_required
 def note_details_view(request, note_id):
     """
     Manage the update and deletion of a note.
     """
+    # Manually check if the user is connected to return a 401 error.
+    if not request.user.is_authenticated:
+        raise HttpNotAuthorized
+
     # Check if the requested resource exist
     note = get_object_or_not_found(Note, id=note_id)
 

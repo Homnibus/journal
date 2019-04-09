@@ -23,6 +23,7 @@
 
 {% block content %}
     <section class="codex-list">
+        <h4 class="codex__not-found">{% trans 'No Codex found' %}</h4>
         {% for codex in codex_list %}
             <article class="codex">
                 <a href="{{ codex.get_absolute_url }}" class="codex__link">

@@ -3,33 +3,33 @@
 /* pagination */
 div.pagination {
   display: flex;
-  text-align: center;
   margin: 1em auto 1em auto;
-  background-color: $mid-blue;
+  text-align: center;
   border-radius: 0.5em;
+  background-color: $mid-blue;
 }
 
 .pagination-first {
-  border-bottom-left-radius: 0.5em;
   border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
 }
 
 .pagination-last {
-  border-bottom-right-radius: 0.5em;
   border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
 }
 
 .pagination a {
-  color: $white;
   font-size: 1em;
   line-height: 1.2em;
   padding: 0.4em 0.4em 0.2em 0.4em;
+  color: $white;
   border-bottom: 2px solid $dark-blue;
 }
 
 .pagination a.current {
-  color: $white;
   text-decoration: none;
+  color: $white;
   border-bottom: 2px solid $light-blue;
   background-color: $dark-blue;
 }
@@ -43,8 +43,8 @@ div.pagination {
 }
 
 .pagination a:hover {
-  color: $dark-blue;
   text-decoration: none;
+  color: $dark-blue;
   border-bottom: 2px solid $mid-blue;
   background-color: $light-blue;
 }

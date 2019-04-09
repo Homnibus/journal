@@ -17,7 +17,7 @@
 <body>
 <nav class="menu">
     <a href="{% url "home" %}" class="menu__item menu__link {% block nav-accueil %}{% endblock %}">
-        <img class="menu__icon menu__home-button" src="{% static "img/home.jpeg" %}" alt={% trans "Home" %}/>
+        <img class="menu__icon menu__home-button" src="{% static "img/favicon.png" %}" alt={% trans "Home" %}/>
     </a>
     {% block nav %}{% endblock %}
     <div class="menu__item menu__filler"></div>

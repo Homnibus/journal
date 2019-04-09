@@ -7,11 +7,11 @@
 
 /* flex-table */
 .flex-table {
-  margin: 0.4em 0.8em 0.4em 0.8em;
   display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
   overflow-x: auto;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  margin: 0.4em 0.8em 0.4em 0.8em;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
@@ -31,13 +31,13 @@
 }
 
 .flex-cell-header {
-  background-color: $mid-blue;
-  color: $white;
-  text-transform: uppercase;
   font-weight: 500;
-  letter-spacing: .05em;
-  white-space: nowrap;
   text-align: left;
+  white-space: nowrap;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: $white;
+  background-color: $mid-blue;
 }
 
 a.flex-cell-header {
@@ -45,39 +45,39 @@ a.flex-cell-header {
 }
 
 a.flex-cell-header:link, a.flex-cell-header:visited {
-  color: $white;
   text-decoration: none;
+  color: $white;
 }
 
 a.flex-cell-header:hover {
-  color: $dark-blue;
   text-decoration: none;
+  color: $dark-blue;
 }
 
 a.flex-cell-header:active, a.flex-cell-header:focus {
-  color: $white;
   text-decoration: none;
+  color: $white;
 }
 
 .flex-cell {
-  padding: .4em .6em;
-  border-bottom: 1px solid $light-grey;
   display: flex;
   align-items: center;
+  padding: .4em .6em;
+  border-bottom: 1px solid $light-grey;
 }
 
 .flex-cell-text {
+  justify-content: left;
   width: 30em;
   min-width: 15em;
-  justify-content: left;
 }
 
 .flex-cell-checkbox {
-  min-width: 5em;
   justify-content: center;
+  min-width: 5em;
 }
 
 .flex-cell-date {
-  min-width: 7em;
   justify-content: center;
+  min-width: 7em;
 }

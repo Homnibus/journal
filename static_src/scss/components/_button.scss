@@ -4,39 +4,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.3em;
   margin: 0.5em auto 0.5em auto;
+  padding: 0.3em;
 }
 
 .button {
-  cursor: pointer;
-  color: $white;
-  background-color: $mid-blue;
   font-size: 1em;
   line-height: 1.2em;
-  padding: 0.4em 0.8em 0.2em 0.8em;
   display: block;
+  padding: 0.4em 0.8em 0.2em 0.8em;
+  cursor: pointer;
+  transition: background-color 100ms ease;
+  color: $white;
   border-top: none;
   border-right: none;
   border-bottom: 2px solid $dark-blue;
   border-left: none;
   border-radius: 0.5em;
+  background-color: $mid-blue;
   box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
+
+  &:hover {
+    background-color: darken($mid-blue, 10%);
+  }
+
+  &:active {
+    margin-top: 2px;
+    border: none;
+    background-color: darken($mid-blue, 20%);
+    box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
+  }
 }
 
-.button:focus {
-  margin-top: 2px;
-  border: none;
-  box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
-}
 
 /* div like button */
 .div-like-button {
   font-family: arial, helvetica, sans-serif;
   font-size: 1em;
   line-height: 1.5;
-  padding: 0;
   margin: 0;
-  background-color: transparent;
+  padding: 0;
   border: none;
+  background-color: transparent;
 }

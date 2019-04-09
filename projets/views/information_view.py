@@ -9,6 +9,7 @@ from projets.commun.error import (
     HttpMethodNotAllowed,
     HttpForbidden,
     HttpConflict,
+    HttpNotAuthorized,
 )
 from projets.commun.utils import get_object_or_not_found, java_string_hashcode
 from projets.forms import InformationCreateForm, InformationUpdateForm
@@ -115,11 +116,14 @@ def put_information(request, information):
     return JsonResponse({"success": True})
 
 
-@login_required
 def information_details_view(request, codex_slug):
     """
     Manage the update of a codex information.
     """
+    # Manually check if the user is connected to return a 401 error.
+    if not request.user.is_authenticated:
+        raise HttpNotAuthorized
+
     # Check if the requested resource exist
     codex = get_object_or_not_found(Codex, slug=codex_slug)
     information = get_object_or_not_found(Information, codex=codex)

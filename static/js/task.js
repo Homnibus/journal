@@ -7,15 +7,22 @@ function add_new_task_dom(text, id, hash) {
         '<input type="hidden" name="hash" class="hash" id="id_hash">' +
         '<textarea name="text" cols="40" rows="1" class="task__text typewatch simple-list__text inline-text-input" required="" id="id_text"></textarea>' +
         '<div class="simple-list__right-icon">' +
-        '<input type="checkbox" name="is_achieved" class="task__is-achieved" id="id_is_achieved">' +
+        '<div class="checkbox__container">' +
+        '<input class="task__is-achieved" type="checkbox" name="is_achieved">' +
+        '<label  class="checkbox__label" ></label>' +
+        '</div>' +
         '</div>' +
         '</article>' +
         '<div class="simple-list__separator"></div>'
     );
+    task.find('.task__is-achieved').attr('id', "task_checkbox_" + id);
+    task.find('.checkbox__label').attr('for', "task_checkbox_" + id);
     task.find('.id').val(id);
     task.find('.hash').val(hash);
     task.find('.task__text').val(text);
+    task.hide(0);
     task_list.prepend(task);
+    task.slideDown('fast');
 
     return task;
 }
@@ -95,6 +102,10 @@ function put_task(task, is_achieved, text, id, hash) {
         dataType: 'json',
         method: 'PUT',
     }).error(function (jqXHR, exception) {
+        // If the user is not authenticated, redirect to the connexion page
+        if (jqXHR.status === 401) {
+            window.location.replace(jqXHR.responseJSON.connexion_url + "?next=" + window.location.pathname);
+        }
         // Give a feedback to the user
         show_task_error(task, jqXHR, exception);
     }).success(function () {
@@ -106,7 +117,8 @@ function put_task(task, is_achieved, text, id, hash) {
 /** Delete a task */
 function delete_task(task, id, hash) {
     //Hide the task so it can't be changed after sending the delete request to the server
-    task.hide();
+    task.next('.simple-list__separator').hide();
+    task.slideUp('fast');
 
     // Give a feedback to the user that there is a save being done.
     show_save();
@@ -120,13 +132,14 @@ function delete_task(task, id, hash) {
         },
         dataType: 'json',
         method: 'DELETE',
-    }).success(function () {
-        // Delete task from the dom
-        task.remove();
     }).error(function (jqXHR, exception) {
+        // If the user is not authenticated, redirect to the connexion page
+        if (jqXHR.status === 401) {
+            window.location.replace(jqXHR.responseJSON.connexion_url + "?next=" + window.location.pathname);
+        }
         // Give a feedback to the user
         show_task_error(task, jqXHR, exception);
-        task.show();
+        task.slideUp('fast');
     }).success(function () {
         // Give a feedback to the user that the saving ended.
         hide_save();

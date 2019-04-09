@@ -1,21 +1,22 @@
 @import "../theme/color";
 
 .simple-card {
-  background: $white;
-  border-radius: 5px;
-  padding-bottom: 0.5em;
+  overflow: hidden;
   margin-bottom: 0.8em;
+  padding-bottom: 0.5em;
+  border-radius: 5px;
+  background: $white;
 }
 
 .simple-card header {
   flex-direction: row;
   color: $dark-blue;
   border-bottom: 1px solid $white-blue;
+  background: lighten($mid-blue, 56%);
 }
 
 .simple-card h2 {
   padding: 0.5em;
-  //font-weight: 700;
   text-transform: capitalize;
 }
 

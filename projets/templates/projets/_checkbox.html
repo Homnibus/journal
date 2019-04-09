@@ -1,0 +1,6 @@
+{# value: input_class; input_name; input_id_name; input_id_counter; input_is_checked #}
+<div class="checkbox__container">
+    <input class="{{ input_class }}" type="checkbox" name="{{ input_name }}"
+           id="{{ input_id_name }}{{ input_id_counter }}" {% if input_is_checked == True %}checked{% endif %}>
+    <label for="{{ input_id_name }}{{ input_id_counter }}" class="checkbox__label"></label>
+</div>

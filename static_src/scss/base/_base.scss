@@ -6,24 +6,24 @@
 
 // Global page display
 html {
-  min-height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 100%;
 }
 
 body {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   background: $background-grey;
 }
 
 // Body header
 .header__background {
-  padding-top: 0.8em;
-  background: $white;
   margin-bottom: 1em;
+  padding-top: 0.8em;
   border-bottom: 1px solid $white-blue;
+  background: $white;
 }
 
 .header__size {
@@ -38,8 +38,8 @@ body {
 }
 
 .header__main h1 {
-  color: $dark-blue;
   margin: 0 0 0.3em 0;
+  color: $dark-blue;
 }
 
 .header__main h4 {
@@ -48,18 +48,18 @@ body {
 
 // Body content
 body > section, .header__size {
-  margin-left: auto;
-  margin-right: auto;
   width: 100%;
   max-width: 1024px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 // Small body content
 body > section.body-small, .header__size.header__size--small {
-  margin-left: auto;
-  margin-right: auto;
   width: 100%;
   max-width: 640px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .main-section-container {
@@ -71,11 +71,11 @@ body > section.body-small, .header__size.header__size--small {
 
 // Body footer
 body > footer {
-  color: $dark-blue;
-  text-align: center;
+  margin-top: 2em;
   padding-top: .4em;
   padding-bottom: .4em;
-  margin-top: 2em;
+  text-align: center;
+  color: $dark-blue;
 }
 
 .footer-filler {
@@ -102,6 +102,6 @@ section, article, header {
   width: 100%;
   margin-top: auto;
   margin-bottom: auto;
-  border-bottom: 1px solid $dark-blue;
   border-top: 1px solid $light-blue;
+  border-bottom: 1px solid $dark-blue;
 }
