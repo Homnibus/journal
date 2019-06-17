@@ -5,6 +5,7 @@ from django.db import models, connection
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import gettext
+from guardian.shortcuts import assign_perm
 
 
 class Codex(models.Model):
@@ -85,7 +86,11 @@ class Codex(models.Model):
         # Set the codex update date
         self.update_date = get_current_timestamp()
         self.set_nested_update_date()
+        # Save the codex
         super(Codex, self).save(*args, **kwargs)
+        # Set user permissions
+        if getattr(self, 'author', None) is not None:
+            assign_all_perm(self, self.author)
 
     def get_absolute_url(self):
         return reverse("codex_details", kwargs={"codex_slug": self.slug})
@@ -107,6 +112,7 @@ class Page(models.Model):
         unique_for_date="date",
         on_delete=models.CASCADE,
         null=False,
+        editable=False,
         help_text=gettext("Codex of the page"),
     )
     date = models.DateField(
@@ -165,6 +171,7 @@ class Note(models.Model):
         related_name="note",
         on_delete=models.CASCADE,
         null=False,
+        editable=False,
         help_text=gettext("Note of the page"),
     )
     text = models.TextField("text", blank=False, null=False, help_text=gettext("Note text"))
@@ -184,7 +191,7 @@ class Note(models.Model):
     def __str__(self):
         return gettext("Note for the {note_date}").format(note_date=self.page.creation_date)
 
-    def save(self, *args, **kwargs):
+    def save(self, codex_id=None, *args, **kwargs):
         """
         Override the save method to generate the creation date.
         """
@@ -198,7 +205,11 @@ class Note(models.Model):
         # Set the page nested_update_date
         self.page.set_nested_update_date()
         self.page.save()
+        # Save the Note
         super(Note, self).save(*args, **kwargs)
+        # Set user permissions
+        if getattr(self.page.codex, 'author', None) is not None:
+            assign_all_perm(self, self.page.codex.author)
 
     def get_absolute_url(self):
         return reverse("note_details", kwargs={"note_id": self.id})
@@ -214,6 +225,7 @@ class Task(models.Model):
         related_name="tasks",
         on_delete=models.CASCADE,
         null=False,
+        editable=False,
         help_text="Tasks of the page",
     )
     text = models.TextField("text", blank=False, null=False, help_text=gettext("Task text"))
@@ -246,7 +258,7 @@ class Task(models.Model):
     def __str__(self):
         return gettext("Task {task_id} for the {task_date}").format(task_id=self.id, task_date=self.page.creation_date)
 
-    def save(self, *args, **kwargs):
+    def save(self, codex_id=None, *args, **kwargs):
         """
         Override the save method to generate the creation date and the is_achieved date.
         """
@@ -254,6 +266,8 @@ class Task(models.Model):
         if not self.id:
             # Set the creation date
             self.creation_date = get_current_timestamp()
+            # Set the initial is_achieved to false to trigger the update of the achievement date
+            self.initial_is_achieved = False
 
         # Set the achieved_date if the task has just been achieved
         if self.is_achieved is True and self.initial_is_achieved is False:
@@ -269,7 +283,11 @@ class Task(models.Model):
         # Set the page nested_update_date
         self.page.set_nested_update_date()
         self.page.save()
+        # Save the Task
         super(Task, self).save(*args, **kwargs)
+        # Set user permissions
+        if getattr(self.page.codex, 'author', None) is not None:
+            assign_all_perm(self, self.page.codex.author)
 
     def get_absolute_url(self):
         return reverse("task_details", kwargs={"task_id": self.id})
@@ -286,6 +304,7 @@ class Information(models.Model):
         on_delete=models.CASCADE,
         primary_key=False,
         null=False,
+        editable=False,
         help_text=gettext("Codex of the information"),
     )
     text = models.TextField(
@@ -320,10 +339,21 @@ class Information(models.Model):
         # Set the codex nested_update_date
         self.codex.set_nested_update_date()
         self.codex.save()
+        # Save the information
         super(Information, self).save(*args, **kwargs)
+        # Set user permissions
+        if getattr(self.codex, 'author', None) is not None:
+            assign_all_perm(self, self.codex.author)
 
     def get_absolute_url(self):
         return reverse("information", kwargs={"codex_slug": self.codex.slug})
+
+
+def assign_all_perm(model_instance, user):
+    model_name = model_instance._meta.model_name
+    assign_perm('view_{}'.format(model_name), user, model_instance)
+    assign_perm('change_{}'.format(model_name), user, model_instance)
+    assign_perm('delete_{}'.format(model_name), user, model_instance)
 
 
 def get_current_timestamp():

@@ -344,7 +344,6 @@ section, article, header {
   text-decoration: none;
   color: white;
 }
-
 .menu__link:visited {
   text-decoration: none;
   color: white;
@@ -501,11 +500,9 @@ section, article, header {
   background-color: #4d7385;
   box-shadow: 0 0.1em 0.2em 0 rgba(0, 0, 0, 0.2), 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.1);
 }
-
 .button:hover {
   background-color: #3a5765;
 }
-
 .button:active {
   margin-top: 2px;
   border: none;
@@ -547,11 +544,9 @@ section, article, header {
   background-color: white;
   box-shadow: 0 0.1em 0.2em 0 rgba(0, 0, 0, 0.2), 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.1);
 }
-
 .checkbox__container input[type=checkbox] + .checkbox__label:hover:before {
   background-color: #e6e6e6;
 }
-
 .checkbox__container input[type=checkbox] + .checkbox__label:active:before {
   background-color: #cccccc;
 }
@@ -561,11 +556,9 @@ section, article, header {
   background: white url(/static/img/svg/check-solid.svg) no-repeat center;
   background-size: 1em;
 }
-
 .checkbox__container input[type=checkbox]:checked + .checkbox__label:hover:before {
   background-color: #e6e6e6;
 }
-
 .checkbox__container input[type=checkbox]:checked + .checkbox__label:active:before {
   background-color: #cccccc;
 }
@@ -699,7 +692,6 @@ section, article, header {
   font-size: 1em;
   width: 1.5em;
   height: 1.5em;
-  background-image: url("/static/img/plus-square-regular.svg");
   background-repeat: no-repeat;
   background-position: center;
 }

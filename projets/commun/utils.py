@@ -2,6 +2,26 @@ from django.http import JsonResponse
 from django.shortcuts import _get_queryset
 
 from projets.commun.error import HttpNotFound
+from projets.models import get_current_timestamp, Page, Codex
+
+
+def create_or_get_today_page(codex_id):
+    """
+    Return the page of the day. Create it if it does not exist.
+    """
+    codex = Codex.objects.get(id=codex_id)
+    # Get the page of the day if it exist
+    # TODO: try to upgrade the way this check is down ?
+    today = get_current_timestamp().date()
+    page = Page.objects.filter(codex=codex, date=today).first()
+    # If the page does not exist, create a new one
+    if page is None:
+        page = Page(
+            codex=codex,
+            date=today
+        )
+        page.save()
+    return page
 
 
 def java_string_hashcode(string):
