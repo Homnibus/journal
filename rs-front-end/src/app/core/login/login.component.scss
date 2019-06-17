@@ -1,0 +1,14 @@
+@import "components/simple-card--no-header";
+@import "components/simple-text-input";
+@import "components/button";
+
+// Main form
+.connexion_form {
+  max-width: 15em;
+  margin-top: 0.8em;
+}
+
+// Adding margin to the input
+.simple-text-input {
+  margin: 0.8em 0.5em 1em 0.5em;
+}

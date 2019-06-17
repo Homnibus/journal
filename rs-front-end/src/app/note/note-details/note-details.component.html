@@ -1,0 +1,5 @@
+<div class="note">
+  <markdown *ngIf="note && !enableEdit" [data]="note.text" class="note__text simple-list__text"></markdown>
+  <textarea *ngIf="enableEdit" [formControl]="noteTextControl" autosize class="note__text inline-text-input"
+            placeholder="Note of the day"></textarea>
+</div>

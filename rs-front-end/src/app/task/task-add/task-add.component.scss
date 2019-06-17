@@ -1,0 +1,46 @@
+@import "../../../sass/components/inline-text-input";
+@import "../../../sass/components/simple-list-base";
+
+
+.add-item-button {
+  font-size: 1em;
+  width: 1.5em;
+  height: 1.5em;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+/* Task */
+.task {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.task__is-achieved {
+  font-size: 1em;
+  margin: .5em;
+}
+
+.task__connexion-line {
+  width: .5em;
+  border: 1px solid $light-grey;
+}
+
+
+.task__text {
+  font-family: arial, serif;
+  font-size: 1em;
+  overflow: hidden;
+  overflow-x: hidden;
+  flex: 1;
+  margin: 0;
+  resize: none;
+}
+
+.task__text:required {
+  text-decoration: none;
+  outline: none 0;
+  box-shadow: none;
+}

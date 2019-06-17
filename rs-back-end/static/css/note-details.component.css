@@ -1,0 +1,69 @@
+/* New text input */
+.inline-text-input {
+  font-family: arial, serif;
+  font-size: 1em;
+  overflow: hidden;
+  margin: 0;
+  padding: 0.8em 1em 0.8em 1.05em;
+  resize: none;
+  transition: border 100ms ease, background-color 100ms ease;
+  border: 0;
+  border-left: 0.15em solid white;
+  caret-color: #79b5d1;
+}
+
+.inline-text-input:hover {
+  border-left: 0.15em solid rgba(0, 0, 0, 0.1);
+  background: #e6e6e6;
+}
+
+.inline-text-input:focus {
+  border-left: 0.3em solid #79b5d1;
+  background: #cccccc;
+}
+
+.simple-list__row {
+  transition: background-color 100ms ease, border 100ms ease;
+}
+
+.simple-list__row:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.simple-list__text {
+  padding: 0.8em 1em 0.8em 1.2em;
+  white-space: pre-wrap;
+  background: none;
+}
+
+.simple-list__right-icon {
+  margin: 0;
+  padding: 0.5em 1.8em 0.5em 1.8em;
+}
+
+.simple-list__left-icon {
+  margin: 0;
+  padding: 0.5em 1.8em 0.5em 1.8em;
+}
+
+.simple-list__separator {
+  margin: 0 1em 0 1em;
+  border-bottom: 1px solid whitesmoke;
+}
+
+/* Note */
+.note {
+  display: flex;
+  flex: 1;
+}
+
+.note__text {
+  font-family: arial, serif;
+  font-size: 1em;
+  overflow: hidden;
+  flex: 1;
+  margin: 0;
+  resize: none;
+}
+
+/*# sourceMappingURL=note-details.component.css.map */

@@ -1,0 +1,51 @@
+@import "../theme/color";
+
+.checkbox__container {
+  width: 2em;
+  height: 1.8em;
+}
+
+.checkbox__container input[type=checkbox] {
+  display: none;
+}
+
+.checkbox__container input[type=checkbox] + .checkbox__label {
+  &:before {
+    display: inline-block;
+    width: 1.7em;
+    height: 1.5em;
+    content: "";
+    transition: background-color 100ms ease;
+    border-top: 2px solid $mid-blue;
+    border-right: 2px solid $mid-blue;
+    border-bottom: 2px solid $dark-blue;
+    border-left: 2px solid $mid-blue;
+    border-radius: 0.5em;
+    background-color: $white;
+    box-shadow: 0 .1em .2em 0 $grey, 0 .1em .5em 0 $light-grey;
+  }
+
+  &:hover:before {
+    background-color: darken($white, 10%);
+  }
+
+  &:active:before {
+    background-color: darken($white, 20%);
+  }
+}
+
+.checkbox__container input[type=checkbox]:checked + .checkbox__label {
+  &:before {
+    content: "";
+    background: $white url(/rs_back_end/static/img/svg/check-solid.svg) no-repeat center;
+    background-size: 1em;
+  }
+
+  &:hover:before {
+    background-color: darken($white, 10%);
+  }
+
+  &:active:before {
+    background-color: darken($white, 20%);
+  }
+}

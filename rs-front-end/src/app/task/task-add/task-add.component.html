@@ -1,0 +1,7 @@
+<div class="task task--new">
+  <textarea (keydown.control.enter)="onClick()" [formControl]="taskTextControl" autosize
+            class="task__text inline-text-input" placeholder="New task"></textarea>
+  <div class="button-container simple-list__right-icon ">
+    <button (click)="onClick()" class="button task__add-item-button" i18n type="button">Add</button>
+  </div>
+</div>

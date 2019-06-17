@@ -1,0 +1,78 @@
+/* LOGIN FORM */
+
+body.login {
+  background: #f8f8f8;
+}
+
+.login #header {
+  height: auto;
+  padding: 5px 16px;
+}
+
+.login #header h1 {
+  font-size: 18px;
+}
+
+.login #header h1 a {
+  color: #fff;
+}
+
+.login #content {
+  padding: 20px 20px 0;
+}
+
+.login #container {
+  overflow: hidden;
+  width: 28em;
+  min-width: 300px;
+  margin: 100px auto;
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.login #content-main {
+  width: 100%;
+}
+
+.login .form-row {
+  float: left;
+  width: 100%;
+  padding: 4px 0;
+  border-bottom: none;
+}
+
+.login .form-row label {
+  font-size: 1em;
+  line-height: 2em;
+  clear: both;
+  padding-right: 0.5em;
+  color: #333;
+}
+
+.login .form-row #id_username, .login .form-row #id_password {
+  clear: both;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+}
+
+.login span.help {
+  font-size: 10px;
+  display: block;
+}
+
+.login .submit-row {
+  clear: both;
+  margin: 0;
+  padding: 1em 0 0 9.4em;
+  text-align: left;
+  border: none;
+  background: none;
+}
+
+.login .password-reset-link {
+  text-align: center;
+}

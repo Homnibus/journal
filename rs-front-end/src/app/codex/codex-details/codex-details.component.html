@@ -1,0 +1,19 @@
+<ng-container *ngIf="(codex$|async) as codex">
+  <app-nav-codex-detail [codexSlug]="codex.slug"></app-nav-codex-detail>
+  <div class="footer-filler"></div>
+  <header class="header__main header__background">
+    <div class="header__size">
+      <div class="header__headline-container">
+        <h1 i18n>Codex - {{ codex.title | titlecase }}</h1>
+        <h4 i18n>{{ codex.description }}</h4>
+      </div>
+    </div>
+    <div class="line"></div>
+  </header>
+  <section class="main-section">
+    <div class="main-section--container">
+      <app-today-page [codex]="codex"></app-today-page>
+      <app-old-page-list [codex]="codex"></app-old-page-list>
+    </div>
+  </section>
+</ng-container>

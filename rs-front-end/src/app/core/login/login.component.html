@@ -1,0 +1,30 @@
+<header class="header__main header__background">
+  <div class="header__size">
+    <div class="header__headline-container">
+      <h1 i18n>Connexion</h1>
+    </div>
+  </div>
+  <div class="line"></div>
+</header>
+<section class="main-section body-small">
+  <div class="main-section--container">
+    <section class="simple-card simple-card--no-header">
+      <ng-container *ngIf="(authService.currentUser$ | async) as curentUser">
+        <h2 i18n>You are connected as {{ curentUser.name }}.</h2>
+      </ng-container>
+      <ng-container *ngIf="!(authService.currentUser$ | async)">
+        <h4 i18n>User Name</h4>
+        <div class="simple-text-input">
+          <input [(ngModel)]="userName" class="form-control" id="userName" placeholder="User" type="text">
+        </div>
+        <h4 i18n>Password</h4>
+        <div class="simple-text-input">
+          <input [(ngModel)]="password" class="form-control" id="password" placeholder="Password" type="password">
+        </div>
+        <div class="button-container validate-button">
+          <button (click)="tryLogin()" class="button" type="submit">Login</button>
+        </div>
+      </ng-container>
+    </section>
+  </div>
+</section>

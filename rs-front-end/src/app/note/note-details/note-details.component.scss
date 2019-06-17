@@ -1,0 +1,17 @@
+@import "../../../sass/components/inline-text-input";
+@import "../../../sass/components/simple-list-base";
+
+/* Note */
+.note {
+  display: flex;
+  flex: 1;
+}
+
+.note__text {
+  font-family: arial, serif;
+  font-size: 1em;
+  overflow: hidden;
+  flex: 1;
+  margin: 0;
+  resize: none;
+}

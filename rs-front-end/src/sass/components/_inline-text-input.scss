@@ -1,0 +1,28 @@
+@import "../theme/color";
+
+/* New text input */
+.inline-text-input {
+  font-family: arial, serif;
+  font-size: 1em;
+  overflow: hidden;
+  margin: 0;
+  padding: 0.8em 1em 0.8em 1.05em;
+  resize: none;
+  transition: border $transition-short, background-color $transition-short;
+  border: 0;
+  border-left: 0.15em solid $white;
+  caret-color: $light-blue;
+
+  &:hover {
+    border-left: 0.15em solid $light-grey;
+    background: darken($white, 10%);
+  }
+
+  &:focus {
+    border-left: 0.3em solid $light-blue;
+    background: darken($white, 20%);
+  }
+}
+
+
+

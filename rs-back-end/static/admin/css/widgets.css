@@ -1,0 +1,564 @@
+/* SELECTOR (FILTER INTERFACE) */
+
+.selector {
+  float: left;
+  width: 800px;
+}
+
+.selector select {
+  width: 380px;
+  height: 17.2em;
+}
+
+.selector-available, .selector-chosen {
+  float: left;
+  width: 380px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.selector-chosen select {
+  border-top: none;
+}
+
+.selector-available h2, .selector-chosen h2 {
+  border: 1px solid #ccc;
+  border-radius: 4px 4px 0 0;
+}
+
+.selector-chosen h2 {
+  color: #fff;
+  background: #79aec8;
+}
+
+.selector .selector-available h2 {
+  color: #666;
+  background: #f8f8f8;
+}
+
+.selector .selector-filter {
+  font-size: 10px;
+  margin: 0;
+  padding: 8px;
+  text-align: left;
+  color: #999;
+  border: 1px solid #ccc;
+  background: white;
+}
+
+.selector .selector-filter label,
+.inline-group .aligned .selector .selector-filter label {
+  line-height: 1;
+  float: left;
+  overflow: hidden;
+  width: 18px;
+  height: 18px;
+  margin: 7px 0 0;
+  padding: 0;
+}
+
+.selector .selector-available input {
+  width: 320px;
+  margin-left: 8px;
+}
+
+.selector ul.selector-chooser {
+  float: left;
+  width: 22px;
+  margin: 10em 5px 0 5px;
+  padding: 0;
+  border-radius: 10px;
+  background-color: #eee;
+}
+
+.selector-chooser li {
+  margin: 0;
+  padding: 3px;
+  list-style-type: none;
+}
+
+.selector select {
+  margin: 0 0 10px;
+  padding: 0 10px;
+  border-radius: 0 0 4px 4px;
+}
+
+.selector-add, .selector-remove {
+  display: block;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+  cursor: default;
+  text-indent: -3000px;
+  opacity: 0.3;
+}
+
+.active.selector-add, .active.selector-remove {
+  opacity: 1;
+}
+
+.active.selector-add:hover, .active.selector-remove:hover {
+  cursor: pointer;
+}
+
+.selector-add {
+  background: url(../img/selector-icons.svg) 0 -96px no-repeat;
+}
+
+.active.selector-add:focus, .active.selector-add:hover {
+  background-position: 0 -112px;
+}
+
+.selector-remove {
+  background: url(../img/selector-icons.svg) 0 -64px no-repeat;
+}
+
+.active.selector-remove:focus, .active.selector-remove:hover {
+  background-position: 0 -80px;
+}
+
+a.selector-chooseall, a.selector-clearall {
+  font-weight: bold;
+  line-height: 16px;
+  display: inline-block;
+  overflow: hidden;
+  height: 16px;
+  margin: 1px auto 3px;
+  text-align: left;
+  text-decoration: none;
+  opacity: 0.3;
+  color: #666;
+}
+
+a.active.selector-chooseall:focus, a.active.selector-clearall:focus,
+a.active.selector-chooseall:hover, a.active.selector-clearall:hover {
+  color: #447e9b;
+}
+
+a.active.selector-chooseall, a.active.selector-clearall {
+  opacity: 1;
+}
+
+a.active.selector-chooseall:hover, a.active.selector-clearall:hover {
+  cursor: pointer;
+}
+
+a.selector-chooseall {
+  padding: 0 18px 0 0;
+  cursor: default;
+  background: url(../img/selector-icons.svg) right -160px no-repeat;
+}
+
+a.active.selector-chooseall:focus, a.active.selector-chooseall:hover {
+  background-position: 100% -176px;
+}
+
+a.selector-clearall {
+  padding: 0 0 0 18px;
+  cursor: default;
+  background: url(../img/selector-icons.svg) 0 -128px no-repeat;
+}
+
+a.active.selector-clearall:focus, a.active.selector-clearall:hover {
+  background-position: 0 -144px;
+}
+
+/* STACKED SELECTORS */
+
+.stacked {
+  float: left;
+  width: 490px;
+}
+
+.stacked select {
+  width: 480px;
+  height: 10.1em;
+}
+
+.stacked .selector-available, .stacked .selector-chosen {
+  width: 480px;
+}
+
+.stacked .selector-available {
+  margin-bottom: 0;
+}
+
+.stacked .selector-available input {
+  width: 422px;
+}
+
+.stacked ul.selector-chooser {
+  width: 50px;
+  height: 22px;
+  margin: 0 0 10px 40%;
+  border-radius: 10px;
+  background-color: #eee;
+}
+
+.stacked .selector-chooser li {
+  float: left;
+  padding: 3px 3px 3px 5px;
+}
+
+.stacked .selector-chooseall, .stacked .selector-clearall {
+  display: none;
+}
+
+.stacked .selector-add {
+  cursor: default;
+  background: url(../img/selector-icons.svg) 0 -32px no-repeat;
+}
+
+.stacked .active.selector-add {
+  cursor: pointer;
+  background-position: 0 -48px;
+}
+
+.stacked .selector-remove {
+  cursor: default;
+  background: url(../img/selector-icons.svg) 0 0 no-repeat;
+}
+
+.stacked .active.selector-remove {
+  cursor: pointer;
+  background-position: 0 -16px;
+}
+
+.selector .help-icon {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin: -2px 0 0 2px;
+  vertical-align: middle;
+  background: url(../img/icon-unknown.svg) 0 0 no-repeat;
+}
+
+.selector .selector-chosen .help-icon {
+  background: url(../img/icon-unknown-alt.svg) 0 0 no-repeat;
+}
+
+.selector .search-label-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: url(../img/search.svg) 0 0 no-repeat;
+}
+
+/* DATE AND TIME */
+
+p.datetime {
+  font-weight: bold;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  color: #666;
+}
+
+.datetime span {
+  font-size: 11px;
+  font-weight: normal;
+  white-space: nowrap;
+  color: #ccc;
+}
+
+.datetime input, .form-row .datetime input.vDateField, .form-row .datetime input.vTimeField {
+  min-width: 0;
+  margin-bottom: 4px;
+  margin-left: 5px;
+}
+
+table p.datetime {
+  font-size: 11px;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.datetimeshortcuts .clock-icon, .datetimeshortcuts .date-icon {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.datetimeshortcuts .clock-icon {
+  background: url(../img/icon-clock.svg) 0 0 no-repeat;
+}
+
+.datetimeshortcuts a:focus .clock-icon,
+.datetimeshortcuts a:hover .clock-icon {
+  background-position: 0 -16px;
+}
+
+.datetimeshortcuts .date-icon {
+  top: -1px;
+  background: url(../img/icon-calendar.svg) 0 0 no-repeat;
+}
+
+.datetimeshortcuts a:focus .date-icon,
+.datetimeshortcuts a:hover .date-icon {
+  background-position: 0 -16px;
+}
+
+.timezonewarning {
+  font-size: 11px;
+  color: #999;
+}
+
+/* URL */
+
+p.url {
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  color: #666;
+}
+
+.url a {
+  font-weight: normal;
+}
+
+/* FILE UPLOADS */
+
+p.file-upload {
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  color: #666;
+}
+
+.aligned p.file-upload {
+  margin-left: 170px;
+}
+
+.file-upload a {
+  font-weight: normal;
+}
+
+.file-upload .deletelink {
+  margin-left: 5px;
+}
+
+span.clearable-file-input label {
+  font-size: 11px;
+  display: inline;
+  float: none;
+  color: #333;
+}
+
+/* CALENDARS & CLOCKS */
+
+.calendarbox, .clockbox {
+  font-size: 12px;
+  position: relative;
+  overflow: hidden;
+  width: 19em;
+  margin: 5px auto;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.clockbox {
+  width: auto;
+}
+
+.calendar {
+  margin: 0;
+  padding: 0;
+}
+
+.calendar table {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+  background: white;
+}
+
+.calendar caption, .calendarbox h2 {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+  color: #333;
+  border-top: none;
+  background: #f5dd5d;
+}
+
+.calendar th {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 8px 5px;
+  text-align: center;
+  color: #666;
+  border-bottom: 1px solid #ddd;
+  background: #f8f8f8;
+}
+
+.calendar td {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 0;
+  text-align: center;
+  border-top: 1px solid #eee;
+  border-bottom: none;
+}
+
+.calendar td.selected a {
+  color: #fff;
+  background: #79aec8;
+}
+
+.calendar td.nonday {
+  background: #f8f8f8;
+}
+
+.calendar td.today a {
+  font-weight: 700;
+}
+
+.calendar td a, .timelist a {
+  font-weight: 400;
+  display: block;
+  padding: 6px;
+  text-decoration: none;
+  color: #444;
+}
+
+.calendar td a:focus, .timelist a:focus,
+.calendar td a:hover, .timelist a:hover {
+  color: white;
+  background: #79aec8;
+}
+
+.calendar td a:active, .timelist a:active {
+  color: white;
+  background: #417690;
+}
+
+.calendarnav {
+  font-size: 10px;
+  margin: 0;
+  padding: 1px 3px;
+  text-align: center;
+  color: #ccc;
+}
+
+.calendarnav a:link, #calendarnav a:visited,
+#calendarnav a:focus, #calendarnav a:hover {
+  color: #999;
+}
+
+.calendar-shortcuts {
+  font-size: 11px;
+  line-height: 11px;
+  padding: 8px 0;
+  color: #ccc;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+.calendarbox .calendarnav-previous, .calendarbox .calendarnav-next {
+  position: absolute;
+  top: 8px;
+  display: block;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  text-indent: -9999px;
+}
+
+.calendarnav-previous {
+  left: 10px;
+  background: url(../img/calendar-icons.svg) 0 0 no-repeat;
+}
+
+.calendarbox .calendarnav-previous:focus,
+.calendarbox .calendarnav-previous:hover {
+  background-position: 0 -15px;
+}
+
+.calendarnav-next {
+  right: 10px;
+  background: url(../img/calendar-icons.svg) 0 -30px no-repeat;
+}
+
+.calendarbox .calendarnav-next:focus,
+.calendarbox .calendarnav-next:hover {
+  background-position: 0 -45px;
+}
+
+.calendar-cancel {
+  font-size: 12px;
+  margin: 0;
+  padding: 4px 0;
+  color: #333;
+  border-top: 1px solid #ddd;
+  background: #eee;
+}
+
+.calendar-cancel:focus, .calendar-cancel:hover {
+  background: #ddd;
+}
+
+.calendar-cancel a {
+  display: block;
+  color: black;
+}
+
+ul.timelist, .timelist li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.timelist a {
+  padding: 2px;
+}
+
+/* EDIT INLINE */
+
+.inline-deletelink {
+  float: right;
+  width: 16px;
+  height: 16px;
+  text-indent: -9999px;
+  border: 0 none;
+  background: url(../img/inline-delete.svg) 0 0 no-repeat;
+}
+
+.inline-deletelink:focus, .inline-deletelink:hover {
+  cursor: pointer;
+}
+
+/* RELATED WIDGET WRAPPER */
+.related-widget-wrapper {
+  float: left; /* display properly in form rows with multiple fields */
+  overflow: hidden; /* clear floated contents */
+}
+
+.related-widget-wrapper-link {
+  opacity: 0.3;
+}
+
+.related-widget-wrapper-link:link {
+  opacity: .8;
+}
+
+.related-widget-wrapper-link:link:focus,
+.related-widget-wrapper-link:link:hover {
+  opacity: 1;
+}
+
+select + .related-widget-wrapper-link,
+.related-widget-wrapper-link + .related-widget-wrapper-link {
+  margin-left: 7px;
+}

@@ -1,0 +1,17 @@
+{% extends 'rs_back_end/_base_template.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static "css/connexion.css" %}"/>
+{% endblock %}
+
+{% block title %}{% trans 'Error ' %}{{ status_code }}{% endblock %}
+
+{% block header %}
+  <h1>{% trans 'Error ' %}{{ status_code }}: {{ message }} </h1>
+{% endblock %}
+
+{% block content %}
+  <h2>{{ explanation }}</h2>
+{% endblock %}

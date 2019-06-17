@@ -1,0 +1,21 @@
+{% extends "rs_back_end/_base_template.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+  <link rel='stylesheet' href='{% static "css/connexion.css" %}'/>
+{% endblock %}
+
+{% block title %}{% trans "Disconnection" %}{% endblock %}
+
+{% block header-size %}header__size--small{% endblock %}
+{% block header %}
+  <h1>{% trans "Disconnected" %}</h1>
+{% endblock %}
+
+{% block section-class %}body-small{% endblock %}
+{% block content %}
+  <section class="simple-card simple-card--no-header">
+    <h4>{% trans "You are disconnected." %}</h4>
+  </section>
+{% endblock %}

@@ -1,0 +1,30 @@
+@import "../theme/color";
+
+.simple-list__row {
+  transition: background-color $transition-short, border $transition-short;
+
+  &:hover {
+    background: $light-grey;
+  }
+}
+
+.simple-list__text {
+  padding: 0.8em 1em 0.8em 1.2em;
+  white-space: pre-wrap;
+  background: none;
+}
+
+.simple-list__right-icon {
+  margin: 0;
+  padding: 0.5em 1.8em 0.5em 1.8em;
+}
+
+.simple-list__left-icon {
+  margin: 0;
+  padding: 0.5em 1.8em 0.5em 1.8em;
+}
+
+.simple-list__separator {
+  margin: 0 1em 0 1em;
+  border-bottom: 1px solid $white-grey;
+}

@@ -1,0 +1,26 @@
+<ng-container *ngIf="dataSource as page">
+  <section class="simple-card simple-card--multiple-header page page--today">
+    <section class="page__note-section">
+      <header>
+        <h2>{{ page.date | date: 'd MMMM y' }}</h2>
+        <div class="header__image"></div>
+      </header>
+      <app-note-details [codex]="codex" [note]="page.note"></app-note-details>
+    </section>
+    <section class="page__task-section">
+      <header>
+        <h2 i18n>
+          Tasks
+        </h2>
+      </header>
+      <app-task-add (taskAdded)="addTask($event)" [codex]="codex" class="simple-list__row"></app-task-add>
+      <div class="simple-list__separator"></div>
+      <section *ngIf="page.tasks && page.tasks.length > 0" class="task-list simple-list">
+        <ng-container *ngFor="let task of page.tasks">
+          <app-task-details [enableEdit]="true" [task]="task"></app-task-details>
+          <div class="simple-list__separator"></div>
+        </ng-container>
+      </section>
+    </section>
+  </section>
+</ng-container>

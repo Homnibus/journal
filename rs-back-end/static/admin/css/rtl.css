@@ -1,0 +1,264 @@
+body {
+  direction: rtl;
+}
+
+/* LOGIN */
+
+.login .form-row {
+  float: right;
+}
+
+.login .form-row label {
+  float: right;
+  padding-right: 0;
+  padding-left: 0.5em;
+  text-align: left;
+}
+
+.login .submit-row {
+  clear: both;
+  padding: 1em 9.4em 0 0;
+}
+
+/* GLOBAL */
+
+th {
+  text-align: right;
+}
+
+.module h2, .module caption {
+  text-align: right;
+}
+
+.module ul, .module ol {
+  margin-right: 1.5em;
+  margin-left: 0;
+}
+
+.addlink, .changelink {
+  padding-right: 16px;
+  padding-left: 0;
+  background-position: 100% 1px;
+}
+
+.deletelink {
+  padding-right: 16px;
+  padding-left: 0;
+  background-position: 100% 1px;
+}
+
+.object-tools {
+  float: left;
+}
+
+thead th:first-child,
+tfoot td:first-child {
+  border-left: none;
+}
+
+/* LAYOUT */
+
+#user-tools {
+  right: auto;
+  left: 0;
+  text-align: left;
+}
+
+div.breadcrumbs {
+  text-align: right;
+}
+
+#content-main {
+  float: right;
+}
+
+#content-related {
+  float: left;
+  margin-right: auto;
+  margin-left: -300px;
+}
+
+.colMS {
+  margin-right: 0;
+  margin-left: 300px;
+}
+
+/* SORTABLE TABLES */
+
+table thead th.sorted .sortoptions {
+  float: left;
+}
+
+thead th.sorted .text {
+  padding-right: 0;
+  padding-left: 42px;
+}
+
+/* dashboard styles */
+
+.dashboard .module table td a {
+  padding-right: 16px;
+  padding-left: .6em;
+}
+
+/* changelists styles */
+
+.change-list .filtered table {
+  border-right: 0 none;
+  border-left: none;
+}
+
+#changelist-filter {
+  right: auto;
+  left: 0;
+  border-right: none;
+  border-left: none;
+}
+
+.change-list .filtered .results, .change-list .filtered .paginator, .filtered #toolbar, .filtered div.xfull {
+  margin-right: 0;
+  margin-left: 280px;
+}
+
+#changelist-filter li.selected {
+  margin-right: -15px;
+  margin-left: 0;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-right: 5px solid #eaeaea;
+  border-left: none;
+}
+
+.filtered .actions {
+  margin-right: 0;
+  margin-left: 280px;
+}
+
+#changelist table tbody td:first-child, #changelist table tbody th:first-child {
+  border-right: none;
+  border-left: none;
+}
+
+/* FORMS */
+
+.aligned label {
+  float: right;
+  padding: 0 0 3px 1em;
+}
+
+.submit-row {
+  text-align: left
+}
+
+.submit-row p.deletelink-box {
+  float: right;
+}
+
+.submit-row input.default {
+  margin-left: 0;
+}
+
+.vDateField, .vTimeField {
+  margin-left: 2px;
+}
+
+.aligned .form-row input {
+  margin-left: 5px;
+}
+
+form .aligned p.help, form .aligned div.help {
+  clear: right;
+}
+
+form ul.inline li {
+  float: right;
+  padding-right: 0;
+  padding-left: 7px;
+}
+
+input[type=submit].default, .submit-row input.default {
+  float: left;
+}
+
+fieldset .field-box {
+  float: right;
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+.errorlist li {
+  padding: 0;
+  background-position: 100% 12px;
+}
+
+.errornote {
+  padding: 10px 12px;
+  background-position: 100% 12px;
+}
+
+/* WIDGETS */
+
+.calendarnav-previous {
+  top: 0;
+  right: 10px;
+  left: auto;
+}
+
+.calendarnav-next {
+  top: 0;
+  right: auto;
+  left: 10px;
+}
+
+.calendar caption, .calendarbox h2 {
+  text-align: center;
+}
+
+.selector {
+  float: right;
+}
+
+.selector .selector-filter {
+  text-align: right;
+}
+
+.inline-deletelink {
+  float: left;
+}
+
+form .form-row p.datetime {
+  overflow: hidden;
+}
+
+.related-widget-wrapper {
+  float: right;
+}
+
+/* MISC */
+
+.inline-related h2, .inline-group h2 {
+  text-align: right
+}
+
+.inline-related h3 span.delete {
+  right: inherit;
+  left: 10px;
+  float: left;
+  padding-right: 20px;
+  padding-left: inherit;
+}
+
+.inline-related h3 span.delete label {
+  margin-right: 2px;
+  margin-left: inherit;
+}
+
+/* IE7 specific bug fixes */
+
+div.colM {
+  position: relative;
+}
+
+.submit-row input {
+  float: left;
+}

@@ -1,0 +1,12 @@
+<nav class="menu">
+  <a class="menu__item menu__link" routerLink="/" routerLinkActive="active">
+    <img alt="Home" class="menu__icon menu__home-button" src="img/favicon.png"/>
+  </a>
+  <app-save-icone></app-save-icone>
+  <div class="menu__item menu__filler"></div>
+  <a *ngIf="(authService.currentUser$ | async)" class="menu__item menu__link" i18n routerLink="/logout"
+     routerLinkActive="active">Logout</a>
+  <a *ngIf="!(authService.currentUser$ | async)" class="menu__item menu__link" i18n routerLink="/login"
+     routerLinkActive="active">Login</a>
+</nav>
+<div class="menu__under"></div>

@@ -1,0 +1,515 @@
+@import url('widgets.css');
+
+/* FORM ROWS */
+
+.form-row {
+  font-size: 13px;
+  overflow: hidden;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.form-row img, .form-row input {
+  vertical-align: middle;
+}
+
+.form-row label input[type="checkbox"] {
+  margin-top: 0;
+  vertical-align: 0;
+}
+
+form .form-row p {
+  padding-left: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* FORM LABELS */
+
+label {
+  font-size: 13px;
+  font-weight: normal;
+  color: #666;
+}
+
+.required label, label.required {
+  font-weight: bold;
+  color: #333;
+}
+
+/* RADIO BUTTONS */
+
+form ul.radiolist li {
+  list-style-type: none;
+}
+
+form ul.radiolist label {
+  display: inline;
+  float: none;
+}
+
+form ul.radiolist input[type="radio"] {
+  margin: -2px 4px 0 0;
+  padding: 0;
+}
+
+form ul.inline {
+  margin-left: 0;
+  padding: 0;
+}
+
+form ul.inline li {
+  float: left;
+  padding-right: 7px;
+}
+
+/* ALIGNED FIELDSETS */
+
+.aligned label {
+  line-height: 1;
+  display: block;
+  float: left;
+  width: 160px;
+  padding: 4px 10px 0 0;
+  word-wrap: break-word;
+}
+
+.aligned label:not(.vCheckboxLabel):after {
+  display: inline-block;
+  height: 26px;
+  content: '';
+  vertical-align: middle;
+}
+
+.aligned label + p, .aligned label + div.help, .aligned label + div.readonly {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 170px;
+  padding: 6px 0;
+}
+
+.aligned ul label {
+  display: inline;
+  float: none;
+  width: auto;
+}
+
+.aligned .form-row input {
+  margin-bottom: 0;
+}
+
+.colMS .aligned .vLargeTextField, .colMS .aligned .vXMLLargeTextField {
+  width: 350px;
+}
+
+form .aligned ul {
+  margin-left: 160px;
+  padding-left: 10px;
+}
+
+form .aligned ul.radiolist {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+form .aligned p.help,
+form .aligned div.help {
+  clear: left;
+  margin-top: 0;
+  margin-left: 160px;
+  padding-left: 10px;
+}
+
+form .aligned label + p.help,
+form .aligned label + div.help {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+form .aligned p.help:last-child,
+form .aligned div.help:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+form .aligned input + p.help,
+form .aligned textarea + p.help,
+form .aligned select + p.help,
+form .aligned input + div.help,
+form .aligned textarea + div.help,
+form .aligned select + div.help {
+  margin-left: 160px;
+  padding-left: 10px;
+}
+
+form .aligned ul li {
+  list-style: none;
+}
+
+form .aligned table p {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.aligned .vCheckboxLabel {
+  display: inline-block;
+  float: none;
+  width: auto;
+  padding: 0 0 5px 5px;
+  vertical-align: -3px;
+}
+
+.aligned .vCheckboxLabel + p.help,
+.aligned .vCheckboxLabel + div.help {
+  margin-top: -4px;
+}
+
+.colM .aligned .vLargeTextField, .colM .aligned .vXMLLargeTextField {
+  width: 610px;
+}
+
+.checkbox-row p.help,
+.checkbox-row div.help {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+fieldset .field-box {
+  float: left;
+  margin-right: 20px;
+}
+
+/* WIDE FIELDSETS */
+
+.wide label {
+  width: 200px;
+}
+
+form .wide p,
+form .wide input + p.help,
+form .wide input + div.help {
+  margin-left: 200px;
+}
+
+form .wide p.help,
+form .wide div.help {
+  padding-left: 38px;
+}
+
+form div.help ul {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.colM fieldset.wide .vLargeTextField, .colM fieldset.wide .vXMLLargeTextField {
+  width: 450px;
+}
+
+/* COLLAPSED FIELDSETS */
+
+fieldset.collapsed * {
+  display: none;
+}
+
+fieldset.collapsed h2, fieldset.collapsed {
+  display: block;
+}
+
+fieldset.collapsed {
+  overflow: hidden;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+fieldset.collapsed h2 {
+  color: #666;
+  background: #f8f8f8;
+}
+
+fieldset .collapse-toggle {
+  color: #fff;
+}
+
+fieldset.collapsed .collapse-toggle {
+  display: inline;
+  color: #447e9b;
+  background: transparent;
+}
+
+/* MONOSPACE TEXTAREAS */
+
+fieldset.monospace textarea {
+  font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+}
+
+/* SUBMIT ROW */
+
+.submit-row {
+  overflow: hidden;
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  text-align: right;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background: #f8f8f8;
+}
+
+body.popup .submit-row {
+  overflow: auto;
+}
+
+.submit-row input {
+  line-height: 15px;
+  height: 35px;
+  margin: 0 0 0 5px;
+}
+
+.submit-row input.default {
+  margin: 0 0 0 8px;
+  text-transform: uppercase;
+}
+
+.submit-row p {
+  margin: 0.3em;
+}
+
+.submit-row p.deletelink-box {
+  float: left;
+  margin: 0;
+}
+
+.submit-row a.deletelink {
+  line-height: 15px;
+  display: block;
+  height: 15px;
+  padding: 10px 15px;
+  color: #fff;
+  border-radius: 4px;
+  background: #ba2121;
+}
+
+.submit-row a.deletelink:focus,
+.submit-row a.deletelink:hover,
+.submit-row a.deletelink:active {
+  background: #a41515;
+}
+
+/* CUSTOM FORM FIELDS */
+
+.vSelectMultipleField {
+  vertical-align: top;
+}
+
+.vCheckboxField {
+  border: none;
+}
+
+.vDateField, .vTimeField {
+  margin-right: 2px;
+  margin-bottom: 4px;
+}
+
+.vDateField {
+  min-width: 6.85em;
+}
+
+.vTimeField {
+  min-width: 4.7em;
+}
+
+.vURLField {
+  width: 30em;
+}
+
+.vLargeTextField, .vXMLLargeTextField {
+  width: 48em;
+}
+
+.flatpages-flatpage #id_content {
+  height: 40.2em;
+}
+
+.module table .vPositiveSmallIntegerField {
+  width: 2.2em;
+}
+
+.vTextField {
+  width: 20em;
+}
+
+.vIntegerField {
+  width: 5em;
+}
+
+.vBigIntegerField {
+  width: 10em;
+}
+
+.vForeignKeyRawIdAdminField {
+  width: 5em;
+}
+
+/* INLINES */
+
+.inline-group {
+  margin: 0 0 30px;
+  padding: 0;
+}
+
+.inline-group thead th {
+  padding: 8px 10px;
+}
+
+.inline-group .aligned label {
+  width: 160px;
+}
+
+.inline-related {
+  position: relative;
+}
+
+.inline-related h3 {
+  font-size: 13px;
+  margin: 0;
+  padding: 5px;
+  color: #666;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  background: #f8f8f8;
+}
+
+.inline-related h3 span.delete {
+  float: right;
+}
+
+.inline-related h3 span.delete label {
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+.inline-related fieldset {
+  width: 100%;
+  margin: 0;
+  border: none;
+  background: #fff;
+}
+
+.inline-related fieldset.module h3 {
+  font-size: 11px;
+  font-weight: bold;
+  margin: 0;
+  padding: 2px 5px 3px 5px;
+  text-align: left;
+  color: #fff;
+  background: #bcd;
+}
+
+.inline-group .tabular fieldset.module {
+  border: none;
+}
+
+.inline-related.tabular fieldset.module table {
+  width: 100%;
+}
+
+.last-related fieldset {
+  border: none;
+}
+
+.inline-group .tabular tr.has_original td {
+  padding-top: 2em;
+}
+
+.inline-group .tabular tr td.original {
+  width: 0;
+  padding: 2px 0 0 0;
+  _position: relative;
+}
+
+.inline-group .tabular th.original {
+  width: 0;
+  padding: 0;
+}
+
+.inline-group .tabular td.original p {
+  font-size: 9px;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+  height: 1.1em;
+  padding: 2px 9px;
+  color: #666;
+  _width: 700px;
+}
+
+.inline-group ul.tools {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inline-group ul.tools li {
+  display: inline;
+  padding: 0 5px;
+}
+
+.inline-group div.add-row,
+.inline-group .tabular tr.add-row td {
+  padding: 8px 10px;
+  color: #666;
+  border-bottom: 1px solid #eee;
+  background: #f8f8f8;
+}
+
+.inline-group .tabular tr.add-row td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.inline-group ul.tools a.add,
+.inline-group div.add-row a,
+.inline-group .tabular tr.add-row td a {
+  font-size: 12px;
+  padding-left: 16px;
+  background: url(../img/icon-addlink.svg) 0 1px no-repeat;
+}
+
+.empty-form {
+  display: none;
+}
+
+/* RELATED FIELD ADD ONE / LOOKUP */
+
+.add-another, .related-lookup {
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-size: 14px;
+}
+
+.add-another {
+  width: 16px;
+  height: 16px;
+  background-image: url(../img/icon-addlink.svg);
+}
+
+.related-lookup {
+  width: 16px;
+  height: 16px;
+  background-image: url(../img/search.svg);
+}
+
+form .related-widget-wrapper ul {
+  display: inline-block;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.clearable-file-input input {
+  margin-top: 0;
+}

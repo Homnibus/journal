@@ -1,0 +1,345 @@
+/* CHANGELISTS */
+
+#changelist {
+  position: relative;
+  width: 100%;
+}
+
+#changelist table {
+  width: 100%;
+}
+
+.change-list .hiddenfields {
+  display: none;
+}
+
+.change-list .filtered table {
+  border-right: none;
+}
+
+.change-list .filtered {
+  min-height: 400px;
+}
+
+.change-list .filtered .results, .change-list .filtered .paginator,
+.filtered #toolbar, .filtered div.xfull {
+  width: auto;
+  margin-right: 280px;
+}
+
+.change-list .filtered table tbody th {
+  padding-right: 1em;
+}
+
+#changelist-form .results {
+  overflow-x: auto;
+}
+
+#changelist .toplinks {
+  border-bottom: 1px solid #ddd;
+}
+
+#changelist .paginator {
+  overflow: hidden;
+  color: #666;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+/* CHANGELIST TABLES */
+
+#changelist table thead th {
+  padding: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#changelist table thead th.action-checkbox-column {
+  width: 1.5em;
+  text-align: center;
+}
+
+#changelist table tbody td.action-checkbox {
+  text-align: center;
+}
+
+#changelist table tfoot {
+  color: #666;
+}
+
+/* TOOLBAR */
+
+#changelist #toolbar {
+  margin-bottom: 15px;
+  padding: 8px 10px;
+  color: #666;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  background: #f8f8f8;
+}
+
+#changelist #toolbar form input {
+  font-size: 14px;
+  padding: 5px;
+  color: #333;
+  border-radius: 4px;
+}
+
+#changelist #toolbar form #searchbar {
+  font-size: 13px;
+  height: 19px;
+  margin: 0;
+  padding: 2px 5px;
+  vertical-align: top;
+  border: 1px solid #ccc;
+}
+
+#changelist #toolbar form #searchbar:focus {
+  border-color: #999;
+}
+
+#changelist #toolbar form input[type="submit"] {
+  margin: 0;
+  padding: 2px 10px;
+  cursor: pointer;
+  vertical-align: middle;
+  color: #333;
+  border: 1px solid #ccc;
+  background: #fff;
+  box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+}
+
+#changelist #toolbar form input[type="submit"]:focus,
+#changelist #toolbar form input[type="submit"]:hover {
+  border-color: #999;
+}
+
+#changelist #changelist-search img {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* FILTER COLUMN */
+
+#changelist-filter {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  width: 240px;
+  margin: 0;
+  border-left: none;
+  background: #f8f8f8;
+}
+
+#changelist-filter h2 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding: 5px 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: none;
+}
+
+#changelist-filter h3 {
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  padding: 0 15px;
+}
+
+#changelist-filter ul {
+  margin: 5px 0;
+  padding: 0 15px 15px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+#changelist-filter ul:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+#changelist-filter li {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#changelist-filter a {
+  display: block;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  color: #999;
+}
+
+#changelist-filter li.selected {
+  margin-left: -15px;
+  padding-left: 10px;
+  border-left: 5px solid #eaeaea;
+}
+
+#changelist-filter li.selected a {
+  color: #5b80b2;
+}
+
+#changelist-filter a:focus, #changelist-filter a:hover,
+#changelist-filter li.selected a:focus,
+#changelist-filter li.selected a:hover {
+  color: #036;
+}
+
+/* DATE DRILLDOWN */
+
+.change-list ul.toplinks {
+  display: block;
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.change-list ul.toplinks li {
+  font-weight: bold;
+  display: inline-block;
+  padding: 3px 6px;
+  list-style-type: none;
+}
+
+.change-list ul.toplinks .date-back a {
+  color: #999;
+}
+
+.change-list ul.toplinks .date-back a:focus,
+.change-list ul.toplinks .date-back a:hover {
+  color: #036;
+}
+
+/* PAGINATOR */
+
+.paginator {
+  font-size: 13px;
+  line-height: 22px;
+  margin: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.paginator a:link, .paginator a:visited {
+  padding: 2px 6px;
+  text-decoration: none;
+  color: #fff;
+  background: #79aec8;
+}
+
+.paginator a.showall {
+  padding: 0;
+  color: #5b80b2;
+  border: none;
+  background: none;
+}
+
+.paginator a.showall:focus, .paginator a.showall:hover {
+  color: #036;
+  background: none;
+}
+
+.paginator .end {
+  margin-right: 6px;
+}
+
+.paginator .this-page {
+  font-size: 13px;
+  font-weight: bold;
+  padding: 2px 6px;
+  vertical-align: top;
+}
+
+.paginator a:focus, .paginator a:hover {
+  color: white;
+  background: #036;
+}
+
+/* ACTIONS */
+
+.filtered .actions {
+  margin-right: 280px;
+  border-right: none;
+}
+
+#changelist table input {
+  margin: 0;
+  vertical-align: baseline;
+}
+
+#changelist table tbody tr.selected {
+  background-color: #FFFFCC;
+}
+
+#changelist .actions {
+  line-height: 24px;
+  padding: 10px;
+  color: #999;
+  border-top: none;
+  border-bottom: none;
+  background: #fff;
+}
+
+#changelist .actions.selected {
+  border-top: 1px solid #fffee8;
+  border-bottom: 1px solid #edecd6;
+  background: #fffccf;
+}
+
+#changelist .actions span.all,
+#changelist .actions span.action-counter,
+#changelist .actions span.clear,
+#changelist .actions span.question {
+  font-size: 13px;
+  display: none;
+  margin: 0 0.5em;
+}
+
+#changelist .actions:last-child {
+  border-bottom: none;
+}
+
+#changelist .actions select {
+  font-size: 14px;
+  height: 24px;
+  margin: 0 0 0 10px;
+  padding: 0 0 0 4px;
+  vertical-align: top;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: none;
+}
+
+#changelist .actions select:focus {
+  border-color: #999;
+}
+
+#changelist .actions label {
+  font-size: 13px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#changelist .actions .button {
+  font-size: 13px;
+  line-height: 1;
+  height: 24px;
+  margin: 0;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+}
+
+#changelist .actions .button:focus, #changelist .actions .button:hover {
+  border-color: #999;
+}

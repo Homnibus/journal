@@ -1,0 +1,82 @@
+@charset "utf-8";
+@import "../theme/color";
+
+// Navigation bar container
+.menu {
+  font-size: 1.1em;
+  line-height: 1.6em;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  box-shadow: 0 0 .2em 0 $dark-grey, 0 0 .5em 0 $grey;
+}
+
+// Place holder under the nav bar
+.menu__under {
+  font-size: 1.1em;
+  width: 100%;
+  margin-top: 2.35em;
+}
+
+// Any item of the nav bar
+.menu__item {
+  margin: 0;
+  padding: .3em;
+  border-bottom: 2px solid $dark-blue;
+  background: $mid-blue;
+}
+
+// Any icon of the nav bar
+.menu__icon {
+  width: 1.4em;
+  height: 1.4em;
+  white-space: nowrap;
+}
+
+// Clickable links
+.menu__link {
+  flex-shrink: 0;
+
+  &.menu__current-active {
+    border-bottom: 2px solid $light-blue;
+  }
+
+  &:link {
+    text-decoration: none;
+    color: $white;
+  }
+
+  &:visited {
+    text-decoration: none;
+    color: $white;
+  }
+
+  &:hover {
+    text-decoration: none;
+    color: $dark-blue;
+    border-bottom: 2px solid $mid-blue;
+    background-color: $light-blue;
+  }
+
+  &:active,
+  &:focus {
+    text-decoration: none;
+    color: $white;
+  }
+}
+
+// Save image
+.menu__save-info {
+  .save-info--display-none {
+    display: none;
+  }
+}
+
+// Flex filler between the left links and the right links
+.menu__filler {
+  flex: 1;
+}

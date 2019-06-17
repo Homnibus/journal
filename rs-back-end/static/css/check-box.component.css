@@ -1,0 +1,47 @@
+.checkbox__container {
+  width: 2em;
+  height: 1.8em;
+}
+
+.checkbox__container input[type=checkbox] {
+  display: none;
+}
+
+.checkbox__container input[type=checkbox] + .checkbox__label:before {
+  display: inline-block;
+  width: 1.7em;
+  height: 1.5em;
+  content: "";
+  transition: background-color 100ms ease;
+  border-top: 2px solid #4d7385;
+  border-right: 2px solid #4d7385;
+  border-bottom: 2px solid #2f4752;
+  border-left: 2px solid #4d7385;
+  border-radius: 0.5em;
+  background-color: white;
+  box-shadow: 0 0.1em 0.2em 0 rgba(0, 0, 0, 0.2), 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.1);
+}
+
+.checkbox__container input[type=checkbox] + .checkbox__label:hover:before {
+  background-color: #e6e6e6;
+}
+
+.checkbox__container input[type=checkbox] + .checkbox__label:active:before {
+  background-color: #cccccc;
+}
+
+.checkbox__container input[type=checkbox]:checked + .checkbox__label:before {
+  content: "";
+  background: white url(http://localhost:8000/static/img/svg/check-solid.svg) no-repeat center;
+  background-size: 1em;
+}
+
+.checkbox__container input[type=checkbox]:checked + .checkbox__label:hover:before {
+  background-color: #e6e6e6;
+}
+
+.checkbox__container input[type=checkbox]:checked + .checkbox__label:active:before {
+  background-color: #cccccc;
+}
+
+/*# sourceMappingURL=check-box.component.css.map */
