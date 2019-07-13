@@ -13,20 +13,26 @@ import {NoteService} from '../note.service';
 export class NoteDetailsComponent implements OnInit, OnDestroy {
 
   @Input()
-  note?: Note;
+  noteLabel = '';
   @Input()
-  enableEdit = true;
+  editable = true;
+
+  @Input()
+  note?: Note;
+  private noteTextControl: FormControl;
   @Input()
   codex?: Codex;
-
-  noteTextControl: FormControl;
-  noteTextControlOnChange: Subscription;
+  private noteTextControlOnChange: Subscription;
 
   constructor(private noteService: NoteService) {
   }
 
   ngOnInit() {
-    this.noteTextControl = this.initForm();
+    let formInitialValue = '';
+    if (this.note) {
+      formInitialValue = this.note.text;
+    }
+    this.noteTextControl = new FormControl(formInitialValue);
 
     this.noteTextControlOnChange = this.noteTextControl.valueChanges.pipe(
       debounceTime(400),
@@ -37,14 +43,6 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.noteTextControlOnChange.unsubscribe();
-  }
-
-  initForm(): FormControl {
-    let formInitialValue = '';
-    if (this.note) {
-      formInitialValue = this.note.text;
-    }
-    return new FormControl(formInitialValue);
   }
 
   createOrUpdateNote(noteText: string): Observable<Note> {

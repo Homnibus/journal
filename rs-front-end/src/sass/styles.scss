@@ -5,3 +5,15 @@
 @import "components/simple-text-input";
 @import "components/button";
 @import "layout/error";
+@import "theme/rescodex-theme.scss";
+
+.rescodex {
+  @import "mat-components/mat-list";
+  @import "mat-components/mat-checkbox";
+  @import "mat-components/mat-card";
+  @import "mat-components/mat-button";
+  @import "mat-components/mat-textarea";
+  @import "~github-markdown-css/github-markdown.css";
+}
+
+

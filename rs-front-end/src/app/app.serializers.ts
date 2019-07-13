@@ -1,7 +1,7 @@
-import {Codex, Model, Note, Page, Task} from './app.models';
+import {Codex, Information, Model, ModelState, Note, Page, Task} from './app.models';
 
 export abstract class ModelSerializer<T extends Model> {
-  abstract fromJson(json: any): T;
+  abstract fromJson(json: any, state: ModelState): T;
 
   abstract toCreateJson(instance: T): any;
 
@@ -9,15 +9,17 @@ export abstract class ModelSerializer<T extends Model> {
 }
 
 export class CodexSerializer implements ModelSerializer<Codex> {
-  fromJson(json: any): Codex {
+  fromJson(json: any, state: ModelState): Codex {
     const codex = new Codex();
     codex.id = parseInt(json.id, 10);
     codex.title = json.title;
     codex.slug = json.slug;
     codex.description = json.description;
+    codex.todoTasks = parseInt(json.todo_tasks, 10);
     codex.creationDate = new Date(json.creation_date);
     codex.nestedUpdateDate = new Date(json.nested_update_date);
     codex.updateDate = new Date(json.update_date);
+    codex.state = state;
 
     return codex;
   }
@@ -39,7 +41,7 @@ export class CodexSerializer implements ModelSerializer<Codex> {
 }
 
 export class NoteSerializer implements ModelSerializer<Note> {
-  fromJson(json: any): Note {
+  fromJson(json: any, state: ModelState): Note {
     const note = new Note();
     note.id = parseInt(json.id, 10);
     note.page = parseInt(json.page, 10);
@@ -47,6 +49,7 @@ export class NoteSerializer implements ModelSerializer<Note> {
     note.initialHash = json.initial_hash;
     note.creationDate = new Date(json.creation_date);
     note.updateDate = new Date(json.update_date);
+    note.state = state;
 
     return note;
   }
@@ -67,7 +70,7 @@ export class NoteSerializer implements ModelSerializer<Note> {
 }
 
 export class TaskSerializer implements ModelSerializer<Task> {
-  fromJson(json: any): Task {
+  fromJson(json: any, state: ModelState): Task {
     const task = new Task();
     task.id = parseInt(json.id, 10);
     task.page = parseInt(json.page, 10);
@@ -77,6 +80,7 @@ export class TaskSerializer implements ModelSerializer<Task> {
     task.achievedDate = json.achieved_date ? new Date(json.achieved_date) : null;
     task.creationDate = new Date(json.creation_date);
     task.updateDate = new Date(json.update_date);
+    task.state = state;
 
     return task;
   }
@@ -99,7 +103,7 @@ export class TaskSerializer implements ModelSerializer<Task> {
 }
 
 export class PageSerializer implements ModelSerializer<Page> {
-  fromJson(json: any): Page {
+  fromJson(json: any, state: ModelState): Page {
     const page = new Page();
 
     page.id = parseInt(json.id, 10);
@@ -108,9 +112,10 @@ export class PageSerializer implements ModelSerializer<Page> {
     page.creationDate = new Date(json.creation_date);
     page.nestedUpdateDate = new Date(json.nested_update_date);
     const noteSerializer = new NoteSerializer();
-    page.note = json.note ? noteSerializer.fromJson(json.note) : null;
+    page.note = json.note ? noteSerializer.fromJson(json.note, state) : null;
     const taskSerializer = new TaskSerializer();
-    page.tasks = Array.from(json.tasks, taskSerializer.fromJson);
+    page.tasks = Array.from(json.tasks, x => taskSerializer.fromJson(x, state));
+    page.state = state;
 
     return page;
   }
@@ -123,4 +128,34 @@ export class PageSerializer implements ModelSerializer<Page> {
     return;
   }
 
+}
+
+
+export class InformationSerializer implements ModelSerializer<Information> {
+  fromJson(json: any, state: ModelState): Information {
+    const information = new Information();
+    information.id = parseInt(json.id, 10);
+    information.codex = parseInt(json.codex, 10);
+    information.text = json.text;
+    information.initialHash = json.initial_hash;
+    information.creationDate = new Date(json.creation_date);
+    information.updateDate = new Date(json.update_date);
+    information.state = state;
+
+    return information;
+  }
+
+  toCreateJson(information: Task): any {
+    return {
+      codex: information.codex,
+      text: information.text
+    };
+  }
+
+  toUpdateJson(information: Task): any {
+    return {
+      text: information.text,
+      modification_hash: information.initialHash
+    };
+  }
 }

@@ -2,27 +2,26 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NoteDetailsComponent} from './note-details/note-details.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NoteService} from './note.service';
 import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
 import {MarkdownModule} from 'ngx-markdown';
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [
     NoteDetailsComponent,
   ],
-  exports: [
-    NoteDetailsComponent,
-  ],
   imports: [
     CommonModule,
+    SharedModule,
     ReactiveFormsModule,
     FormsModule,
     TextareaAutosizeModule,
-    MarkdownModule
+    MarkdownModule,
   ],
-  providers: [
-    NoteService
+  exports: [
+    NoteDetailsComponent,
   ],
+
 })
 export class NoteModule {
 }

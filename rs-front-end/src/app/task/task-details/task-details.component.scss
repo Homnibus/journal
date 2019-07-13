@@ -1,35 +1,23 @@
-@import "../../../sass/components/inline-text-input";
-@import "../../../sass/components/simple-list-base";
-
-/* Task */
-.task {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-}
-
-.task__is-achieved {
-  font-size: 1em;
-  margin: .5em;
-}
-
-.task__connexion-line {
-  width: .5em;
-  border: 1px solid $light-grey;
-}
-
-
-.task__text {
-  font-family: arial, serif;
-  font-size: 1em;
+:host {
+  display: block;
   overflow: hidden;
-  flex: 1;
-  margin: 0;
-  resize: none;
 }
 
-.task__text:required {
-  text-decoration: none;
-  outline: none 0;
-  box-shadow: none;
+.task__disable-text {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  overflow: hidden;
+  flex: 999;
+  margin: 0;
+
+  &:first-letter {
+    text-transform: capitalize;
+  }
+}
+
+.mat-form-field {
+  margin-left: 0.5em;
+}
+
+.task__enable-edit-button {
+  margin-left: 0.5em;
 }

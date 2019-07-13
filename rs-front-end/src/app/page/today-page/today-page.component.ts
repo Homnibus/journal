@@ -11,6 +11,7 @@ export class TodayPageComponent implements OnInit {
 
   @Input() codex: Codex;
   private dataSource: Page;
+  private editableNote = true;
 
   constructor(private pageService: PageService) {
   }
@@ -29,7 +30,7 @@ export class TodayPageComponent implements OnInit {
 
   initTodayPage(pages: Page[]): Page {
     let todayPage: Page;
-    if (pages.length >= 1) {
+    if (pages.length > 0) {
       todayPage = pages[0];
     } else {
       todayPage = new Page();
@@ -39,10 +40,11 @@ export class TodayPageComponent implements OnInit {
   }
 
   addTask(task: Task): void {
-    if (!this.dataSource.tasks) {
-      this.dataSource.tasks = [];
-    }
     this.dataSource.tasks.unshift(task);
+  }
+
+  switchEditMode() {
+    this.editableNote = !this.editableNote;
   }
 
 }

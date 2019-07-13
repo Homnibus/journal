@@ -4,6 +4,7 @@ import {FormControl} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {TaskService} from '../task.service';
 import {concatMap, debounceTime, distinct} from 'rxjs/operators';
+import {MatCheckboxChange} from "@angular/material";
 
 @Component({
   selector: 'app-task-details',
@@ -12,20 +13,21 @@ import {concatMap, debounceTime, distinct} from 'rxjs/operators';
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
 
-  @Input()
-  task: Task;
-  @Input()
-  enableEdit = true;
-
   taskTextControl: FormControl;
   taskTextControlOnChange: Subscription;
 
+  @Input()
+  task: Task;
+  @Input()
+  allowChangeEditable = true;
+  @Input()
+  editable = false;
 
   constructor(private taskService: TaskService) {
   }
 
   ngOnInit() {
-    this.initForm();
+    this.taskTextControl = new FormControl(this.task.text);
 
     this.taskTextControlOnChange = this.taskTextControl.valueChanges.pipe(
       debounceTime(400),
@@ -39,12 +41,12 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.taskTextControlOnChange.unsubscribe();
   }
 
-  initForm(): void {
-    this.taskTextControl = new FormControl(this.task.text);
+  switchTaskEditableMode() {
+    this.editable = !this.editable;
   }
 
-  onCheckBoxChange(value: boolean) {
-    this.UpdateTaskIsAchieved(value).subscribe(task => this.task = task);
+  onCheckBoxChange(matCheckboxChange: MatCheckboxChange) {
+    this.UpdateTaskIsAchieved(matCheckboxChange.checked).subscribe(task => this.task = task);
   }
 
   UpdateTaskText(taskText: string): Observable<Task> {

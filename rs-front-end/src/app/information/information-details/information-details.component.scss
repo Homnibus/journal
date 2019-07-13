@@ -1,0 +1,17 @@
+.information {
+  display: flex;
+  min-height: 8.5em;
+}
+
+.information-placeholder {
+  align-self: center;
+  flex: 1;
+  text-align: center;
+}
+
+.information__disable-text {
+  display: block;
+  overflow: hidden;
+  flex: 999;
+  margin: 16px;
+}

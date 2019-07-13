@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {TaskService} from '../../task/task.service';
 import {Observable} from 'rxjs';
-import {Task} from 'src/app/app.models';
-import {ActivatedRoute} from '@angular/router';
+import {Codex, Task} from 'src/app/app.models';
+import {CodexDetailsService} from "../codex-details.service";
+import {filter, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-codex-task-todo',
@@ -12,14 +13,22 @@ import {ActivatedRoute} from '@angular/router';
 export class CodexTaskTodoComponent implements OnInit {
 
   taskList$: Observable<Task[]>;
-  codexSlug: string;
+  codex$: Observable<Codex>;
+  editable = false;
 
-  constructor(private taskService: TaskService, private route: ActivatedRoute) {
+  constructor(private taskService: TaskService, private codexDetailsService: CodexDetailsService) {
   }
 
   ngOnInit() {
-    this.codexSlug = this.route.snapshot.paramMap.get('slug');
-    this.taskList$ = this.taskService.getCodexToDoTask(this.codexSlug);
+    this.codex$ = this.codexDetailsService.activeCodex$;
+    this.taskList$ = this.codex$.pipe(
+      filter(codex => codex != undefined),
+      switchMap(codex => this.taskService.getCodexToDoTask(codex.slug))
+    );
+  }
+
+  switchEditMode() {
+    this.editable = !this.editable;
   }
 
 }

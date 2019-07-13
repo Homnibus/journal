@@ -1,0 +1,113 @@
+@import '../../../node_modules/@angular/material/theming';
+
+@include mat-core();
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-primary: (
+  //50: #EAEEF0,
+  50 : #f6f8fa,
+  100 : #cad5da,
+  200 : #a6b9c2,
+  300 : #829daa,
+  400 : #688897,
+  500 : #4d7385,
+  600 : #466b7d,
+  700 : #3d6072,
+  800 : #345668,
+  900 : #254355,
+  A100 : #9bd8ff,
+  A200 : #68c4ff,
+  A400 : #35b0ff,
+  A700 : #1ba6ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-accent: (
+  50 : #eafbfd,
+  100 : #cbf5f9,
+  200 : #a9eff6,
+  300 : #86e9f2,
+  400 : #6ce4ef,
+  500 : #52dfec,
+  600 : #4bdbea,
+  700 : #41d7e7,
+  800 : #38d2e4,
+  900 : #28cadf,
+  A100 : #ffffff,
+  A200 : #e9fcff,
+  A400 : #b6f6ff,
+  A700 : #9cf3ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-warn: (
+  50 : #f4e8f8,
+  100 : #e4c5ee,
+  200 : #d29ee3,
+  300 : #bf77d8,
+  400 : #b259cf,
+  500 : #a43cc7,
+  600 : #9c36c1,
+  700 : #922eba,
+  800 : #8927b3,
+  900 : #781aa6,
+  A100 : #f3dcff,
+  A200 : #e1a9ff,
+  A400 : #ce76ff,
+  A700 : #c55dff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+
+$rescodex-light-primary: mat-palette($md-primary);
+$rescodex-light-accent: mat-palette($md-accent);
+$rescodex-light-warn: mat-palette($md-warn);
+
+$rescodex-light-theme: mat-light-theme($rescodex-light-primary, $rescodex-light-accent, $rescodex-light-warn);
+
+@include angular-material-theme($rescodex-light-theme);

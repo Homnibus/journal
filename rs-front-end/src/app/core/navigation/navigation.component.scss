@@ -1,0 +1,24 @@
+@import "../../../sass/theme/rescodex-theme";
+
+// Navigation bar container
+.mat-toolbar {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  border-bottom: 2px solid map_get($md-primary, 900);
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+  height: 2.5em;
+}
+
+// Flex filler between the left links and the right links
+.menu__filler {
+  flex: 1;
+}
+
+// Navigation button
+.mat-button {
+  font-size: 0.9em;
+}

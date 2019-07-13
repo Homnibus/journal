@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Codex} from '../../app.models';
 import {CodexService} from '../codex.service';
-import {NavigationLink, NavigationService} from '../../core/navigation/navigation.service';
 import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
+import * as seedrandom from 'seedrandom';
 
 
 @Component({
@@ -21,13 +21,10 @@ export class CodexListComponent implements OnInit, OnDestroy {
 
   constructor(
     private codexService: CodexService,
-    private navigationService: NavigationService,
   ) {
   }
 
   ngOnInit() {
-    const links = [new NavigationLink('/codex/13', 'Codex 13')];
-    this.navigationService.setLinks(links);
     this.fetchCodex();
 
     this.codexSearchControl = new FormControl();
@@ -48,6 +45,11 @@ export class CodexListComponent implements OnInit, OnDestroy {
         this.filteredCodexList = Object.assign([], this.dataSource);
       }
     );
+  }
+
+  getCodexColor(codex: Codex): string {
+    const seededRandomNumberGenerator = seedrandom(codex.id.toString());
+    return "hsl(" + Math.floor(seededRandomNumberGenerator() * 360).toString() + ",100%,70%)";
   }
 
   codexSearch(value: string): void {

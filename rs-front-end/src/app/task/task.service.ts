@@ -6,7 +6,9 @@ import {Task} from '../app.models';
 import {AuthService} from '../core/services/auth.service';
 import {Observable} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TaskService extends ModelService<Task> {
 
   constructor(authService: AuthService, modificationRequestStatusService: ModificationRequestStatusService) {

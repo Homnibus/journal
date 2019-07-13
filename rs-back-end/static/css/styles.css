@@ -1,3 +1,4 @@
+@import "~@angular/material/prebuilt-themes/purple-green.css";
 /* ----------------------------- */
 /* ==reset                       */
 /* ----------------------------- */
@@ -337,28 +338,23 @@ section, article, header {
 .menu__link {
   flex-shrink: 0;
 }
-
 .menu__link.menu__current-active {
   border-bottom: 2px solid #79b5d1;
 }
-
 .menu__link:link {
   text-decoration: none;
   color: white;
 }
-
 .menu__link:visited {
   text-decoration: none;
   color: white;
 }
-
 .menu__link:hover {
   text-decoration: none;
   color: #2f4752;
   border-bottom: 2px solid #4d7385;
   background-color: #79b5d1;
 }
-
 .menu__link:active, .menu__link:focus {
   text-decoration: none;
   color: white;
@@ -437,14 +433,12 @@ section, article, header {
   box-shadow: 0 0.1em 0.2em 0 rgba(0, 0, 0, 0.2), 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.1);
   caret-color: #79b5d1;
 }
-
 .simple-text-input input[type=text]:hover,
 .simple-text-input input[type=password]:hover,
 .simple-text-input input[type=search]:hover,
 .simple-text-input textarea:hover {
   background: #e6e6e6;
 }
-
 .simple-text-input input[type=text]:focus,
 .simple-text-input input[type=password]:focus,
 .simple-text-input input[type=search]:focus,
@@ -478,11 +472,9 @@ section, article, header {
   background-color: #4d7385;
   box-shadow: 0 0.1em 0.2em 0 rgba(0, 0, 0, 0.2), 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.1);
 }
-
 .button:hover {
   background-color: #3a5765;
 }
-
 .button:active {
   margin-top: 2px;
   border: none;

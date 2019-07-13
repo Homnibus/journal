@@ -1,5 +1,13 @@
 <div class="note">
-  <markdown *ngIf="note && !enableEdit" [data]="note.text" class="note__text simple-list__text"></markdown>
-  <textarea *ngIf="enableEdit" [formControl]="noteTextControl" autosize class="note__text inline-text-input"
-            placeholder="Note of the day"></textarea>
+  <markdown *ngIf="note && !editable" [data]="note.text" class="note__disable-text markdown-body"></markdown>
+  <mat-form-field *ngIf="editable" appearance="outline" color="primary">
+    <mat-label>{{noteLabel}}</mat-label>
+    <textarea #autosize="cdkTextareaAutosize"
+              [formControl]="noteTextControl"
+              cdkAutosizeMaxRows="19"
+              cdkAutosizeMinRows="3"
+              cdkTextareaAutosize
+              matInput
+    ></textarea>
+  </mat-form-field>
 </div>

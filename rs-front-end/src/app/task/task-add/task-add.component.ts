@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {TaskService} from '../task.service';
 import {Codex, Task} from 'src/app/app.models';
 
@@ -17,29 +17,28 @@ export class TaskAddComponent implements OnInit {
   @Output()
   taskAdded = new EventEmitter<Task>();
 
-  taskTextControl: FormControl;
+  addTaskFrom = this.fb.group({
+    taskText: ['', Validators.required]
+  });
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    this.initForm();
   }
 
-  initForm(): void {
-    this.taskTextControl = new FormControl();
-  }
-
-  onClick(): void {
-    const newTask = new Task();
-    newTask.text = this.taskTextControl.value;
-    newTask.codex = this.codex.id;
-    this.taskService.create(newTask)
-      .subscribe(
-        task => {
-          this.taskAdded.emit(task);
-          this.taskTextControl.reset();
-        });
+  onSubmit(): void {
+    if (this.addTaskFrom.valid) {
+      const newTask = new Task();
+      newTask.text = this.addTaskFrom.get('taskText').value;
+      newTask.codex = this.codex.id;
+      this.taskService.create(newTask)
+        .subscribe(
+          task => {
+            this.taskAdded.emit(task);
+            this.addTaskFrom.reset();
+          });
+    }
   }
 
 

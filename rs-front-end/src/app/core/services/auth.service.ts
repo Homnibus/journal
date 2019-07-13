@@ -8,7 +8,9 @@ class TokenData {
   token: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
   public currentUser$: Observable<User>;
   // API URL

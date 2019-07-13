@@ -1,16 +1,27 @@
 // List of models used by the application
+
+export enum ModelState {
+  Retrieved = 'RETRIEVED',
+  Created = 'CREATED',
+  Modified = 'MODIFIED',
+  Deleted = 'DELETED',
+}
+
 export abstract class Model {
   public static modelName: string;
   public static modelPlural: string;
 
   public static lookupField: string;
+  public state: ModelState;
 }
 
-export class DefaultLookupField {
+
+export class BaseModel {
   public static lookupField = 'id';
+  public state: ModelState;
 }
 
-export class Codex implements Model {
+export class Codex extends BaseModel implements Model {
   public static modelName = 'codex';
   public static modelPlural = 'codex';
 
@@ -19,12 +30,13 @@ export class Codex implements Model {
   public title: string;
   public slug: string;
   public description: string;
+  public todoTasks: number;
   public creationDate: Date;
   public nestedUpdateDate: Date;
   public updateDate: Date;
 }
 
-export class Page extends DefaultLookupField implements Model {
+export class Page extends BaseModel implements Model {
   public static modelName = 'page';
   public static modelPlural = 'pages';
 
@@ -34,10 +46,10 @@ export class Page extends DefaultLookupField implements Model {
   public creationDate: Date;
   public nestedUpdateDate: Date;
   public note: Note;
-  public tasks: Task[];
+  public tasks: Task[] = [];
 }
 
-export class Note extends DefaultLookupField implements Model {
+export class Note extends BaseModel implements Model {
   public static modelName = 'note';
   public static modelPlural = 'notes';
 
@@ -52,7 +64,7 @@ export class Note extends DefaultLookupField implements Model {
 
 }
 
-export class Task extends DefaultLookupField implements Model {
+export class Task extends BaseModel implements Model {
   public static modelName = 'task';
   public static modelPlural = 'tasks';
 
@@ -66,6 +78,18 @@ export class Task extends DefaultLookupField implements Model {
   public updateDate: Date;
 
   public codex: number;
+}
+
+export class Information extends BaseModel implements Model {
+  public static modelName = 'information';
+  public static modelPlural = 'information';
+
+  public id: number;
+  public codex: number;
+  public text: string;
+  public initialHash: string;
+  public creationDate: Date;
+  public updateDate: Date;
 }
 
 export class User {

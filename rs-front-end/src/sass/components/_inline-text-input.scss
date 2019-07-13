@@ -6,12 +6,13 @@
   font-size: 1em;
   overflow: hidden;
   margin: 0;
-  padding: 0.8em 1em 0.8em 1.05em;
+  padding: 0.8em 1em 0.8em 1.2em;
   resize: none;
   transition: border $transition-short, background-color $transition-short;
   border: 0;
-  border-left: 0.15em solid $white;
-  caret-color: $light-blue;
+  //border-left: 0.15em solid $white;
+  //caret-color: $light-blue;
+  background: none;
 
   &:hover {
     border-left: 0.15em solid $light-grey;

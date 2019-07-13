@@ -3,25 +3,23 @@ import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
-
-import {NavigationComponent} from './navigation/navigation.component';
-import {NavigationService} from './navigation/navigation.service';
 import {SaveIconComponent} from './save-icon/save-icon.component';
-import {ModificationRequestStatusService} from './services/modification-request-status.service';
 import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './logout/logout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {AuthService} from './services/auth.service';
+import {SharedModule} from "../shared/shared.module";
+import {NavigationComponent} from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
-    NavigationComponent,
     SaveIconComponent,
     LoginComponent,
     LogoutComponent,
+    NavigationComponent,
   ],
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule,
     HttpClientModule,
     TextareaAutosizeModule,
@@ -29,16 +27,9 @@ import {AuthService} from './services/auth.service';
     FormsModule,
   ],
   exports: [
-    NavigationComponent,
-    LoginComponent,
-    LogoutComponent,
     SaveIconComponent,
+    NavigationComponent,
   ],
-  providers: [
-    AuthService,
-    NavigationService,
-    ModificationRequestStatusService,
-  ]
 })
 export class CoreModule {
 }

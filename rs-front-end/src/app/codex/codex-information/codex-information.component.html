@@ -1,0 +1,37 @@
+<ng-container *ngIf="(codex$|async) as codex">
+  <section class="main-section">
+    <div class="main-section--container">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div class="mat-card-header__action-button">
+            <button (click)="switchEditMode()" color="primary" mat-stroked-button>
+              <ng-container *ngIf="!informationEditable">Edit
+                <mat-icon>edit</mat-icon>
+              </ng-container>
+              <ng-container *ngIf="informationEditable">MarkDown
+                <mat-icon>notes</mat-icon>
+              </ng-container>
+            </button>
+          </div>
+          <mat-card-title>
+            Information for {{codex.title}}
+          </mat-card-title>
+          <mat-card-subtitle>
+
+            Write any general information here !
+            <!--            </button>-->
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <ng-container *ngIf="(information$|async) as information; else emptyInformation">
+            <app-information-details [codex]="codex" [editable]="informationEditable"
+                                     [information]="information"></app-information-details>
+          </ng-container>
+          <ng-template #emptyInformation>
+            <app-information-details [codex]="codex" [editable]="informationEditable"></app-information-details>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+</ng-container>

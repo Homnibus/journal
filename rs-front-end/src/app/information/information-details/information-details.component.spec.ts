@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {NavCodexDetailComponent} from './nav-codex-detail.component';
+import {InformationDetailsComponent} from './information-details.component';
 
-describe('NavCodexDetailComponent', () => {
-  let component: NavCodexDetailComponent;
-  let fixture: ComponentFixture<NavCodexDetailComponent>;
+describe('InformationDetailsComponent', () => {
+  let component: InformationDetailsComponent;
+  let fixture: ComponentFixture<InformationDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NavCodexDetailComponent]
+      declarations: [InformationDetailsComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NavCodexDetailComponent);
+    fixture = TestBed.createComponent(InformationDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,17 @@
+<div class="information">
+  <markdown *ngIf="information && !editable" [data]="information.text"
+            class="information__disable-text markdown-body"></markdown>
+  <div *ngIf="!information && !editable" class="information-placeholder">Write any general information about your codex
+    here !
+  </div>
+  <mat-form-field *ngIf="editable" appearance="outline" color="primary">
+    <mat-label></mat-label>
+    <textarea #autosize="cdkTextareaAutosize" *ngIf="editable"
+              [formControl]="informationTextControl"
+              cdkAutosizeMaxRows="19"
+              cdkAutosizeMinRows="5"
+              cdkTextareaAutosize
+              matInput
+    ></textarea>
+  </mat-form-field>
+</div>

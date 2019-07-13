@@ -22,11 +22,13 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "core-js": "^2.6.9",
+    "github-markdown-css": "^3.0.1",
     "ngx-markdown": "^8.0.2",
     "ngx-textarea-autosize": "^2.0.3",
     "prism": "^4.1.2",
     "prismjs": "^1.16.0",
     "rxjs": "~6.3.3",
+    "seedrandom": "^3.0.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },

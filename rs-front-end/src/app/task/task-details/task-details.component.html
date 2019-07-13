@@ -1,8 +1,22 @@
-<div class="task simple-list__row">
-  <pre *ngIf="!enableEdit" class="task__text simple-list__text">{{ task.text }}</pre>
-  <textarea *ngIf="enableEdit" [formControl]="taskTextControl" autosize class="task__text inline-text-input"></textarea>
-  <!-- Div needed because an input checkbox can have a border-->
-  <div class="simple-list__right-icon">
-    <app-button (changed)="onCheckBoxChange($event)" [checked]="task.isAchieved" [id]="task.id"></app-button>
-  </div>
-</div>
+<mat-list-item class="task">
+  <mat-checkbox (change)="onCheckBoxChange($event)" [checked]="task.isAchieved" [id]="task.id.toString()">
+    <pre *ngIf="!editable" class="task__disable-text">{{ task.text }}</pre>
+  </mat-checkbox>
+  <mat-form-field *ngIf="editable" appearance="outline" color="primary">
+    <mat-label></mat-label>
+    <textarea #autosize="cdkTextareaAutosize"
+              [formControl]="taskTextControl"
+              cdkAutosizeMaxRows="19"
+              cdkAutosizeMinRows="1"
+              cdkTextareaAutosize
+              matInput
+    ></textarea>
+  </mat-form-field>
+  <button (click)="switchTaskEditableMode()" *ngIf="allowChangeEditable" class="task__enable-edit-button"
+          color="accent"
+          mat-icon-button
+          matTooltip="Edit"
+          matTooltipPosition="left">
+    <mat-icon>edit</mat-icon>
+  </button>
+</mat-list-item>

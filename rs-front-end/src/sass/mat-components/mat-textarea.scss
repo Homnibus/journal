@@ -1,0 +1,26 @@
+.mat-form-field-appearance-outline {
+  font-size: 16px;
+  flex: 999;
+
+  .mat-input-element {
+    line-height: 18px;
+    min-height: 18px;
+  }
+
+  .mat-form-field-wrapper {
+    margin: 0.5em;
+    padding-bottom: 0;
+  }
+
+  &.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.7em 0 0.7em 0;
+    border-top: 0.24em solid transparent;
+  }
+
+  &.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+  &.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+    width: 133.33333333%;
+    -webkit-transform: translateY(-1.1em) scale(0.75);
+    transform: translateY(-1.1em) scale(0.75);
+  }
+}

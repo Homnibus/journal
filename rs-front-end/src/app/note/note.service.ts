@@ -5,7 +5,9 @@ import {Note} from '../app.models';
 import {ModificationRequestStatusService} from '../core/services/modification-request-status.service';
 import {AuthService} from '../core/services/auth.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NoteService extends ModelService<Note> {
 
   constructor(authService: AuthService, modificationRequestStatusService: ModificationRequestStatusService) {

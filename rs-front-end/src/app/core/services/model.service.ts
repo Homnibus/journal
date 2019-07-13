@@ -1,4 +1,4 @@
-import {Model} from '../../app.models';
+import {BaseModel, Model, ModelState} from '../../app.models';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {ModelSerializer} from '../../app.serializers';
@@ -6,7 +6,7 @@ import {ModificationRequestStatusService} from './modification-request-status.se
 import {AuthService} from './auth.service';
 
 
-export class ModelService<T extends Model> {
+export class ModelService<T extends BaseModel> {
 
   constructor(
     private userService: AuthService,
@@ -31,7 +31,7 @@ export class ModelService<T extends Model> {
   get(id: number | string): Observable<T> {
     return this.userService.http.get(
       `${this.userService.API_URL}/${this.model.modelName}/${id}/`
-    ).pipe(map(data => this.serializer.fromJson(data)));
+    ).pipe(map(data => this.serializer.fromJson(data, ModelState.Retrieved)));
   }
 
 
@@ -42,7 +42,7 @@ export class ModelService<T extends Model> {
       this.serializer.toCreateJson(item)
     ).pipe(
       tap(() => this.modificationRequestStatusService.requestEnd()),
-      map(data => this.serializer.fromJson(data))
+      map(data => this.serializer.fromJson(data, ModelState.Created))
     );
   }
 
@@ -53,7 +53,7 @@ export class ModelService<T extends Model> {
       this.serializer.toUpdateJson(item)
     ).pipe(
       tap(() => this.modificationRequestStatusService.requestEnd()),
-      map(data => this.serializer.fromJson(data))
+      map(data => this.serializer.fromJson(data, ModelState.Modified))
     );
   }
 
@@ -67,6 +67,6 @@ export class ModelService<T extends Model> {
   }
 
   private convertData(data: any): T[] {
-    return data.map(item => this.serializer.fromJson(item));
+    return data.map(item => this.serializer.fromJson(item, ModelState.Retrieved));
   }
 }

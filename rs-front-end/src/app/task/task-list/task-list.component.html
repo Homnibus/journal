@@ -1,0 +1,7 @@
+<mat-list>
+  <ng-container *ngFor="let task of taskList; trackBy: trackByFn">
+    <app-task-details [@slideTopTransition]="task.state" [allowChangeEditable]="allowChangeEditable"
+                      [editable]="editable" [task]="task"></app-task-details>
+    <mat-divider></mat-divider>
+  </ng-container>
+</mat-list>

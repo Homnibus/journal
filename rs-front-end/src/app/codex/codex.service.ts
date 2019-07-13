@@ -5,7 +5,9 @@ import {ModelService} from '../core/services/model.service';
 import {ModificationRequestStatusService} from '../core/services/modification-request-status.service';
 import {AuthService} from '../core/services/auth.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CodexService extends ModelService<Codex> {
 
   constructor(authService: AuthService, modificationRequestStatusService: ModificationRequestStatusService) {

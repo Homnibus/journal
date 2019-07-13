@@ -30,11 +30,15 @@ export class OldPageListComponent implements OnInit {
 
   filterTodayPage(pages: Page[]): Page[] {
     let filteredPages: Page[];
-    const lastPage = pages[0];
-    if (formatDate(lastPage.date, 'yyyy-MM-dd', 'en') === formatDate(new Date(), 'yyyy-MM-dd', 'en')) {
-      filteredPages = pages.slice(1);
+    if (pages.length > 0) {
+      const lastPage = pages[0];
+      if (formatDate(lastPage.date, 'yyyy-MM-dd', 'en') === formatDate(new Date(), 'yyyy-MM-dd', 'en')) {
+        filteredPages = pages.slice(1);
+      } else {
+        filteredPages = Array.from(pages);
+      }
     } else {
-      filteredPages = Array.from(pages);
+      filteredPages = [];
     }
     return filteredPages;
   }

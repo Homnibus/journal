@@ -1,0 +1,17 @@
+.mat-raised-button.mat-primary {
+  font-size: 16px;
+  border-bottom: 2px solid mat-color($md-primary, 900);
+
+  &[disabled] {
+    border-bottom: 2px solid mat-color($md-primary, 300);
+  }
+
+  &:active {
+    margin-top: 2px;
+    border: none;
+  }
+}
+
+.mat-button-wrapper .mat-icon {
+  margin-left: 4px;
+}

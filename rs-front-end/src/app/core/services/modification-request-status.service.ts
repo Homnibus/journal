@@ -8,7 +8,9 @@ export enum RequestEvent {
   Error
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ModificationRequestStatusService {
 
   private requestEventSubject = new Subject<RequestEvent>();

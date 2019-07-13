@@ -1,14 +1,29 @@
-@import "components/simple-card--no-header";
-@import "components/simple-text-input";
-@import "components/button";
-
-// Main form
-.connexion_form {
-  max-width: 15em;
-  margin-top: 0.8em;
+.main-section--container {
+  width: 100%;
+  max-width: 320px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-// Adding margin to the input
-.simple-text-input {
-  margin: 0.8em 0.5em 1em 0.5em;
+.mat-card {
+  padding: 3em 0 2em 0;
+}
+
+.login-form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .mat-form-field {
+    margin-bottom: 1em;
+  }
+
+  .mat-form-field:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .formGroupError {
+    height: 1em;
+    margin-bottom: 1.5em;
+  }
 }

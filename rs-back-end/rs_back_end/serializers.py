@@ -32,6 +32,10 @@ class HashUpdateSerializerMixin(serializers.Serializer):
 
 class CodexSerializer(serializers.ModelSerializer):
   author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+  todo_tasks = serializers.SerializerMethodField()
+
+  def get_todo_tasks(self, obj):
+    return Task.objects.filter(page__codex=obj, is_achieved=False).count()
 
   class Meta:
     model = Codex

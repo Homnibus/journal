@@ -1,34 +1,50 @@
-<article *ngIf="page.tasks.length > 0 || page.note" class="simple-card simple-card--multiple-header page">
-  <ng-container *ngIf="page.note">
-    <section class="page__note-section">
-      <header>
-        <h2>
-          {{ page.date | date: 'd MMMM y' }} - Note
-        </h2>
-        <button (click)="switchNoteEditMode()">Edit</button>
-      </header>
-      <app-note-details [enableEdit]="noteEditable" [note]="page.note"></app-note-details>
-    </section>
-  </ng-container>
-  <ng-container *ngIf="page.tasks.length > 0">
-    <section class="page__task-section">
-      <header>
-        <h2 i18n>
-          <ng-container *ngIf="!page.note">
-            {{ page.date | date: 'd MMMM y' }} - Tasks
-          </ng-container>
-          <ng-container *ngIf="page.note">
-            Tasks
-          </ng-container>
-        </h2>
-        <button (click)="switchTaskEditMode()">Edit</button>
-      </header>
-      <section class="task-list simple-list">
-        <ng-container *ngFor="let task of page.tasks">
-          <app-task-details [enableEdit]="taskEditable" [task]="task"></app-task-details>
-          <div class="simple-list__separator"></div>
-        </ng-container>
-      </section>
-    </section>
-  </ng-container>
+<article *ngIf="page.tasks.length > 0 || page.note">
+  <mat-card>
+    <ng-container *ngIf="page.note">
+      <mat-card-header>
+        <mat-card-title>
+          Note
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ page.date | date: 'd MMMM y' }}
+        </mat-card-subtitle>
+        <div class="mat-card-header__action-button">
+          <button (click)="switchNoteEditMode()" color="primary" mat-stroked-button>
+            <ng-container *ngIf="!noteEditable">Edit
+              <mat-icon>edit</mat-icon>
+            </ng-container>
+            <ng-container *ngIf="noteEditable">MarkDown
+              <mat-icon>notes</mat-icon>
+            </ng-container>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="note__mat-card-content">
+        <app-note-details [editable]="noteEditable" [note]="page.note"></app-note-details>
+      </mat-card-content>
+    </ng-container>
+    <ng-container *ngIf="page.tasks.length > 0">
+      <mat-card-header>
+        <mat-card-title>
+          Tasks
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="!page.note">
+          {{ page.date | date: 'd MMMM y' }}
+        </mat-card-subtitle>
+        <div class="mat-card-header__action-button">
+          <button (click)="switchTaskEditMode()" color="primary" mat-stroked-button>
+            <ng-container *ngIf="!taskEditable">Edit
+              <mat-icon>edit</mat-icon>
+            </ng-container>
+            <ng-container *ngIf="taskEditable">Text
+              <mat-icon>notes</mat-icon>
+            </ng-container>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <app-task-list [allowChangeEditable]="false" [editable]="taskEditable" [taskList]="page.tasks"></app-task-list>
+      </mat-card-content>
+    </ng-container>
+  </mat-card>
 </article>

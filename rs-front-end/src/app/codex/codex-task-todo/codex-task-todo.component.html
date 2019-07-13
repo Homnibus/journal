@@ -1,26 +1,27 @@
-<app-nav-codex-detail [codexSlug]="codexSlug"></app-nav-codex-detail>
-<header class="header__main header__background">
-  <div class="header__size">
-    <div class="header__headline-container">
-      <h1 i18n>Task to do</h1>
-    </div>
-  </div>
-  <div class="line"></div>
-</header>
-<section class="main-section">
+<section *ngIf="(taskList$ | async) as taskList" class="main-section">
   <div class="main-section--container">
-    <section class="simple-card simple-card--single-header">
-      <header>
-        <h2 i18n>Still {{ (taskList$ | async).length }} to go !</h2>
-        <div class="header__image"></div>
-      </header>
-      <section class="task-list simple-list">
-        <ng-container *ngFor="let task of (taskList$ | async)">
-          <app-task-details [enableEdit]="false" [task]="task"></app-task-details>
-        </ng-container>
-        <div class="simple-list__separator"></div>
-      </section>
-    </section>
-
+    <mat-card>
+      <mat-card-header>
+        <div class="mat-card-header__action-button">
+          <button (click)="switchEditMode()" color="primary" mat-stroked-button>
+            <ng-container *ngIf="!editable">Edit
+              <mat-icon>edit</mat-icon>
+            </ng-container>
+            <ng-container *ngIf="editable">Text
+              <mat-icon>notes</mat-icon>
+            </ng-container>
+          </button>
+        </div>
+        <mat-card-title>
+          Task in progress for {{(codex$| async).title}}
+        </mat-card-title>
+        <mat-card-subtitle>
+          Only {{ taskList.length }} left !
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <app-task-list [allowChangeEditable]="false" [editable]="editable" [taskList]="taskList"></app-task-list>
+      </mat-card-content>
+    </mat-card>
   </div>
 </section>
