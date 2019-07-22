@@ -23,9 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "+7tc6*)=+zg=3k-+rl#n%dra34e!ir=)x_o-(#3_9v8ikm-=!6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if "runserver" in sys.argv:
+  DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+if "runserver" in sys.argv:
+  ALLOWED_HOSTS = ["*"]
+else:
+  ALLOWED_HOSTS = ["www.rescodex.com"]
 
 # Application definition
 
@@ -119,8 +123,8 @@ REST_FRAMEWORK = {
   'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
   'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
-
-CORS_ORIGIN_WHITELIST = ["http://localhost:4200", ]
+if "runserver" in sys.argv:
+  CORS_ORIGIN_WHITELIST = ["http://localhost:4200", ]
 
 AUTH_PASSWORD_VALIDATORS = [
   {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

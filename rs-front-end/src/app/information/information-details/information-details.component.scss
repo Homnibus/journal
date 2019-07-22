@@ -7,6 +7,10 @@
   align-self: center;
   flex: 1;
   text-align: center;
+
+  .mat-button {
+    white-space: normal;
+  }
 }
 
 .information__disable-text {

@@ -21,14 +21,14 @@ export class InformationService extends ModelService<Information> {
     );
   }
 
-  getCodexInformation(codexSlug: string): Observable<Information> {
+  getCodexInformation(codexSlug: string): Observable<Information[]> {
     const filter = `codex__slug=${codexSlug}`;
     return this.filteredList(filter).pipe(
       map(information => {
         if (information.length > 0) {
-          return information[0];
+          return information.slice(0, 1);
         }
-        return undefined;
+        return [];
       })
     );
   }

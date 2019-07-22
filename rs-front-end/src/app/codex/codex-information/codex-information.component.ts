@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Codex, Information} from "../../app.models";
 import {InformationService} from "../../information/information.service";
-import {CodexDetailsService} from "../codex-details.service";
+import {CodexDetailsService} from "../services/codex-details.service";
 import {switchMap} from "rxjs/operators";
 import {Observable} from "rxjs";
 
@@ -13,8 +13,8 @@ import {Observable} from "rxjs";
 export class CodexInformationComponent implements OnInit {
 
   private informationEditable = false;
-  private information$: Observable<Information>;
-  private codex$: Observable<Codex>;
+  codex$: Observable<Codex>;
+  private information$: Observable<Information[]>;
 
   constructor(private informationService: InformationService, private codexDetailsService: CodexDetailsService) {
   }

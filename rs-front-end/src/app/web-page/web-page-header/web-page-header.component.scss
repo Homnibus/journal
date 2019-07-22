@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.header {
+  max-width: 1024px;
+  margin-right: auto;
+  margin-left: auto;
+
+  .mat-divider {
+    margin: 0 1em;
+  }
+}
+
+.header__content {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1em 2em;
+
+  > div {
+    flex: 1;
+  }
+}

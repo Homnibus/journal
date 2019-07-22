@@ -11,7 +11,7 @@ import {slideTopTransition} from "../../shared/slide-top.animations";
 export class TaskListComponent {
 
   @Input()
-  private taskList: Task[];
+  taskList: Task[];
   @Input()
   private editable = false;
   @Input()

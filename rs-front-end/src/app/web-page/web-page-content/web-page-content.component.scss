@@ -1,0 +1,35 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.main-section {
+  width: 100%;
+  margin-top: 1em;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+// Extra Small body content
+.main-section.main-section--extra-small {
+  max-width: 320px;
+}
+
+// Body content
+.main-section.main-section--medium {
+  max-width: 1024px;
+}
+
+// Small body content
+.main-section.main-section--small {
+  max-width: 640px;
+}
+
+// Small body content
+.main-section.main-section--large {
+  max-width: 100%;
+}
+
+.main-section__container {
+  margin: 0 1em;
+}

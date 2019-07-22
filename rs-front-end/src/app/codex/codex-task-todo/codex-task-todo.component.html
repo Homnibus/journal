@@ -1,27 +1,28 @@
-<section *ngIf="(taskList$ | async) as taskList" class="main-section">
-  <div class="main-section--container">
-    <mat-card>
-      <mat-card-header>
-        <div class="mat-card-header__action-button">
-          <button (click)="switchEditMode()" color="primary" mat-stroked-button>
-            <ng-container *ngIf="!editable">Edit
-              <mat-icon>edit</mat-icon>
-            </ng-container>
-            <ng-container *ngIf="editable">Text
-              <mat-icon>notes</mat-icon>
-            </ng-container>
-          </button>
-        </div>
-        <mat-card-title>
-          Task in progress for {{(codex$| async).title}}
-        </mat-card-title>
-        <mat-card-subtitle>
-          Only {{ taskList.length }} left !
-        </mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <app-task-list [allowChangeEditable]="false" [editable]="editable" [taskList]="taskList"></app-task-list>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</section>
+<mat-card *ngIf="(taskList$ | async) as taskList">
+  <mat-card-header>
+    <div *ngIf="taskList.length > 0" class="mat-card-header__action-button">
+      <button (click)="switchEditMode()" color="primary" mat-stroked-button>
+        <ng-container *ngIf="!editable">Edit
+          <mat-icon>edit</mat-icon>
+        </ng-container>
+        <ng-container *ngIf="editable">Text
+          <mat-icon>notes</mat-icon>
+        </ng-container>
+      </button>
+    </div>
+    <mat-card-title>
+      Task in progress for {{(codex$| async).title}}
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="taskList.length > 0">
+      Only {{ taskList.length }} left !
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="taskList.length === 0">
+      This codex don't have any task to complete.
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <app-task-list *ngIf="taskList.length > 0" [allowChangeEditable]="false" [editable]="editable"
+                   [taskList]="taskList"></app-task-list>
+    <h1 *ngIf="taskList.length === 0"> No Task found</h1>
+  </mat-card-content>
+</mat-card>

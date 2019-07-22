@@ -1,8 +1,4 @@
 <ng-container *ngIf="(codex$|async) as codex">
-  <section class="main-section">
-    <div class="main-section--container">
-      <app-today-page [codex]="codex"></app-today-page>
-      <app-old-page-list [codex]="codex"></app-old-page-list>
-    </div>
-  </section>
+  <app-today-page [codex]="codex"></app-today-page>
+  <app-old-page-list [codex]="codex"></app-old-page-list>
 </ng-container>

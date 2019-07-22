@@ -10,8 +10,8 @@ import {PageService} from '../page.service';
 export class TodayPageComponent implements OnInit {
 
   @Input() codex: Codex;
-  private dataSource: Page;
-  private editableNote = true;
+  dataSource: Page;
+  private editableNote = false;
 
   constructor(private pageService: PageService) {
   }

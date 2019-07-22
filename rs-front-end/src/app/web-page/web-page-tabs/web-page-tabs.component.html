@@ -1,0 +1,13 @@
+<nav color="accent" mat-tab-nav-bar>
+  <a #rla="routerLinkActive"
+     *ngFor="let tabLink of tabLinkList"
+     [active]="rla.isActive"
+     [routerLinkActiveOptions]="{exact:true}" [routerLink]="tabLink.routerLink"
+     mat-tab-link
+     routerLinkActive>
+    {{tabLink.label}}
+  </a>
+</nav>
+<app-web-page-content [@routerTransition]="getState(o)">
+  <router-outlet #o="outlet"></router-outlet>
+</app-web-page-content>

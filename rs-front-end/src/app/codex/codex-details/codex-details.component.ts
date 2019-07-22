@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Codex} from '../../app.models';
 import {Observable} from 'rxjs';
-import {CodexDetailsService} from "../codex-details.service";
+import {CodexDetailsService} from "../services/codex-details.service";
 
 @Component({
   selector: 'app-codex-details',

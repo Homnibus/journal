@@ -11,7 +11,7 @@ import {formatDate} from '@angular/common';
 export class OldPageListComponent implements OnInit {
 
   @Input() codex: Codex;
-  private dataSource: Page[];
+  dataSource: Page[];
 
   constructor(private pageService: PageService) {
   }

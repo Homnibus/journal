@@ -1,0 +1,53 @@
+<app-web-page>
+  <app-web-page-header>
+    <app-web-page-title>Creation of a new Codex</app-web-page-title>
+    <app-web-page-subtitle>
+      Give a title and a short description to your Codex !
+    </app-web-page-subtitle>
+    <app-web-page-action-menu *ngIf="(codex$ | async) as codex">
+      <a [routerLink]="['/codex/details', codex.slug]" color="primary" mat-stroked-button>
+        Back to Codex
+      </a>
+    </app-web-page-action-menu>
+  </app-web-page-header>
+  <app-web-page-content [pageSize]="webPageSize.Small">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Edit Codex
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <form (ngSubmit)="onSubmit()" [formGroup]="codexForm">
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input #titleInput formControlName="title" matInput maxlength="50" type="text">
+            <mat-hint align="end">{{titleInput.value?.length || 0}}/50</mat-hint>
+            <mat-error>Please enter your codex title</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMaxRows="5"
+                      cdkAutosizeMinRows="3"
+                      cdkTextareaAutosize
+                      formControlName="description"
+                      matInput
+            ></textarea>
+          </mat-form-field>
+          <div class="button-container">
+            <button color="primary" mat-raised-button type="submit">
+              Edit
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="deleteCodex()" color="warn" mat-raised-button type='button'>
+              Delete
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </app-web-page-content>
+</app-web-page>

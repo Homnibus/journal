@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {FormBuilder, Validators} from "@angular/forms";
+import {webPageSize} from "../../web-page/web-page/web-page.component";
+import {throwError} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -15,8 +17,9 @@ export class LoginComponent {
     password: ['', Validators.required]
   });
   hide = true;
+  webPageSize = webPageSize;
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder) {
+  constructor(public authService: AuthService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder) {
   }
 
   get userName() {
@@ -37,9 +40,8 @@ export class LoginComponent {
         err => {
           if (err.status == 400) {
             this.loginForm.setErrors({invalidUserOrPassword: true});
-          } else {
-            throw err;
           }
+          return throwError(err);
         }
       );
     }

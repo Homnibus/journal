@@ -1,29 +1,32 @@
-.main-section--container {
-  width: 100%;
-  max-width: 320px;
-  margin-right: auto;
-  margin-left: auto;
+.mat-card-content {
+  padding: 2em;
 }
 
-.mat-card {
-  padding: 3em 0 2em 0;
-}
-
-.login-form {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-
+form {
   .mat-form-field {
+    display: block;
     margin-bottom: 1em;
   }
 
+  .button-container {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
   .mat-form-field:last-of-type {
-    margin-bottom: 0;
+    margin-bottom: 2em;
   }
 
   .formGroupError {
     height: 1em;
     margin-bottom: 1.5em;
   }
+}
+
+form .mat-form-field:last-of-type {
+  margin-bottom: 0;
+}
+
+h1 {
+  hyphens: none;
 }

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {User} from '../../app.models';
+import {environment} from "../../../environments/environment";
 
 class TokenData {
   token: string;
@@ -13,9 +14,6 @@ class TokenData {
 })
 export class AuthService {
   public currentUser$: Observable<User>;
-  // API URL
-  public API_URL = 'http://localhost:8000/api';
-  private AUTH_URL = 'http://localhost:8000/api-auth/';
   private currentUserSubject: BehaviorSubject<User>;
 
   constructor(public http: HttpClient) {
@@ -28,7 +26,7 @@ export class AuthService {
   }
 
   public login(username: string, password: string): Observable<User> {
-    return this.http.post<TokenData>(this.AUTH_URL, {username, password})
+    return this.http.post<TokenData>(environment.authUrl, {username, password})
       .pipe(map(
         data => {
           const user = new User(username, data.token);

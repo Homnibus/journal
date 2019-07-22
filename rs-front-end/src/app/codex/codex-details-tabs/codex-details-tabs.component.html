@@ -1,32 +1,14 @@
-<ng-container *ngIf="(codex$|async) as codex">
-  <header class="header__main header__background">
-    <div class="header__size">
-      <div class="header__headline-container">
-        <h1 i18n>Codex - {{ codex.title | titlecase }}</h1>
-        <h4 i18n>{{ codex.description }}</h4>
-      </div>
-      <mat-divider></mat-divider>
-      <nav color="accent" mat-tab-nav-bar>
-        <a #rlaCodex="routerLinkActive"
-           [active]="rlaCodex.isActive"
-           [routerLinkActiveOptions]="{exact:true}" mat-tab-link
-           routerLink="/codex/{{codex.slug}}"
-           routerLinkActive> Codex </a>
-        <a #rlaTask="routerLinkActive"
-           [active]="rlaTask.isActive"
-           [routerLinkActiveOptions]="{exact:true}" mat-tab-link
-           routerLink="/codex/{{codex.slug}}/todo"
-           routerLinkActive> Task </a>
-        <a #rlaInformation="routerLinkActive"
-           [active]="rlaInformation.isActive"
-           [routerLinkActiveOptions]="{exact:true}" mat-tab-link
-           routerLink="/codex/{{codex.slug}}/information"
-           routerLinkActive> Information </a>
-      </nav>
-    </div>
-    <div class="line"></div>
-  </header>
-  <main [@routerTransition]="getState(o)">
-    <router-outlet #o="outlet"></router-outlet>
-  </main>
-</ng-container>
+<app-web-page *ngIf="(codex$|async) as codex">
+  <app-web-page-header>
+    <app-web-page-title>Codex - {{ codex.title | titlecase }}</app-web-page-title>
+    <app-web-page-subtitle>{{ codex.description }}</app-web-page-subtitle>
+    <app-web-page-action-menu>
+      <a [routerLink]="['/codex/edit', codex.slug]" color="primary" mat-stroked-button>
+        Edit Codex
+        <mat-icon>edit</mat-icon>
+      </a>
+    </app-web-page-action-menu>
+  </app-web-page-header>
+  <app-web-page-tabs [tabLinkList]="tabLinkList">
+  </app-web-page-tabs>
+</app-web-page>

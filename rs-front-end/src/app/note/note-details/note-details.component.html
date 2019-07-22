@@ -1,13 +1,24 @@
 <div class="note">
-  <markdown *ngIf="note && !editable" [data]="note.text" class="note__disable-text markdown-body"></markdown>
-  <mat-form-field *ngIf="editable" appearance="outline" color="primary">
-    <mat-label>{{noteLabel}}</mat-label>
-    <textarea #autosize="cdkTextareaAutosize"
-              [formControl]="noteTextControl"
-              cdkAutosizeMaxRows="19"
-              cdkAutosizeMinRows="3"
-              cdkTextareaAutosize
-              matInput
-    ></textarea>
-  </mat-form-field>
+  <ng-container *ngIf="!editable; else noteTextarea">
+    <markdown *ngIf="note; else newNote" [data]="note.text" class="note__disable-text markdown-body"></markdown>
+    <ng-template #newNote>
+      <div class="note-placeholder">
+        <button (click)="switchNoteEditableMode()" mat-button>
+          Write what's going on today about your codex here !
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
+  <ng-template #noteTextarea>
+    <mat-form-field *ngIf="editable" appearance="outline" color="primary">
+      <mat-label>{{noteLabel}}</mat-label>
+      <textarea #autosize="cdkTextareaAutosize"
+                [formControl]="noteTextControl"
+                cdkAutosizeMaxRows="18"
+                cdkAutosizeMinRows="5"
+                cdkTextareaAutosize
+                matInput
+      ></textarea>
+    </mat-form-field>
+  </ng-template>
 </div>

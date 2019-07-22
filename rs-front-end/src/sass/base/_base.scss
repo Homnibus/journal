@@ -1,86 +1,21 @@
-@import "../theme/color";
-
 /* ----------------------------- */
 /* Baseline design               */
 /* ----------------------------- */
 
 // Global page display
 html {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  background: $background-grey;
+  overflow-x: hidden;
+  min-height: 100%;
+  background: rgb(255, 255, 255);
 }
 
-// Body header
-.header__background {
-  margin-bottom: 1em;
-  padding-top: 0.8em;
-  border-bottom: 1px solid $white-blue;
-  background: $white;
-}
+/*
 
-.header__size {
-  //padding-bottom: 0.5em;
-}
-
-.header__headline-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  padding: 0 0.5em 0 0.5em;
-}
-
-.header__main h1 {
-  margin: 0 0 0.3em 0;
-  color: $dark-blue;
-}
-
-.header__main h4 {
-  padding-left: 0.3em;
-}
-
-// Body content
-.main-section, .header__size {
-  width: 100%;
-  max-width: 1024px;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-// Small body content
-body > section.body-small, .header__size.header__size--small {
-  width: 100%;
-  max-width: 640px;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.main-section--container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  margin: 0 0.8em 0 0.8em;
-}
-
-// Body footer
-body > footer {
-  margin-top: 2em;
-  padding-top: .4em;
-  padding-bottom: .4em;
-  text-align: center;
-  color: $dark-blue;
-}
-
-.footer-filler {
-  flex: 1;
-}
 
 // Generic display
 section, article, header {
@@ -94,14 +29,15 @@ section, article, header {
   width: 100%;
   margin-top: auto;
   margin-bottom: auto;
-  border-top: 1px solid $dark-blue;
-  border-bottom: 1px solid $light-blue;
+  border-top: 1px solid mat-color($md-primary, 900);;
+  border-bottom: 1px solid mat-color($md-primary, 50);
 }
 
 .reversed-line {
   width: 100%;
   margin-top: auto;
   margin-bottom: auto;
-  border-top: 1px solid $light-blue;
-  border-bottom: 1px solid $dark-blue;
+  border-top: 1px solid mat-color($md-primary, 50);
+  border-bottom: 1px solid mat-color($md-primary, 900);;
 }
+*/

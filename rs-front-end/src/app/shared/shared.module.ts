@@ -6,11 +6,13 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
+  MatDialogModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatRippleModule,
   MatSidenavModule,
+  MatSnackBarModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
@@ -51,7 +53,9 @@ import {LayoutModule} from "@angular/cdk/layout";
     MatTooltipModule,
     MatInputModule,
     MatChipsModule,
-  ]
+    MatSnackBarModule,
+    MatDialogModule,
+  ],
 })
 export class SharedModule {
 }

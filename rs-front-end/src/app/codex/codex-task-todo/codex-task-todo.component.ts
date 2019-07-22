@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TaskService} from '../../task/task.service';
 import {Observable} from 'rxjs';
 import {Codex, Task} from 'src/app/app.models';
-import {CodexDetailsService} from "../codex-details.service";
+import {CodexDetailsService} from "../services/codex-details.service";
 import {filter, switchMap} from "rxjs/operators";
 
 @Component({

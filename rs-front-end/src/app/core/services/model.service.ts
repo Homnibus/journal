@@ -4,6 +4,7 @@ import {map, tap} from 'rxjs/operators';
 import {ModelSerializer} from '../../app.serializers';
 import {ModificationRequestStatusService} from './modification-request-status.service';
 import {AuthService} from './auth.service';
+import {environment} from "../../../environments/environment";
 
 
 export class ModelService<T extends BaseModel> {
@@ -18,27 +19,27 @@ export class ModelService<T extends BaseModel> {
 
   list(): Observable<T[]> {
     return this.userService.http.get(
-      `${this.userService.API_URL}/${this.model.modelPlural}/`
+      `${environment.apiUrl}${this.model.modelPlural}/`
     ).pipe(map((data: Array<object>) => this.convertData(data)));
   }
 
   filteredList(filter: string): Observable<T[]> {
     return this.userService.http.get(
-      `${this.userService.API_URL}/${this.model.modelPlural}/?${filter}`
+      `${environment.apiUrl}${this.model.modelPlural}/?${filter}`
     ).pipe(map((data: Array<object>) => this.convertData(data)));
   }
 
-  get(id: number | string): Observable<T> {
+  get(id: number | string): Observable<T[]> {
     return this.userService.http.get(
-      `${this.userService.API_URL}/${this.model.modelName}/${id}/`
-    ).pipe(map(data => this.serializer.fromJson(data, ModelState.Retrieved)));
+      `${environment.apiUrl}${this.model.modelName}/${id}/`
+    ).pipe(map(data => [this.serializer.fromJson(data, ModelState.Retrieved)]));
   }
 
 
   create(item: T): Observable<T> {
     this.modificationRequestStatusService.requestStart();
     return this.userService.http.post(
-      `${this.userService.API_URL}/${this.model.modelPlural}/`,
+      `${environment.apiUrl}${this.model.modelPlural}/`,
       this.serializer.toCreateJson(item)
     ).pipe(
       tap(() => this.modificationRequestStatusService.requestEnd()),
@@ -49,7 +50,7 @@ export class ModelService<T extends BaseModel> {
   update(item: T): Observable<T> {
     this.modificationRequestStatusService.requestStart();
     return this.userService.http.put(
-      `${this.userService.API_URL}/${this.model.modelPlural}/${item[this.model.lookupField]}/`,
+      `${environment.apiUrl}${this.model.modelPlural}/${item[this.model.lookupField]}/`,
       this.serializer.toUpdateJson(item)
     ).pipe(
       tap(() => this.modificationRequestStatusService.requestEnd()),
@@ -60,7 +61,7 @@ export class ModelService<T extends BaseModel> {
   delete(item: T) {
     this.modificationRequestStatusService.requestStart();
     return this.userService.http.delete(
-      `${this.userService.API_URL}/${this.model.modelName}/${item[this.model.lookupField]}/`
+      `${environment.apiUrl}${this.model.modelName}/${item[this.model.lookupField]}/`
     ).pipe(
       tap(() => this.modificationRequestStatusService.requestEnd())
     );

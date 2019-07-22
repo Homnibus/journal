@@ -1,116 +1,92 @@
-@import "../../../sass/theme/color";
+mat-form-field {
+  margin: -0.4em 0 -1em 0.2em;
 
-/* Header */
-.header__main h4 {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  padding-bottom: .6em;
-  white-space: nowrap;
+  mat-icon {
+    margin-right: 0.1em;
+    vertical-align: bottom;
+  }
+
+  input {
+    padding-left: 0.1em;
+    color: black;
+  }
 }
 
-/* Search field */
-.codex-search {
-  max-width: 12em;
-  margin-left: 0.5em;
-}
+app-web-page-content {
+  ::ng-deep .main-section__container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
 
-/* Codex box */
-.codex-list {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.codex__not-found {
-  display: none;
+  h1 {
+    margin: 1em;
+  }
 }
 
 .codex {
-  width: auto;
-}
 
-.codex__title {
-  font-size: 1.4em;
-  line-height: 1.3em;
-  overflow: hidden;
-  flex: 1 1 auto;
-  padding: 0.5em 0.5em 0 0.5em;
-}
-
-.codex__date {
-  font-size: 0.9em;
-  overflow: hidden;
-  flex-shrink: 0;
-  padding: 0.3em 0.5em 0.4em 0;
-  transition: font-size $transition-medium;
-  text-align: right;
-  border-top: 2px solid;
-  border-left: 1px solid;
-  border-radius: 28px 0 4px 4px;
-  background: white;
-
-  .mat-chip-list {
-    display: inline-block;
-    margin-left: 0.2em;
-    vertical-align: middle;
+  .codex__title {
+    font-size: 1.4em;
+    line-height: 1.3em;
+    overflow: hidden;
+    flex: 1 1 auto;
+    padding: 0.5em 0.5em 0 0.5em;
   }
 
-  .mat-standard-chip {
-    min-height: 18px;
-    padding: 5px 5px;
-  }
-}
+  .codex__date {
+    font-size: 0.9em;
+    padding: 0.3em 0.5em 0.4em 0;
+    text-align: right;
+    border-top: 2px solid;
+    border-left: 1px solid;
+    border-top-left-radius: 28px;
+    background: white;
 
-.codex__link {
-  display: flex;
-  flex-direction: column;
-  width: 10em;
-  height: 9em;
-  margin: 0.5em;
-  /*padding: 0.5em;*/
-  transition: background-color $transition-short;
-  word-wrap: break-word;
-  /*border: 2px solid $dark-blue;*/
-  /*background-color: $white-blue;*/
-  border-radius: 4px;
-  background-color: #f6f8fa;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    .mat-chip-list {
+      display: inline-block;
+      margin-top: -0.3em;
+      margin-left: 0.2em;
+      vertical-align: middle;
+    }
 
-  &:link,
-  &:visited,
-  &:hover,
-  &:active,
-  &:focus {
-    text-decoration: none;
-    color: $black;
+    .mat-standard-chip {
+      min-height: 18px;
+      padding: 0 7px;
+    }
   }
 
-  &:hover,
-  &:active,
-  &:focus {
-    background-color: $mid-blue;
-  }
+  .codex__link {
+    display: flex;
+    flex-direction: column;
+    width: 10em;
+    height: 9em;
+    margin: 0.5em;
+    transition: background-color 100ms ease;
+    border-radius: 4px;
+    background-color: #f6f8fa;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
 
-  &:link .codex__title {
-    text-decoration: none;
-    color: $dark-blue;
-  }
+    &:link,
+    &:visited,
+    &:hover,
+    &:active,
+    &:focus {
+      text-decoration: none;
+      color: black;
+    }
 
-  &:visited .codex__title {
-    text-decoration: none;
-    color: $dark-blue;
-  }
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #4d7385;
+    }
 
-  &:hover .codex__title {
-    text-decoration: none;
-    color: $white;
-  }
-
-  &:active .title,
-  &:focus .title {
-    text-decoration: none;
-    color: $white;
-    background-color: $mid-blue;
+    &:hover .codex__title {
+      color: white;
+    }
   }
 }
+
+
+

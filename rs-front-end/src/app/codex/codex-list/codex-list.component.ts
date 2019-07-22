@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Codex} from '../../app.models';
-import {CodexService} from '../codex.service';
+import {CodexService} from '../services/codex.service';
 import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class CodexListComponent implements OnInit, OnDestroy {
   codexSearchControl: FormControl;
   codexSearchControlOnChange: Subscription;
   private dataSource: Codex[];
-  private filteredCodexList: Codex[];
+  filteredCodexList: Codex[];
 
   constructor(
     private codexService: CodexService,

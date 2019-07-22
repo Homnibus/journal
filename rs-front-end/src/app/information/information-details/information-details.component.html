@@ -1,17 +1,25 @@
 <div class="information">
-  <markdown *ngIf="information && !editable" [data]="information.text"
-            class="information__disable-text markdown-body"></markdown>
-  <div *ngIf="!information && !editable" class="information-placeholder">Write any general information about your codex
-    here !
-  </div>
-  <mat-form-field *ngIf="editable" appearance="outline" color="primary">
-    <mat-label></mat-label>
-    <textarea #autosize="cdkTextareaAutosize" *ngIf="editable"
-              [formControl]="informationTextControl"
-              cdkAutosizeMaxRows="19"
-              cdkAutosizeMinRows="5"
-              cdkTextareaAutosize
-              matInput
-    ></textarea>
-  </mat-form-field>
+  <ng-container *ngIf="!editable; else informationTextarea">
+    <markdown *ngIf="information; else newInformation" [data]="information.text"
+              class="information__disable-text markdown-body"></markdown>
+    <ng-template #newInformation>
+      <div class="information-placeholder">
+        <button (click)="switchInformationEditableMode()" mat-button>
+          Write any general information about your codex here !
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
+  <ng-template #informationTextarea>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label></mat-label>
+      <textarea #autosize="cdkTextareaAutosize"
+                [formControl]="informationTextControl"
+                cdkAutosizeMaxRows="18"
+                cdkAutosizeMinRows="5"
+                cdkTextareaAutosize
+                matInput
+      ></textarea>
+    </mat-form-field>
+  </ng-template>
 </div>

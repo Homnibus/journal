@@ -1,6 +1,16 @@
-/* Note */
 .note {
   display: flex;
+  min-height: 8.5em;
+}
+
+.note-placeholder {
+  align-self: center;
+  flex: 1;
+  text-align: center;
+
+  .mat-button {
+    white-space: normal;
+  }
 }
 
 .note__disable-text {

@@ -1,5 +1,3 @@
 <section class="page-list">
-  <ng-container *ngFor="let page of dataSource">
-    <app-page-details [page]="page"></app-page-details>
-  </ng-container>
+  <app-page-details *ngFor="let page of dataSource" [page]="page"></app-page-details>
 </section>

@@ -1,38 +1,36 @@
-<ng-container *ngIf="dataSource as page">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        Note
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{ page.date | date: 'd MMMM y' }}
-      </mat-card-subtitle>
-      <div class="mat-card-header__action-button">
-        <button (click)="switchEditMode()" color="primary" mat-stroked-button>
-          <ng-container *ngIf="!editableNote">Edit
-            <mat-icon>edit</mat-icon>
-          </ng-container>
-          <ng-container *ngIf="editableNote">MarkDown
-            <mat-icon>notes</mat-icon>
-          </ng-container>
-        </button>
-      </div>
-    </mat-card-header>
-    <mat-card-content class="note--of-today">
-      <app-note-details [codex]="codex" [editable]="editableNote" [noteLabel]="'Note of the day'"
-                        [note]="page.note"></app-note-details>
-    </mat-card-content>
-    <mat-card-header>
-      <mat-card-title>
-        Tasks
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <app-task-add (taskAdded)="addTask($event)" [codex]="codex" class="simple-list__row"></app-task-add>
-      <mat-divider></mat-divider>
-      <section *ngIf="page.tasks && page.tasks.length > 0" class="task-list simple-list">
-        <app-task-list [allowChangeEditable]="false" [editable]="true" [taskList]="page.tasks"></app-task-list>
-      </section>
-    </mat-card-content>
-  </mat-card>
-</ng-container>
+<mat-card *ngIf="dataSource as page">
+  <mat-card-header>
+    <mat-card-title>
+      Note
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ page.date | date: 'd MMMM y' }}
+    </mat-card-subtitle>
+    <div class="mat-card-header__action-button">
+      <button (click)="switchEditMode()" color="primary" mat-stroked-button>
+        <ng-container *ngIf="!editableNote">Edit
+          <mat-icon>edit</mat-icon>
+        </ng-container>
+        <ng-container *ngIf="editableNote">MarkDown
+          <mat-icon>notes</mat-icon>
+        </ng-container>
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="note--of-today">
+    <app-note-details [(editable)]="editableNote" [codex]="codex" [noteLabel]="'Note of the day'"
+                      [note]="page.note"></app-note-details>
+  </mat-card-content>
+  <mat-card-header>
+    <mat-card-title>
+      Tasks
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-task-add (taskAdded)="addTask($event)" [codex]="codex" class="simple-list__row"></app-task-add>
+    <mat-divider></mat-divider>
+    <section *ngIf="page.tasks && page.tasks.length > 0" class="task-list simple-list">
+      <app-task-list [allowChangeEditable]="false" [editable]="true" [taskList]="page.tasks"></app-task-list>
+    </section>
+  </mat-card-content>
+</mat-card>

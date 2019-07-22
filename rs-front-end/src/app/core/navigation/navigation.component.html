@@ -1,14 +1,14 @@
 <mat-toolbar class="mat-elevation-z6" color="primary">
-  <button mat-button routerLink="/">
-    <mat-icon>home</mat-icon>
-    Home
-  </button>
+  <a mat-button routerLink="/">
+    <img [src]="iconUrl" class="png-icon" style="height: 26px;margin: 0 4px 6px 0;">
+    ResCodex
+  </a>
   <app-save-icone></app-save-icone>
   <div class="menu__filler"></div>
-  <button *ngIf="(authService.currentUser$ | async)" mat-button routerLink="/logout">
+  <a *ngIf="(authService.currentUser$ | async)" mat-button routerLink="/logout">
     Logout
-  </button>
-  <button *ngIf="!(authService.currentUser$ | async)" mat-button routerLink="/login">
+  </a>
+  <a *ngIf="!(authService.currentUser$ | async)" mat-button routerLink="/login">
     Login
-  </button>
+  </a>
 </mat-toolbar>

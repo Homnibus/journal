@@ -9,7 +9,7 @@ import {Subscription} from 'rxjs';
 })
 export class SaveIconComponent implements OnInit, OnDestroy {
 
-  private showIcon: boolean;
+  showIcon: boolean;
   private requestStatusSubscription: Subscription;
 
   constructor(private modificationRequestStatusService: ModificationRequestStatusService) {

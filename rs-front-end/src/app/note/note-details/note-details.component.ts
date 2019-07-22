@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Codex, Note} from '../../app.models';
 import {FormControl} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
@@ -8,14 +8,30 @@ import {NoteService} from '../note.service';
 @Component({
   selector: 'app-note-details',
   templateUrl: './note-details.component.html',
-  styleUrls: ['./note-details.component.scss']
+  styleUrls: ['./note-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoteDetailsComponent implements OnInit, OnDestroy {
 
   @Input()
   noteLabel = '';
+
+  @Output()
+  editableChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  private _editable: boolean;
+
+  get editable() {
+    return this._editable;
+  }
+
   @Input()
-  editable = true;
+  set editable(val: boolean) {
+    if (this._editable != undefined) {
+      this.editableChange.emit(val);
+    }
+    this._editable = val;
+  }
 
   @Input()
   note?: Note;
@@ -45,13 +61,21 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
     this.noteTextControlOnChange.unsubscribe();
   }
 
+  switchNoteEditableMode(): void {
+    this.editable = !this.editable;
+  }
+
   createOrUpdateNote(noteText: string): Observable<Note> {
     let httpObservable: Observable<Note>;
     if (this.note) {
+      // Create a copy of the Note to prevent the update of the markdown part until the server give a 200
+      // response
       const noteCopy = Object.assign({}, this.note);
       noteCopy.text = noteText;
       httpObservable = this.noteService.update(noteCopy);
     } else {
+      // Create a copy of the Note to prevent the update of the markdown part until the server give a 200
+      // response
       const newNote = new Note();
       newNote.text = noteText;
       newNote.codex = this.codex.id;

@@ -26,7 +26,7 @@ body {
   background: $white;
 }
 
-.header__size {
+.header__content {
   padding-bottom: 0.5em;
 }
 
@@ -37,17 +37,17 @@ body {
   padding: 0 0.5em 0 0.5em;
 }
 
-.header__main h1 {
+.header h1 {
   margin: 0 0 0.3em 0;
   color: $dark-blue;
 }
 
-.header__main h4 {
+.header h4 {
   padding-left: 0.3em;
 }
 
 // Body content
-body > section, .header__size {
+body > section, .header__content {
   width: 100%;
   max-width: 1024px;
   margin-right: auto;
@@ -55,7 +55,7 @@ body > section, .header__size {
 }
 
 // Small body content
-body > section.body-small, .header__size.header__size--small {
+body > section.body-small, .header__content.header__size--small {
   width: 100%;
   max-width: 640px;
   margin-right: auto;

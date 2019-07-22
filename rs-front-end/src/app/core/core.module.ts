@@ -9,6 +9,7 @@ import {LogoutComponent} from './logout/logout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from "../shared/shared.module";
 import {NavigationComponent} from './navigation/navigation.component';
+import {WebPageModule} from "../web-page/web-page.module";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {NavigationComponent} from './navigation/navigation.component';
   imports: [
     CommonModule,
     SharedModule,
+    WebPageModule,
     RouterModule,
     HttpClientModule,
     TextareaAutosizeModule,

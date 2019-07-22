@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {AuthService} from "../services/auth.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-navigation',
@@ -8,6 +9,8 @@ import {AuthService} from "../services/auth.service";
 })
 export class NavigationComponent {
 
-  constructor(private authService: AuthService) {
+  iconUrl = `${environment.staticUrl}img/favicon.png`;
+
+  constructor(public authService: AuthService) {
   }
 }

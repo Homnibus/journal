@@ -10,10 +10,11 @@ import {CodexTaskTodoComponent} from './codex-task-todo/codex-task-todo.componen
 import {TaskModule} from '../task/task.module';
 import {CodexAddComponent} from './codex-add/codex-add.component';
 import {SharedModule} from "../shared/shared.module";
-import {CodexListTabsComponent} from './codex-list-tabs/codex-list-tabs.component';
 import {CodexDetailsTabsComponent} from './codex-details-tabs/codex-details-tabs.component';
 import {CodexInformationComponent} from './codex-information/codex-information.component';
 import {InformationModule} from "../information/information.module";
+import {WebPageModule} from "../web-page/web-page.module";
+import {CodexEditComponent, CodexEditDeleteDialog} from './codex-edit/codex-edit.component';
 
 @NgModule({
   declarations: [
@@ -21,9 +22,10 @@ import {InformationModule} from "../information/information.module";
     CodexDetailsComponent,
     CodexTaskTodoComponent,
     CodexAddComponent,
-    CodexListTabsComponent,
     CodexDetailsTabsComponent,
     CodexInformationComponent,
+    CodexEditComponent,
+    CodexEditDeleteDialog,
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,9 @@ import {InformationModule} from "../information/information.module";
     PageModule,
     TaskModule,
     InformationModule,
+    WebPageModule,
   ],
+  entryComponents: [CodexEditDeleteDialog],
 })
 export class CodexModule {
 }

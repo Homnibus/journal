@@ -1,35 +1,41 @@
-<header class="header__main header__background">
-  <div class="header__size">
-    <div class="header__headline-container">
-      <h1 i18n>Most recent Codex</h1>
-      <h4 i18n>
-        Search :
-        <div class="codex-search simple-text-input">
-          <input [formControl]="codexSearchControl" autocomplete="off" class="codex-search_input" maxlength="256"
-                 placeholder="Codex title" title="Search a Codex" type="search">
+<app-web-page>
+  <app-web-page-header>
+    <app-web-page-title>
+      Most recent Codex
+    </app-web-page-title>
+    <app-web-page-subtitle>
+      Search :
+      <mat-form-field>
+        <mat-icon matSuffix>search</mat-icon>
+        <input [formControl]="codexSearchControl"
+               autocomplete="off"
+               formControlName="title"
+               matInput
+               maxlength="256"
+               type="search">
+      </mat-form-field>
+    </app-web-page-subtitle>
+    <app-web-page-action-menu>
+      <a color="primary" mat-stroked-button routerLink="/codex/add">
+        New Codex
+        <mat-icon>add</mat-icon>
+      </a>
+    </app-web-page-action-menu>
+  </app-web-page-header>
+  <app-web-page-content *ngIf="filteredCodexList">
+    <h1 *ngIf="filteredCodexList.length === 0" i18n>No Codex found</h1>
+    <div *ngFor="let codex of filteredCodexList" class="codex">
+      <a [routerLink]="['/codex/details', codex.slug]" class="codex__link" matRipple>
+        <div class="codex__title title">
+          {{ codex.title | titlecase }}
         </div>
-      </h4>
+        <div [ngStyle]="{'border-color':getCodexColor(codex)}" class="codex__date">
+          {{ codex.nestedUpdateDate | date: 'd LLL y' }}
+          <mat-chip-list>
+            <mat-chip [color]="codex.todoTasks > 0 ? 'primary' : 'accent'" selected>{{codex.todoTasks}}</mat-chip>
+          </mat-chip-list>
+        </div>
+      </a>
     </div>
-  </div>
-  <div class="line"></div>
-</header>
-<section class="main-section">
-  <div class="main-section--container">
-    <section *ngIf="filteredCodexList" class="codex-list">
-      <h4 *ngIf="filteredCodexList.length == 0" class="codex__not-found" i18n>No Codex found</h4>
-      <article *ngFor="let codex of filteredCodexList" class="codex">
-        <a [routerLink]="['/codex', codex.slug]" class="codex__link" matRipple>
-          <div class="codex__title title">
-            {{ codex.title | titlecase }}
-          </div>
-          <div [ngStyle]="{'border-color':getCodexColor(codex)}" class="codex__date">
-            {{ codex.nestedUpdateDate | date: 'd LLL y' }}
-            <mat-chip-list>
-              <mat-chip [color]="codex.todoTasks > 0 ? 'primary' : 'accent'" selected>{{codex.todoTasks}}</mat-chip>
-            </mat-chip-list>
-          </div>
-        </a>
-      </article>
-    </section>
-  </div>
-</section>
+  </app-web-page-content>
+</app-web-page>

@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  max-width: 1024px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+.mat-tab-link {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.mat-tab-label-active {
+  opacity: .85;
+}
+
+.mat-tab-nav-bar {
+  margin: 0 1em;
+}

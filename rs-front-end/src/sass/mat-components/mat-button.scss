@@ -1,14 +1,25 @@
-.mat-raised-button.mat-primary {
+.mat-raised-button {
   font-size: 16px;
+
+  &:active:not([disabled]) {
+    margin-top: 2px;
+    border: none;
+  }
+}
+
+.mat-raised-button.mat-primary {
   border-bottom: 2px solid mat-color($md-primary, 900);
 
   &[disabled] {
     border-bottom: 2px solid mat-color($md-primary, 300);
   }
+}
 
-  &:active {
-    margin-top: 2px;
-    border: none;
+.mat-raised-button.mat-warn {
+  border-bottom: 2px solid mat-color($md-warn, 900);
+
+  &[disabled] {
+    border-bottom: 2px solid mat-color($md-warn, 300);
   }
 }
 
