@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html class="rescodex" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ResCodex</title>
+  <base href="/">
+
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="{% static "img/favicon.png" %}" rel="icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="{% static "angular/styles.css" %}">
+</head>
+<body>
+<app-root></app-root>
+<script type="text/javascript" src="{% static "angular/runtime.js" %}"></script>
+<script type="text/javascript" src="{% static "angular/es2015-polyfills.js" %}" nomodule></script>
+<script type="text/javascript" src="{% static "angular/polyfills.js" %}"></script>
+<script type="text/javascript" src="{% static "angular/scripts.js" %}"></script>
+<script type="text/javascript" src="{% static "angular/main.js" %}"></script>
+</body>
+</html>

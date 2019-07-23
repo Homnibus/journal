@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --statsJson=true --sourceMap=true",
+    "build": "ng build --prod --statsJson=true --sourceMap=true --outputHashing=none",
+    "dev": "ng build --extractCss=true --vendorChunk=false --outputHashing=none --outputPath=../rs-back-end/static/angular",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
