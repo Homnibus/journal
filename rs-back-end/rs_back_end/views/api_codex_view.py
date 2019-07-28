@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework_guardian import filters
 
 from rs_back_end.models import Codex
-from rs_back_end.permissions import FullObjectPermissions
+from rs_back_end.guardian_permissions import FullObjectPermissions
 from rs_back_end.serializers import CodexSerializer
 
 

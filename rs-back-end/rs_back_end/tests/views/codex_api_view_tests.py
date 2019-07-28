@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 
-from rs_back_end.models import Codex
+from rs_back_end.models import Codex, Task
 from rs_back_end.tests.views.defaultAPITestCase import DefaultAPITestCase
 
 
@@ -96,11 +96,12 @@ class CodexGetDetailViewTest(DefaultAPITestCase):
     """ Test if the view return a unique of codex """
     response = self.client.get(self.url)
 
-    self.assertEqual(len(response.data), 7)
+    self.assertEqual(len(response.data), 8)
 
     self.assertEqual(response.data['id'], self.codex.id)
     self.assertEqual(response.data['title'], self.codex.title)
     self.assertEqual(response.data['slug'], self.codex.slug)
+    self.assertEqual(response.data['todo_tasks'], 0)
     self.assertEqual(response.data['description'], self.codex.description)
     self.assertEqual(response.data['creation_date'], self.codex.creation_date.strftime('%Y-%m-%dT%H:%M:%SZ'))
     self.assertEqual(response.data['update_date'], self.codex.update_date.strftime('%Y-%m-%dT%H:%M:%SZ'))
@@ -176,11 +177,12 @@ class CodexPostViewTest(DefaultAPITestCase):
     """ Test if the view return a codex """
     response = self.client.post(self.url, self.data)
 
-    self.assertEqual(len(response.data), 7)
+    self.assertEqual(len(response.data), 8)
 
     self.assertEqual(response.data['id'], 2)
     self.assertEqual(response.data['title'], self.data["title"])
     self.assertEqual(response.data['slug'], self.slug)
+    self.assertEqual(response.data['todo_tasks'], 0)
     self.assertEqual(response.data['description'], self.data["description"])
     self.assertIsNotNone(response.data['creation_date'])
     self.assertIsNotNone(response.data['update_date'])
@@ -241,11 +243,12 @@ class CodexPutViewTest(DefaultAPITestCase):
     """ Test if the view update a unique of codex """
     response = self.client.put(self.url, self.data)
 
-    self.assertEqual(len(response.data), 7)
+    self.assertEqual(len(response.data), 8)
 
     self.assertEqual(response.data['id'], self.codex1.id)
     self.assertEqual(response.data['title'], self.data['title'])
     self.assertEqual(response.data['slug'], self.codex1.slug)
+    self.assertEqual(response.data['todo_tasks'], 0)
     self.assertEqual(response.data['description'], self.data['description'])
     self.assertEqual(response.data['creation_date'], self.codex1.creation_date.strftime('%Y-%m-%dT%H:%M:%SZ'))
     self.assertIsNotNone(response.data['update_date'])

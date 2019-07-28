@@ -4,7 +4,7 @@ from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
 
 from rs_back_end.AuthorModelViewset import CreationModelViewSet
 from rs_back_end.models import Note
-from rs_back_end.permissions import FullObjectPermissions
+from rs_back_end.guardian_permissions import FullObjectPermissions
 from rs_back_end.serializers import NoteSerializer, NoteCreateSerializer
 
 

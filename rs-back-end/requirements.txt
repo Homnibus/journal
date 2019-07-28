@@ -1,8 +1,8 @@
+djangorestframework
 Django==2.2
 psycopg2==2.8.1
 pytz==2018.9
 black==19.3b0
-djangorestframework=3.9.0
 django-filter=2.1.0
 djangorestframework-guardian
 django-guardian

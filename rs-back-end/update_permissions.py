@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from guardian.shortcuts import assign_perm
 
-from rs_back_end.models import Codex, assign_all_perm, Task, Note, Information
+from rs_back_end.models import Codex, assign_all_perm, Task, Note, Information, Page
 
 
 def update_permissions():
@@ -30,6 +30,9 @@ def update_permissions():
   for codex in (u for u in Codex.objects.all() if u.author and not u.author.is_anonymous):
     assign_all_perm(codex, codex.author)
     print("codex : " + str(codex))
+    for page in Page.objects.filter(codex__author=codex.author):
+      print("page : " + str(page))
+      assign_all_perm(page, codex.author)
     for information in Information.objects.filter(codex__author=codex.author):
       print("information : " + str(information))
       assign_all_perm(information, codex.author)

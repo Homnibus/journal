@@ -38,15 +38,15 @@ class PageGetListViewTest(DefaultAPITestCase):
 
     self.assertEqual(response.data[0]["id"], self.page1.id)
     self.assertEqual(response.data[0]["codex"], self.codex1.id)
-    self.assertEqual(
-      response.data[0]["creation_date"],
+    self.assertGreaterEqual(
       self.page1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["date"],
+    self.assertGreaterEqual(
       self.page1.date.strftime("%Y-%m-%d"),
+      response.data[0]["date"],
     )
-    self.assertEqual(
+    self.assertGreaterEqual(
       response.data[0]["nested_update_date"],
       self.page1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
@@ -58,13 +58,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       response.data[0]["note"]["initial_hash"],
       java_string_hashcode(self.note1.text),
     )
-    self.assertEqual(
-      response.data[0]["note"]["creation_date"],
+    self.assertGreaterEqual(
       self.note1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["note"]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["note"]["update_date"],
+    self.assertGreaterEqual(
       self.note1.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["note"]["update_date"],
     )
 
     self.assertEqual(len(response.data[0]["tasks"]), 2)
@@ -78,13 +78,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task1.text),
     )
     self.assertIsNone(response.data[0]["tasks"][0]["achieved_date"])
-    self.assertEqual(
-      response.data[0]["tasks"][0]["creation_date"],
+    self.assertGreaterEqual(
       self.task1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][0]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["tasks"][0]["update_date"],
+    self.assertGreaterEqual(
       self.task1.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][0]["update_date"],
     )
     self.assertEqual(response.data[0]["tasks"][1]["id"], self.task2.id)
     self.assertEqual(response.data[0]["tasks"][1]["page"], self.page1.id)
@@ -95,28 +95,28 @@ class PageGetListViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task2.text),
     )
     self.assertIsNone(response.data[0]["tasks"][1]["achieved_date"])
-    self.assertEqual(
-      response.data[0]["tasks"][1]["creation_date"],
+    self.assertGreaterEqual(
       self.task2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][1]["creation_date"],
     )
     self.assertEqual(
-      response.data[0]["tasks"][1]["update_date"],
       self.task2.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][1]["update_date"],
     )
 
     self.assertEqual(response.data[1]["id"], self.page2.id)
     self.assertEqual(response.data[1]["codex"], self.codex2.id)
-    self.assertEqual(
+    self.assertGreaterEqual(
+      self.page2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
       response.data[1]["creation_date"],
-      self.page2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
-    self.assertEqual(
-      response.data[1]["date"],
+    self.assertGreaterEqual(
       self.page2.date.strftime("%Y-%m-%d"),
+      response.data[1]["date"],
     )
-    self.assertEqual(
-      response.data[1]["nested_update_date"],
+    self.assertGreaterEqual(
       self.page2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[1]["nested_update_date"],
     )
 
     self.assertEqual(response.data[1]["note"]["id"], self.note2.id)
@@ -126,13 +126,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       response.data[1]["note"]["initial_hash"],
       java_string_hashcode(self.note2.text),
     )
-    self.assertEqual(
-      response.data[1]["note"]["creation_date"],
+    self.assertGreaterEqual(
       self.note2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[1]["note"]["creation_date"],
     )
-    self.assertEqual(
-      response.data[1]["note"]["update_date"],
+    self.assertGreaterEqual(
       self.note2.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[1]["note"]["update_date"],
     )
 
     self.assertEqual(len(response.data[1]["tasks"]), 1)
@@ -146,13 +146,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task3.text),
     )
     self.assertIsNone(response.data[1]["tasks"][0]["achieved_date"])
-    self.assertEqual(
-      response.data[1]["tasks"][0]["creation_date"],
+    self.assertGreaterEqual(
       self.task3.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[1]["tasks"][0]["creation_date"],
     )
-    self.assertEqual(
-      response.data[1]["tasks"][0]["update_date"],
+    self.assertGreaterEqual(
       self.task3.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[1]["tasks"][0]["update_date"],
     )
 
   def test_get_filtered_list_page_assert_return_list(self):
@@ -163,15 +163,16 @@ class PageGetListViewTest(DefaultAPITestCase):
 
     self.assertEqual(response.data[0]["id"], self.page1.id)
     self.assertEqual(response.data[0]["codex"], self.codex1.id)
-    self.assertEqual(
-      response.data[0]["creation_date"],
+    self.assertGreaterEqual(
       self.page1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["date"],
+    self.assertGreaterEqual(
       self.page1.date.strftime("%Y-%m-%d"),
+      response.data[0]["date"],
+
     )
-    self.assertEqual(
+    self.assertGreaterEqual(
       response.data[0]["nested_update_date"],
       self.page1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
@@ -183,13 +184,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       response.data[0]["note"]["initial_hash"],
       java_string_hashcode(self.note1.text),
     )
-    self.assertEqual(
-      response.data[0]["note"]["creation_date"],
+    self.assertGreaterEqual(
       self.note1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["note"]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["note"]["update_date"],
+    self.assertGreaterEqual(
       self.note1.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["note"]["update_date"],
     )
 
     self.assertEqual(len(response.data[0]["tasks"]), 2)
@@ -203,13 +204,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task1.text),
     )
     self.assertIsNone(response.data[0]["tasks"][0]["achieved_date"])
-    self.assertEqual(
-      response.data[0]["tasks"][0]["creation_date"],
+    self.assertGreaterEqual(
       self.task1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][0]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["tasks"][0]["update_date"],
+    self.assertGreaterEqual(
       self.task1.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][0]["update_date"],
     )
     self.assertEqual(response.data[0]["tasks"][1]["id"], self.task2.id)
     self.assertEqual(response.data[0]["tasks"][1]["page"], self.page1.id)
@@ -220,13 +221,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task2.text),
     )
     self.assertIsNone(response.data[0]["tasks"][1]["achieved_date"])
-    self.assertEqual(
-      response.data[0]["tasks"][1]["creation_date"],
+    self.assertGreaterEqual(
       self.task2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][1]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["tasks"][1]["update_date"],
+    self.assertGreaterEqual(
       self.task2.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["tasks"][1]["update_date"],
     )
 
   def test_get_list_page_not_codex_author_return_only_self_codex(self):
@@ -245,17 +246,17 @@ class PageGetListViewTest(DefaultAPITestCase):
 
     self.assertEqual(response.data[0]["id"], page3.id)
     self.assertEqual(response.data[0]["codex"], codex3.id)
-    self.assertEqual(
+    self.assertGreaterEqual(
+      page3.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
       response.data[0]["creation_date"],
-      page3.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
-    self.assertEqual(
-      response.data[0]["date"],
+    self.assertGreaterEqual(
       page3.date.strftime("%Y-%m-%d"),
+      response.data[0]["date"],
     )
-    self.assertEqual(
-      response.data[0]["nested_update_date"],
+    self.assertGreaterEqual(
       page3.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["nested_update_date"],
     )
 
     self.assertEqual(response.data[0]["note"]["id"], note3.id)
@@ -265,13 +266,13 @@ class PageGetListViewTest(DefaultAPITestCase):
       response.data[0]["note"]["initial_hash"],
       java_string_hashcode(note3.text),
     )
-    self.assertEqual(
-      response.data[0]["note"]["creation_date"],
+    self.assertGreaterEqual(
       note3.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["note"]["creation_date"],
     )
-    self.assertEqual(
-      response.data[0]["note"]["update_date"],
+    self.assertGreaterEqual(
       note3.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data[0]["note"]["update_date"],
     )
 
   def test_get_list_page_not_connected_return_401(self):
@@ -308,17 +309,17 @@ class PageGetDetailViewTest(DefaultAPITestCase):
 
     self.assertEqual(response.data["id"], self.page1.id)
     self.assertEqual(response.data["codex"], self.codex1.id)
-    self.assertEqual(
-      response.data["creation_date"],
+    self.assertGreaterEqual(
       self.page1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["creation_date"],
     )
-    self.assertEqual(
-      response.data["date"],
+    self.assertGreaterEqual(
       self.page1.date.strftime("%Y-%m-%d"),
+      response.data["date"],
     )
-    self.assertEqual(
-      response.data["nested_update_date"],
+    self.assertGreaterEqual(
       self.task2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["nested_update_date"],
     )
 
     self.assertEqual(response.data["note"]["id"], self.note1.id)
@@ -328,13 +329,13 @@ class PageGetDetailViewTest(DefaultAPITestCase):
       response.data["note"]["initial_hash"],
       java_string_hashcode(self.note1.text),
     )
-    self.assertEqual(
-      response.data["note"]["creation_date"],
+    self.assertGreaterEqual(
       self.note1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["note"]["creation_date"],
     )
-    self.assertEqual(
-      response.data["note"]["update_date"],
+    self.assertGreaterEqual(
       self.note1.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["note"]["update_date"],
     )
 
     self.assertEqual(len(response.data["tasks"]), 2)
@@ -348,13 +349,13 @@ class PageGetDetailViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task1.text),
     )
     self.assertIsNone(response.data["tasks"][0]["achieved_date"])
-    self.assertEqual(
-      response.data["tasks"][0]["creation_date"],
+    self.assertGreaterEqual(
       self.task1.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["tasks"][0]["creation_date"],
     )
-    self.assertEqual(
-      response.data["tasks"][0]["update_date"],
+    self.assertGreaterEqual(
       self.task1.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["tasks"][0]["update_date"],
     )
     self.assertEqual(response.data["tasks"][1]["id"], self.task2.id)
     self.assertEqual(response.data["tasks"][1]["page"], self.page1.id)
@@ -365,13 +366,13 @@ class PageGetDetailViewTest(DefaultAPITestCase):
       java_string_hashcode(self.task2.text),
     )
     self.assertIsNone(response.data["tasks"][1]["achieved_date"])
-    self.assertEqual(
-      response.data["tasks"][1]["creation_date"],
+    self.assertGreaterEqual(
       self.task2.creation_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["tasks"][1]["creation_date"],
     )
-    self.assertEqual(
-      response.data["tasks"][1]["update_date"],
+    self.assertGreaterEqual(
       self.task2.update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      response.data["tasks"][1]["update_date"],
     )
 
   def test_get_detail_page_not_exist_assert_return_http_404(self):

@@ -1,13 +1,14 @@
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import DjangoObjectPermissionsFilter
 
-from rs_back_end.AuthorModelViewset import AuthorModelViewSet
 from rs_back_end.models import Page, Task
 from rs_back_end.serializers import PageSerializer
+from rs_back_end.guardian_permissions import FullObjectPermissions
 
 
-class PageViewSet(AuthorModelViewSet, viewsets.ReadOnlyModelViewSet):
+class PageViewSet(viewsets.ReadOnlyModelViewSet):
   """
   API Endpoint that allows page to be viewed
   """
@@ -15,7 +16,7 @@ class PageViewSet(AuthorModelViewSet, viewsets.ReadOnlyModelViewSet):
     .prefetch_related(
     Prefetch('tasks',
              queryset=Task.objects.all().order_by('-creation_date')))
-  author_filter_arg = "codex__author"
   serializer_class = PageSerializer
-  filter_backends = (DjangoFilterBackend,)
+  permission_classes = (FullObjectPermissions,)
+  filter_backends = (DjangoObjectPermissionsFilter, DjangoFilterBackend,)
   filterset_fields = ('codex__slug', 'date',)

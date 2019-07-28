@@ -1,36 +1,11 @@
-import json
-
-from django.http import JsonResponse
 from django.test import TestCase
-from rs_back_end.commun.codex import Page
 from rs_back_end.commun.utils import (
-  JsonResponseContainer,
   java_string_hashcode,
   min_paginator_rang,
   max_paginator_rang,
 )
 
-
-class CommunTest(TestCase):
-  def test_page_assert_init(self):
-    date = "01/01/0001"
-    page = Page(date)
-    self.assertEqual(page.date, date)
-    self.assertIsNone(page.note_form)
-    self.assertIsNone(page.new_task_form)
-    self.assertEqual(page.tasks_form, [])
-
-
 class UtilsTest(TestCase):
-  def test_json_response_container_assert_return_json_response(self):
-    message = "TEST_OK"
-    json_response_container = JsonResponseContainer()
-    json_response_container.data.update({"test": message})
-    response = json_response_container.get_json_response()
-
-    self.assertEqual(response.status_code, 200)
-    self.assertIsInstance(response, JsonResponse)
-    self.assertEqual(json.loads(response.content)["test"], message)
 
   def test_java_string_hashcode_assert_equal(self):
     message = "TEST MESSAGE"

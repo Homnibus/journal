@@ -41,10 +41,6 @@ class CodexModelTest(TestCase):
     """ Test if str(self) is a string """
     self.assertIsInstance(str(self.codex), str)
 
-  def test_get_absolute_url_assert_is_str(self):
-    """ Test if the function return the url of the codex detail """
-    self.assertIsInstance(self.codex.get_absolute_url(), str)
-
 
 class PageModelTest(TestCase):
   def setUp(self):
@@ -101,10 +97,6 @@ class NoteModelTest(TestCase):
     """ Test if str(self) is a string """
     self.assertIsInstance(str(self.note), str)
 
-  def test_get_absolute_url_assert_is_str(self):
-    """ Test if the function return the url of the task detail """
-    self.assertIsInstance(self.note.get_absolute_url(), str)
-
 
 class TaskModelTest(TestCase):
   def setUp(self):
@@ -136,10 +128,6 @@ class TaskModelTest(TestCase):
   def test_assert_self_is_str(self):
     """ Test if str(self) is a string """
     self.assertIsInstance(str(self.task), str)
-
-  def test_get_absolute_url_assert_is_str(self):
-    """ Test if the function return the url of the task detail """
-    self.assertIsInstance(self.task.get_absolute_url(), str)
 
   def test_achieved_assert_date_is_not_none(self):
     """ Test if the update date is updated """
@@ -185,7 +173,3 @@ class InformationModelTest(TestCase):
   def test_assert_self_is_str(self):
     """ Test if str(self) is a string """
     self.assertIsInstance(str(self.information), str)
-
-  def test_get_absolute_url_assert_is_str(self):
-    """ Test if the function return the url of the task detail """
-    self.assertIsInstance(self.information.get_absolute_url(), str)

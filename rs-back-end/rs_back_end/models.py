@@ -3,7 +3,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models, connection
 from django.template.defaultfilters import slugify
-from django.urls import reverse
 from django.utils.translation import gettext
 from guardian.shortcuts import assign_perm
 
@@ -92,9 +91,6 @@ class Codex(models.Model):
     if getattr(self, 'author', None) is not None:
       assign_all_perm(self, self.author)
 
-  def get_absolute_url(self):
-    return reverse("codex_details", kwargs={"codex_slug": self.slug})
-
   def set_nested_update_date(self):
     # Set the codex update date
     self.nested_update_date = get_current_timestamp()
@@ -152,6 +148,8 @@ class Page(models.Model):
     # Set the page and codex nested_update_date
     self.set_nested_update_date()
     super(Page, self).save(*args, **kwargs)
+    if getattr(self.codex, 'author', None) is not None:
+      assign_all_perm(self, self.codex.author)
 
   def set_nested_update_date(self):
     # Set the page update date
@@ -210,9 +208,6 @@ class Note(models.Model):
     # Set user permissions
     if getattr(self.page.codex, 'author', None) is not None:
       assign_all_perm(self, self.page.codex.author)
-
-  def get_absolute_url(self):
-    return reverse("note_details", kwargs={"note_id": self.id})
 
 
 class Task(models.Model):
@@ -289,9 +284,6 @@ class Task(models.Model):
     if getattr(self.page.codex, 'author', None) is not None:
       assign_all_perm(self, self.page.codex.author)
 
-  def get_absolute_url(self):
-    return reverse("task_details", kwargs={"task_id": self.id})
-
 
 class Information(models.Model):
   """
@@ -344,9 +336,6 @@ class Information(models.Model):
     # Set user permissions
     if getattr(self.codex, 'author', None) is not None:
       assign_all_perm(self, self.codex.author)
-
-  def get_absolute_url(self):
-    return reverse("information", kwargs={"codex_slug": self.codex.slug})
 
 
 def assign_all_perm(model_instance, user):

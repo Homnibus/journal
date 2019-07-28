@@ -34,15 +34,6 @@ def java_string_hashcode(string):
   return ((string_hash + 0x80000000) & 0xFFFFFFFF) - 0x80000000
 
 
-class JsonResponseContainer:
-  def __init__(self):
-    self.data = {}
-    self.status = 200
-
-  def get_json_response(self):
-    return JsonResponse(self.data, status=self.status)
-
-
 def min_paginator_rang(current_page, max_page, step):
   """
   :param current_page: The current page of the paginator
@@ -65,29 +56,3 @@ def max_paginator_rang(current_page, max_page, step):
   if current_page <= 0 or max_page <= 0 or step <= 0 or current_page > max_page:
     raise IndexError
   return max(min(current_page + step, max_page), min(step + step + 1, max_page))
-
-
-def get_object_or_not_found(klass, *args, **kwargs):
-  """
-  Use get() to return an object, or raise a HttpNotFound exception if the object
-  does not exist.
-
-  klass may be a Model, Manager, or QuerySet object. All other passed
-  arguments and keyword arguments are used in the get() query.
-
-  Like with QuerySet.get(), MultipleObjectsReturned is raised if more than
-  one object is found.
-  """
-  queryset = _get_queryset(klass)
-  if not hasattr(queryset, "get"):
-    klass__name = (
-      klass.__name__ if isinstance(klass, type) else klass.__class__.__name__
-    )
-    raise ValueError(
-      "First argument to get_object_or_404() must be a Model, Manager, "
-      "or QuerySet, not '%s'." % klass__name
-    )
-  try:
-    return queryset.get(*args, **kwargs)
-  except queryset.model.DoesNotExist:
-    raise HttpNotFound(queryset.model._meta.object_name)
