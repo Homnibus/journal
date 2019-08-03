@@ -12,7 +12,8 @@
   <ng-template #noteTextarea>
     <mat-form-field *ngIf="editable" appearance="outline" color="primary">
       <mat-label>{{noteLabel}}</mat-label>
-      <textarea #autosize="cdkTextareaAutosize"
+      <textarea #noteField
+                #autosize="cdkTextareaAutosize"
                 [formControl]="noteTextControl"
                 cdkAutosizeMaxRows="18"
                 cdkAutosizeMinRows="5"

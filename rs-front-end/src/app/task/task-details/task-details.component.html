@@ -1,4 +1,4 @@
-<mat-list-item class="task">
+<mat-list-item *ngIf="task" class="task">
   <mat-checkbox (change)="onCheckBoxChange($event)" [checked]="task.isAchieved" [id]="task.id.toString()">
     <pre *ngIf="!editable" class="task__disable-text">{{ task.text }}</pre>
   </mat-checkbox>

@@ -4,7 +4,7 @@ import {map, tap} from 'rxjs/operators';
 import {ModelSerializer} from '../../app.serializers';
 import {ModificationRequestStatusService} from './modification-request-status.service';
 import {AuthService} from './auth.service';
-import {environment} from "../../../environments/environment";
+import {environment} from '../../../environments/environment';
 
 
 export class ModelService<T extends BaseModel> {
@@ -37,33 +37,34 @@ export class ModelService<T extends BaseModel> {
 
 
   create(item: T): Observable<T> {
-    this.modificationRequestStatusService.requestStart();
+    this.modificationRequestStatusService.startSaveRequest();
     return this.userService.http.post(
       `${environment.apiUrl}${this.model.modelPlural}/`,
       this.serializer.toCreateJson(item)
     ).pipe(
-      tap(() => this.modificationRequestStatusService.requestEnd()),
+      tap(() => this.modificationRequestStatusService.endSaveRequest()),
       map(data => this.serializer.fromJson(data, ModelState.Created))
     );
   }
 
   update(item: T): Observable<T> {
-    this.modificationRequestStatusService.requestStart();
+    this.modificationRequestStatusService.startSaveRequest();
     return this.userService.http.put(
       `${environment.apiUrl}${this.model.modelPlural}/${item[this.model.lookupField]}/`,
       this.serializer.toUpdateJson(item)
     ).pipe(
-      tap(() => this.modificationRequestStatusService.requestEnd()),
+      tap(() => this.modificationRequestStatusService.endSaveRequest()),
       map(data => this.serializer.fromJson(data, ModelState.Modified))
     );
   }
 
-  delete(item: T) {
-    this.modificationRequestStatusService.requestStart();
+  delete(item: T): Observable<T> {
+    this.modificationRequestStatusService.startSaveRequest();
     return this.userService.http.delete(
-      `${environment.apiUrl}${this.model.modelName}/${item[this.model.lookupField]}/`
+      `${environment.apiUrl}${this.model.modelPlural}/${item[this.model.lookupField]}/`
     ).pipe(
-      tap(() => this.modificationRequestStatusService.requestEnd())
+      tap(() => this.modificationRequestStatusService.endSaveRequest()),
+      map(() => undefined)
     );
   }
 

@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
-import {FormBuilder, Validators} from "@angular/forms";
-import {webPageSize} from "../../web-page/web-page/web-page.component";
-import {throwError} from "rxjs";
+import {FormBuilder, Validators} from '@angular/forms';
+import {webPageSize} from '../../shared/web-page/web-page/web-page.component';
+import {throwError} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +38,7 @@ export class LoginComponent {
           this.router.navigateByUrl(nextUrl);
         },
         err => {
-          if (err.status == 400) {
+          if (err.status === 400) {
             this.loginForm.setErrors({invalidUserOrPassword: true});
           }
           return throwError(err);

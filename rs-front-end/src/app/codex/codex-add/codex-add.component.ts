@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {CodexService} from '../services/codex.service';
 import {Codex} from '../../app.models';
 import {Router} from '@angular/router';
-import {webPageSize} from '../../web-page/web-page/web-page.component';
+import {webPageSize} from '../../shared/web-page/web-page/web-page.component';
 
 @Component({
   selector: 'app-codex-add',
@@ -21,7 +21,7 @@ export class CodexAddComponent {
   constructor(private fb: FormBuilder, private codexService: CodexService, private router: Router) {
   }
 
-  onSubmit(): void {
+  submit(): void {
     if (this.codexForm.valid) {
       const newCodex = new Codex();
       newCodex.title = this.codexForm.get('title').value;

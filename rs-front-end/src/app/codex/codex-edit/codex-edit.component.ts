@@ -1,12 +1,12 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {webPageSize} from "../../web-page/web-page/web-page.component";
-import {FormBuilder, Validators} from "@angular/forms";
-import {CodexService} from "../services/codex.service";
-import {Observable, Subscription} from "rxjs";
-import {Codex} from "../../app.models";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {map, switchMap} from "rxjs/operators";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from "@angular/material";
+import {webPageSize} from '../../shared/web-page/web-page/web-page.component';
+import {FormBuilder, Validators} from '@angular/forms';
+import {CodexService} from '../services/codex.service';
+import {Observable, Subscription} from 'rxjs';
+import {Codex} from '../../app.models';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {map, switchMap} from 'rxjs/operators';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-codex-edit',
@@ -36,15 +36,14 @@ export class CodexEditComponent implements OnInit, OnDestroy {
       switchMap((params: ParamMap) => this.codexService.get(params.get('slug')).pipe(
         map(
           codexList => {
-            let codex: Codex = undefined;
+            let codex: Codex;
             if (codexList.length > 0) {
               codex = codexList[0];
             }
             return codex;
           }
         )
-        )
-      )
+      ))
     );
     this.codexSubscription = this.codex$.subscribe(codex => {
       this.codex = codex;
@@ -63,18 +62,18 @@ export class CodexEditComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.codexForm.valid && this.codexForm.dirty
     ) {
-      let updatedCodex = Object.assign({}, this.codex);
-      updatedCodex.title = this.codexForm.get("title").value;
-      updatedCodex.description = this.codexForm.get("description").value;
+      const updatedCodex = Object.assign({}, this.codex);
+      updatedCodex.title = this.codexForm.get('title').value;
+      updatedCodex.description = this.codexForm.get('description').value;
       this.codexService.update(updatedCodex).subscribe(codex => {
-        this.snackBar.open("Codex Updated !", "Close", {duration: 2000,});
+        this.snackBar.open('Codex Updated !', 'Close', {duration: 2000, });
         this.initForm(codex);
-      })
+      });
     }
   }
 
   deleteCodex(): void {
-    const dialogRef = this.dialog.open(CodexEditDeleteDialog, {
+    const dialogRef = this.dialog.open(CodexEditDeleteDialogComponent, {
       width: '250px',
       data: this.codex
     });
@@ -83,7 +82,7 @@ export class CodexEditComponent implements OnInit, OnDestroy {
       if (result === 'delete') {
         this.codexService.delete(this.codex).subscribe(next => {
             const codexDetailsUrl = this.router.createUrlTree(['/codex']);
-            this.snackBar.open("Codex Deleted !", "Close", {duration: 2000,});
+            this.snackBar.open('Codex Deleted !', 'Close', {duration: 2000, });
             this.router.navigateByUrl(codexDetailsUrl);
           }
         );
@@ -98,10 +97,10 @@ export class CodexEditComponent implements OnInit, OnDestroy {
   templateUrl: 'codex-edit-delete-dialog.component.html',
   styleUrls: ['./codex-edit-delete-dialog.scss']
 })
-export class CodexEditDeleteDialog {
+export class CodexEditDeleteDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<CodexEditDeleteDialog>,
+    public dialogRef: MatDialogRef<CodexEditDeleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Codex) {
   }
 

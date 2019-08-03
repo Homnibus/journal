@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
-import {NotFoundComponent} from "./not-found/not-found.component";
-import {ForbiddenComponent} from "./forbidden/forbidden.component";
-import {UnexpectedComponent} from "./unexpected/unexpected.component";
+import {RouterModule, Routes} from '@angular/router';
+import {NotFoundComponent} from './not-found/not-found.component';
+import {ForbiddenComponent} from './forbidden/forbidden.component';
+import {UnexpectedComponent} from './unexpected/unexpected.component';
 
 const routes: Routes = [
   {

@@ -14,7 +14,7 @@
       </mat-card-header>
       <mat-card-content>
 
-        <form (ngSubmit)="onSubmit()" [formGroup]="codexForm">
+        <form (ngSubmit)="submit()" [formGroup]="codexForm">
           <mat-form-field>
             <mat-label>Title</mat-label>
             <input #titleInput formControlName="title" matInput maxlength="50" type="text">

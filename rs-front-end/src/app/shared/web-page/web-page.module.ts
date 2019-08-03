@@ -3,15 +3,23 @@ import {CommonModule} from '@angular/common';
 import {WebPageComponent} from './web-page/web-page.component';
 import {WebPageHeaderComponent} from './web-page-header/web-page-header.component';
 import {WebPageContentComponent} from './web-page-content/web-page-content.component';
-import {SharedModule} from "../shared/shared.module";
 import {WebPageTabsComponent} from './web-page-tabs/web-page-tabs.component';
-import {RouterModule} from "@angular/router";
+import {RouterModule} from '@angular/router';
 import {WebPageTitleComponent} from './web-page-title/web-page-title.component';
 import {WebPageSubtitleComponent} from './web-page-subtitle/web-page-subtitle.component';
 import {WebPageActionMenuComponent} from './web-page-action-menu/web-page-action-menu.component';
+import {MatDividerModule, MatTabsModule} from '@angular/material';
 
 @NgModule({
-  declarations: [WebPageComponent, WebPageHeaderComponent, WebPageContentComponent, WebPageTabsComponent, WebPageTitleComponent, WebPageSubtitleComponent, WebPageActionMenuComponent],
+  declarations: [
+    WebPageComponent,
+    WebPageHeaderComponent,
+    WebPageContentComponent,
+    WebPageTabsComponent,
+    WebPageTitleComponent,
+    WebPageSubtitleComponent,
+    WebPageActionMenuComponent
+  ],
   exports: [
     WebPageComponent,
     WebPageHeaderComponent,
@@ -23,8 +31,9 @@ import {WebPageActionMenuComponent} from './web-page-action-menu/web-page-action
   ],
   imports: [
     CommonModule,
-    SharedModule,
     RouterModule,
+    MatDividerModule,
+    MatTabsModule,
   ]
 })
 export class WebPageModule {

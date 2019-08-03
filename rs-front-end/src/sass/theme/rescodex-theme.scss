@@ -2,7 +2,6 @@
 
 @include mat-core();
 
-/* For use in src/lib/core/theming/_palette.scss */
 $md-primary: (
   //50: #EAEEF0,
   50 : #f6f8fa,
@@ -71,28 +70,28 @@ $md-accent: (
 );
 
 $md-warn: (
-  50 : #f4e8f8,
-  100 : #e4c5ee,
-  200 : #d29ee3,
-  300 : #bf77d8,
-  400 : #b259cf,
-  500 : #a43cc7,
-  600 : #9c36c1,
-  700 : #922eba,
-  800 : #8927b3,
-  900 : #781aa6,
-  A100 : #f3dcff,
-  A200 : #e1a9ff,
-  A400 : #ce76ff,
-  A700 : #c55dff,
+  50 : #fdecea,
+  100 : #f9cfcb,
+  200 : #f6afa9,
+  300 : #f28f86,
+  400 : #ef776c,
+  500 : #ec5f52,
+  600 : #ea574b,
+  700 : #e74d41,
+  800 : #e44338,
+  900 : #df3228,
+  A100 : #ffffff,
+  A200 : #ffeae9,
+  A400 : #ffb9b6,
+  A700 : #ffa19c,
   contrast: (
     50 : #000000,
     100 : #000000,
     200 : #000000,
     300 : #000000,
     400 : #000000,
-    500 : #ffffff,
-    600 : #ffffff,
+    500 : #000000,
+    600 : #000000,
     700 : #ffffff,
     800 : #ffffff,
     900 : #ffffff,
@@ -102,7 +101,6 @@ $md-warn: (
     A700 : #000000,
   )
 );
-
 
 $rescodex-light-primary: mat-palette($md-primary);
 $rescodex-light-accent: mat-palette($md-accent);

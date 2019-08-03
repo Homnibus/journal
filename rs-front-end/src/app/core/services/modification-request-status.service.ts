@@ -1,54 +1,49 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
-import {filter} from 'rxjs/operators';
 
-export enum RequestEvent {
-  Start,
-  End,
-  Error
-}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModificationRequestStatusService {
 
-  private requestEventSubject = new Subject<RequestEvent>();
+  activeSaveRequestCount = 0;
+  dataNeedToBeSaved = false;
 
-  public requestEvent$ = this.requestEventSubject.asObservable();
-  private requestPool = 0;
-  public requestPoolEvent$ = this.requestEvent$.pipe(
-    filter(value => (value === RequestEvent.Start && this.requestPool === 1)
-      || (value === RequestEvent.End && this.requestPool === 0)
-      || (value === RequestEvent.Error)
-    )
-  );
-  private anyRequestFailed = false;
+  private saveRequestStartedSubject = new Subject<number>();
+  saveRequestStarted$ = this.saveRequestStartedSubject.asObservable();
+  private saveRequestEndedSubject = new Subject<number>();
+  saveRequestEnded$ = this.saveRequestEndedSubject.asObservable();
+  private dataToSaveIsInputtedSubject = new Subject<any>();
+  dataToSaveIsInputted$ = this.dataToSaveIsInputtedSubject.asObservable();
 
-  requestStart(): void {
-    console.log('Request Start');
-    this.requestPool += 1;
-    this.requestEventSubject.next(RequestEvent.Start);
+  startSaveRequest(): void {
+    // console.log('Save Request Start');
+    this.activeSaveRequestCount += 1;
+    this.dataNeedToBeSaved = false;
+    this.saveRequestStartedSubject.next(this.activeSaveRequestCount);
   }
 
-  requestEnd(): void {
-    console.log('Request End');
-    this.requestPool -= 1;
-    this.requestEventSubject.next(RequestEvent.End);
+  endSaveRequest(): void {
+    // console.log('Save Request End');
+    this.activeSaveRequestCount -= 1;
+    this.saveRequestEndedSubject.next(this.activeSaveRequestCount);
   }
 
-  requestFail(): void {
-    this.requestPool -= 1;
-    this.anyRequestFailed = true;
-    this.requestEventSubject.next(RequestEvent.Error);
+  inputDataToSave(dataToSave: any): void {
+    // console.log('Data to Save');
+    this.dataNeedToBeSaved = true;
+    this.dataToSaveIsInputtedSubject.next(dataToSave);
   }
 
-  hasActiveRequest(): boolean {
-    return this.requestPool > 0;
+  hasActiveSaveRequest(): boolean {
+    return this.activeSaveRequestCount > 0;
   }
 
-  countActiveRequest(): number {
-    return this.requestPool;
-  }
+  // requestFail(): void {
+  //   this.requestPool -= 1;
+  //   this.anyRequestFailed = true;
+  //   this.requestEventSubject.next(RequestEvent.Error);
+  // }
 
 }

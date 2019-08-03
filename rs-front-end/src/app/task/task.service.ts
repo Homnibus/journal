@@ -25,4 +25,7 @@ export class TaskService extends ModelService<Task> {
     return this.filteredList(filter);
   }
 
+  deleteFromTaskList(taskList: Task[], taskToDelete: Task): Task[] {
+    return taskList.filter(task => task.id !== taskToDelete.id);
+  }
 }

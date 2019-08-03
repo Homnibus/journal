@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {webPageSize} from "../web-page/web-page.component";
+import {webPageSize} from '../web-page/web-page.component';
 
 @Component({
   selector: 'app-web-page-content',

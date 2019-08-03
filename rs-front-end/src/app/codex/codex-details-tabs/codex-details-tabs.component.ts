@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {switchMap} from "rxjs/operators";
-import {ActivatedRoute, ParamMap} from "@angular/router";
-import {Observable} from "rxjs";
-import {Codex} from "../../app.models";
-import {CodexDetailsService} from "../services/codex-details.service";
-import {TabLink} from "../../web-page/web-page-tabs/web-page-tabs.component";
+import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {Observable} from 'rxjs';
+import {Codex} from '../../app.models';
+import {CodexDetailsService} from '../services/codex-details.service';
+import {TabLink} from '../../shared/web-page/web-page-tabs/web-page-tabs.component';
 
 @Component({
   selector: 'app-codex-details-tabs',

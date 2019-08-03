@@ -42,7 +42,17 @@
       </div>
     </mat-card-header>
     <mat-card-content>
-      <app-task-list [allowChangeEditable]="false" [editable]="taskEditable" [taskList]="page.tasks"></app-task-list>
+      <mat-list>
+        <ng-container *ngFor="let task of taskList; trackBy: trackByFn">
+          <app-task-details [@slideTopTransition]="task.state"
+                            [allowChangeEditable]="false"
+                            [editable]="taskEditable"
+                            [task]="task"
+                            (delete)="taskDelete(task)"
+          ></app-task-details>
+          <mat-divider></mat-divider>
+        </ng-container>
+      </mat-list>
     </mat-card-content>
   </ng-container>
 </mat-card>

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {routerTransition} from "./wep-page-tabs.animations";
+import {routerTransition} from './wep-page-tabs.animations';
 
 export class TabLink {
   constructor(

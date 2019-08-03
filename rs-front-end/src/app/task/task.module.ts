@@ -5,13 +5,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
 import {SharedModule} from '../shared/shared.module';
 import {TaskAddComponent} from './task-add/task-add.component';
-import {TaskListComponent} from './task-list/task-list.component';
 
 @NgModule({
   declarations: [
     TaskDetailsComponent,
     TaskAddComponent,
-    TaskListComponent,
   ],
   imports: [
     CommonModule,
@@ -23,7 +21,6 @@ import {TaskListComponent} from './task-list/task-list.component';
   exports: [
     TaskDetailsComponent,
     TaskAddComponent,
-    TaskListComponent,
   ],
 })
 export class TaskModule {

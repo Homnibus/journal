@@ -13,7 +13,8 @@
   <ng-template #informationTextarea>
     <mat-form-field appearance="outline" color="primary">
       <mat-label></mat-label>
-      <textarea #autosize="cdkTextareaAutosize"
+      <textarea #informationField
+                #autosize="cdkTextareaAutosize"
                 [formControl]="informationTextControl"
                 cdkAutosizeMaxRows="18"
                 cdkAutosizeMinRows="5"

@@ -1,4 +1,4 @@
-<mat-card *ngIf="(taskList$ | async) as taskList">
+<mat-card *ngIf="taskList">
   <mat-card-header>
     <div *ngIf="taskList.length > 0" class="mat-card-header__action-button">
       <button (click)="switchEditMode()" color="primary" mat-stroked-button>
@@ -21,8 +21,17 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <app-task-list *ngIf="taskList.length > 0" [allowChangeEditable]="false" [editable]="editable"
-                   [taskList]="taskList"></app-task-list>
-    <h1 *ngIf="taskList.length === 0"> No Task found</h1>
+    <mat-list *ngIf="taskList.length > 0">
+      <ng-container *ngFor="let task of taskList; trackBy: trackByFn">
+        <app-task-details [@slideTopTransition]="task.state"
+                          [allowChangeEditable]="false"
+                          [editable]="editable"
+                          [task]="task"
+                          (delete)="taskDelete(task)"
+        ></app-task-details>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+    <h1 *ngIf="taskList.length === 0"> No Task to complete</h1>
   </mat-card-content>
 </mat-card>

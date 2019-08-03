@@ -9,9 +9,8 @@ import {AuthInterceptor} from './core/interceptor/auth.interceptor';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {MarkdownModule} from 'ngx-markdown';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SharedModule} from "./shared/shared.module";
-import {ErrorModule} from "./error/error.module";
-import {ErrorInterceptor} from "./core/interceptor/error.interceptor";
+import {ErrorInterceptor} from './core/interceptor/error.interceptor';
+import {ErrorRoutingModule} from './core/error/error-routing.module';
 
 @NgModule({
   declarations: [
@@ -20,12 +19,11 @@ import {ErrorInterceptor} from "./core/interceptor/error.interceptor";
   imports: [
     BrowserModule,
     CoreModule,
-    SharedModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MarkdownModule.forRoot(),
     CodexModule,
-    ErrorModule,
+    ErrorRoutingModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

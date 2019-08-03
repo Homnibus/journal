@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Codex, Information} from "../../app.models";
-import {InformationService} from "../../information/information.service";
-import {CodexDetailsService} from "../services/codex-details.service";
-import {switchMap} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {Codex, Information} from '../../app.models';
+import {InformationService} from '../../information/information.service';
+import {CodexDetailsService} from '../services/codex-details.service';
+import {switchMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-codex-information',

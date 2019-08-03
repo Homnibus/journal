@@ -1,19 +1,23 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Codex, Page, Task} from '../../app.models';
 import {PageService} from '../page.service';
+import {TaskService} from '../../task/task.service';
+import {slideTopTransition} from '../../shared/slide-top.animations';
 
 @Component({
   selector: 'app-today-page',
   templateUrl: './today-page.component.html',
-  styleUrls: ['./today-page.component.scss']
+  styleUrls: ['./today-page.component.scss'],
+  animations: [slideTopTransition]
 })
 export class TodayPageComponent implements OnInit {
 
   @Input() codex: Codex;
-  dataSource: Page;
+  page: Page;
+  taskList: Task[] = [];
   private editableNote = false;
 
-  constructor(private pageService: PageService) {
+  constructor(private taskService: TaskService, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -23,7 +27,8 @@ export class TodayPageComponent implements OnInit {
   getTodayPage(): void {
     this.pageService.getTodayCodexPage(this.codex.slug).subscribe(
       data => {
-        this.dataSource = this.initTodayPage(data);
+        this.page = this.initTodayPage(data);
+        this.taskList = this.page.tasks;
       }
     );
   }
@@ -40,11 +45,18 @@ export class TodayPageComponent implements OnInit {
   }
 
   addTask(task: Task): void {
-    this.dataSource.tasks.unshift(task);
+    this.taskList.unshift(task);
   }
 
   switchEditMode() {
     this.editableNote = !this.editableNote;
   }
 
+  trackByFn(index, item) {
+    return item.id;
+  }
+
+  taskDelete(taskDeleted: Task) {
+    this.taskList = this.taskService.deleteFromTaskList(this.taskList, taskDeleted);
+  }
 }
