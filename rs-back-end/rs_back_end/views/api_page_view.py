@@ -1,7 +1,7 @@
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.filters import DjangoObjectPermissionsFilter
+from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
 
 from rs_back_end.models import Page, Task
 from rs_back_end.serializers import PageSerializer

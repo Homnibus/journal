@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework_guardian import filters
+from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
 
 from rs_back_end.models import Codex
 from rs_back_end.guardian_permissions import FullObjectPermissions
@@ -14,4 +14,4 @@ class CodexViewSet(viewsets.ModelViewSet):
   serializer_class = CodexSerializer
   lookup_field = 'slug'
   permission_classes = (FullObjectPermissions,)
-  filter_backends = (filters.DjangoObjectPermissionsFilter,)
+  filter_backends = (DjangoObjectPermissionsFilter,)
