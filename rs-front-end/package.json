@@ -13,24 +13,24 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.2.15",
-    "@angular/cdk": "^8.0.1",
+    "@angular/cdk": "^8.1.2",
     "@angular/common": "~7.2.0",
     "@angular/compiler": "~7.2.0",
-    "@angular/core": "^8.0.1",
+    "@angular/core": "^8.2.0",
     "@angular/forms": "~7.2.0",
-    "@angular/material": "^8.0.1",
+    "@angular/material": "^8.1.2",
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "core-js": "^2.6.9",
     "github-markdown-css": "^3.0.1",
-    "ngx-markdown": "^8.0.2",
+    "ngx-markdown": "^8.1.0",
     "ngx-textarea-autosize": "^2.0.3",
     "prism": "^4.1.2",
-    "prismjs": "^1.16.0",
+    "prismjs": "^1.17.1",
     "rxjs": "~6.3.3",
     "seedrandom": "^3.0.1",
-    "tslib": "^1.9.0",
+    "tslib": "^1.10.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.0.0",
     "karma-chrome-launcher": "~2.2.0",
-    "karma-coverage-istanbul-reporter": "~2.0.1",
+    "karma-coverage-istanbul-reporter": "^2.0.6",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
@@ -54,6 +54,6 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.2.2",
-    "webpack-bundle-analyzer": "^3.3.2"
+    "webpack-bundle-analyzer": "^3.4.1"
   }
 }
