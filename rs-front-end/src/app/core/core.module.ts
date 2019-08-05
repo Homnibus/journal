@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
-import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
 import {SaveIconComponent} from './save-icon/save-icon.component';
 import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './logout/logout.component';
@@ -21,7 +20,6 @@ import {ErrorModule} from './error/error.module';
     ErrorModule,
     RouterModule,
     HttpClientModule,
-    TextareaAutosizeModule,
   ],
   exports: [
     SaveIconComponent,
