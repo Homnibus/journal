@@ -1,12 +1,15 @@
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
 
 from rs_back_end.models import Page, Task
 from rs_back_end.serializers import PageSerializer
 from rs_back_end.guardian_permissions import FullObjectPermissions
 
+class StandardResultsSetPagination(PageNumberPagination):
+  page_size = 10
 
 class PageViewSet(viewsets.ReadOnlyModelViewSet):
   """
@@ -20,3 +23,4 @@ class PageViewSet(viewsets.ReadOnlyModelViewSet):
   permission_classes = (FullObjectPermissions,)
   filter_backends = (DjangoObjectPermissionsFilter, DjangoFilterBackend,)
   filterset_fields = ('codex__slug', 'date',)
+  pagination_class = StandardResultsSetPagination

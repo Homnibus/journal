@@ -1,21 +1,4 @@
 from rest_framework import permissions
-from rs_back_end.models import Codex
-
-
-class IsCodexAuthor(permissions.BasePermission):
-    """
-     Return False in case of creation of a object linked to a codex,  if the codex exist and was not created by the user
-    """
-    def has_permission(self, request, view):
-
-        if view.action == 'create':
-            codex_id = request.data.get('codex_id')
-            if codex_id:
-                codex = Codex.objects.filter(id=codex_id)
-                if codex.exists() and not codex.first().author == request.user:
-                    return False
-
-        return True
 
 class FullObjectPermissions(permissions.DjangoObjectPermissions):
     """
