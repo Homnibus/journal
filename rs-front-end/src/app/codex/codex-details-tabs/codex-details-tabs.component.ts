@@ -1,7 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {switchMap} from 'rxjs/operators';
-import {ActivatedRoute, ParamMap} from '@angular/router';
-import {Observable} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
 import {Codex} from '../../app.models';
 import {CodexDetailsService} from '../services/codex-details.service';
 import {TabLink} from '../../shared/web-page/web-page-tabs/web-page-tabs.component';
@@ -14,19 +12,17 @@ import {TabLink} from '../../shared/web-page/web-page-tabs/web-page-tabs.compone
 })
 export class CodexDetailsTabsComponent implements OnInit, OnDestroy {
 
-  codex$: Observable<Codex>;
+  codex: Codex;
   tabLinkList: TabLink[];
 
   constructor(private codexDetailsService: CodexDetailsService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.codex$ = this.route.paramMap.pipe(
-      switchMap(
-        (params: ParamMap) => this.codexDetailsService.setActiveCodex(params.get('slug'))
-      )
-    );
-    this.codex$.subscribe(codex => this.initTabLinkList(codex));
+    this.route.data.subscribe(data => {
+      this.codex = data.codex;
+      this.initTabLinkList(data.codex);
+    });
   }
 
   ngOnDestroy(): void {

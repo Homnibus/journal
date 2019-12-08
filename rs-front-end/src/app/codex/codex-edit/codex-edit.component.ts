@@ -1,11 +1,9 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {webPageSize} from '../../shared/web-page/web-page/web-page.component';
 import {FormBuilder, Validators} from '@angular/forms';
 import {CodexService} from '../services/codex.service';
-import {Observable, Subscription} from 'rxjs';
 import {Codex} from '../../app.models';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {map, switchMap} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 
 @Component({
@@ -13,11 +11,9 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/ma
   templateUrl: './codex-edit.component.html',
   styleUrls: ['./codex-edit.component.scss']
 })
-export class CodexEditComponent implements OnInit, OnDestroy {
+export class CodexEditComponent implements OnInit {
 
-  codex$: Observable<Codex>;
   codex: Codex;
-  codexSubscription: Subscription;
   codexForm = this.fb.group({
     title: ['', Validators.required],
     description: ['']
@@ -32,27 +28,10 @@ export class CodexEditComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.codex$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => this.codexService.get(params.get('slug')).pipe(
-        map(
-          codexList => {
-            let codex: Codex;
-            if (codexList.length > 0) {
-              codex = codexList[0];
-            }
-            return codex;
-          }
-        )
-      ))
-    );
-    this.codexSubscription = this.codex$.subscribe(codex => {
-      this.codex = codex;
-      this.initForm(this.codex);
+    this.route.data.subscribe(data => {
+      this.codex = data.codex;
+      this.initForm(data.codex);
     });
-  }
-
-  ngOnDestroy(): void {
-    this.codexSubscription.unsubscribe();
   }
 
   initForm(codex: Codex): void {

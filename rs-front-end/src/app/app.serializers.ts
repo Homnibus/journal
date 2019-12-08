@@ -50,7 +50,6 @@ export class NoteSerializer implements ModelSerializer<Note> {
     note.creationDate = new Date(json.creation_date);
     note.updateDate = new Date(json.update_date);
     note.state = state;
-
     return note;
   }
 
@@ -116,7 +115,6 @@ export class PageSerializer implements ModelSerializer<Page> {
     const taskSerializer = new TaskSerializer();
     page.tasks = Array.from(json.tasks, x => taskSerializer.fromJson(x, state));
     page.state = state;
-
     return page;
   }
 

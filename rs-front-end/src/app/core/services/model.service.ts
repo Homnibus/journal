@@ -1,74 +1,43 @@
 import {BaseModel, Model, ModelState} from '../../app.models';
 import {Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {ModelSerializer} from '../../app.serializers';
 import {ModificationRequestStatusService} from './modification-request-status.service';
 import {AuthService} from './auth.service';
 import {environment} from '../../../environments/environment';
+import {BaseModelService} from './base-model.service';
 
 
-export class ModelService<T extends BaseModel> {
+export class ModelService<T extends BaseModel> extends BaseModelService<T> {
 
   constructor(
-    private userService: AuthService,
-    private model: typeof Model,
-    private serializer: ModelSerializer<T>,
-    private modificationRequestStatusService: ModificationRequestStatusService,
+    userService: AuthService,
+    model: typeof Model,
+    serializer: ModelSerializer<T>,
+    modificationRequestStatusService: ModificationRequestStatusService,
   ) {
+    super(
+      userService,
+      model,
+      serializer,
+      modificationRequestStatusService,
+    );
   }
 
   list(): Observable<T[]> {
     return this.userService.http.get(
       `${environment.apiUrl}${this.model.modelPlural}/`
-    ).pipe(map((data: Array<object>) => this.convertData(data)));
+    ).pipe(map((data: any) => this.convertData(data)));
   }
 
   filteredList(filter: string): Observable<T[]> {
     return this.userService.http.get(
       `${environment.apiUrl}${this.model.modelPlural}/?${filter}`
-    ).pipe(map((data: Array<object>) => this.convertData(data)));
-  }
-
-  get(id: number | string): Observable<T[]> {
-    return this.userService.http.get(
-      `${environment.apiUrl}${this.model.modelName}/${id}/`
-    ).pipe(map(data => [this.serializer.fromJson(data, ModelState.Retrieved)]));
-  }
-
-
-  create(item: T): Observable<T> {
-    this.modificationRequestStatusService.startSaveRequest();
-    return this.userService.http.post(
-      `${environment.apiUrl}${this.model.modelPlural}/`,
-      this.serializer.toCreateJson(item)
-    ).pipe(
-      tap(() => this.modificationRequestStatusService.endSaveRequest()),
-      map(data => this.serializer.fromJson(data, ModelState.Created))
-    );
-  }
-
-  update(item: T): Observable<T> {
-    this.modificationRequestStatusService.startSaveRequest();
-    return this.userService.http.put(
-      `${environment.apiUrl}${this.model.modelPlural}/${item[this.model.lookupField]}/`,
-      this.serializer.toUpdateJson(item)
-    ).pipe(
-      tap(() => this.modificationRequestStatusService.endSaveRequest()),
-      map(data => this.serializer.fromJson(data, ModelState.Modified))
-    );
-  }
-
-  delete(item: T): Observable<T> {
-    this.modificationRequestStatusService.startSaveRequest();
-    return this.userService.http.delete(
-      `${environment.apiUrl}${this.model.modelPlural}/${item[this.model.lookupField]}/`
-    ).pipe(
-      tap(() => this.modificationRequestStatusService.endSaveRequest()),
-      map(() => undefined)
-    );
+    ).pipe(map((data: any) => this.convertData(data)));
   }
 
   private convertData(data: any): T[] {
     return data.map(item => this.serializer.fromJson(item, ModelState.Retrieved));
   }
+
 }

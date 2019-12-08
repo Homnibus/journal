@@ -12,6 +12,8 @@ import {CodexInformationComponent} from './codex-information/codex-information.c
 import {InformationModule} from '../information/information.module';
 import {CodexEditComponent, CodexEditDeleteDialogComponent} from './codex-edit/codex-edit.component';
 import {SharedModule} from '../shared/shared.module';
+import {NoteModule} from '../note/note.module';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,10 @@ import {SharedModule} from '../shared/shared.module';
     SharedModule,
     CodexRoutingModule,
     PageModule,
+    NoteModule,
     TaskModule,
     InformationModule,
+    InfiniteScrollModule,
   ],
   entryComponents: [CodexEditDeleteDialogComponent],
 })

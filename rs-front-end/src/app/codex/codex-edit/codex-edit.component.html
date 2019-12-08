@@ -4,7 +4,7 @@
     <app-web-page-subtitle>
       Give a title and a short description to your Codex !
     </app-web-page-subtitle>
-    <app-web-page-action-menu *ngIf="(codex$ | async) as codex">
+    <app-web-page-action-menu *ngIf="codex">
       <a [routerLink]="['/codex/details', codex.slug]" color="primary" mat-stroked-button>
         Back to Codex
       </a>

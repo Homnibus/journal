@@ -1,4 +1,4 @@
-<mat-card *ngIf="(codex$|async) as codex">
+<mat-card *ngIf="codex">
   <mat-card-header>
     <div class="mat-card-header__action-button">
       <button (click)="switchEditMode()" color="primary" mat-stroked-button>
@@ -20,7 +20,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="(information$|async) as information; else loading">
+    <ng-container *ngIf="information; else loading">
       <app-information-details [(editable)]="informationEditable"
                                [codex]="codex"
                                [information]="information.length > 0 ? information[0] : undefined">

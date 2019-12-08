@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Codex, Page, Task} from '../../app.models';
-import {PageService} from '../page.service';
-import {TaskService} from '../../task/task.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Note, Page, Task} from '../../app.models';
 import {slideTopTransition} from '../../shared/slide-top.animations';
+
 
 @Component({
   selector: 'app-today-page',
@@ -12,40 +11,40 @@ import {slideTopTransition} from '../../shared/slide-top.animations';
 })
 export class TodayPageComponent implements OnInit {
 
-  @Input() codex: Codex;
-  page: Page;
-  taskList: Task[] = [];
+  @Input() page: Page;
+
+  @Output() taskCreated = new EventEmitter<Task>();
+  @Output() taskUpdated = new EventEmitter<Task>();
+  @Output() taskDeleted = new EventEmitter<Task>();
+  @Output() noteCreated = new EventEmitter<Note>();
+  @Output() noteUpdated = new EventEmitter<Note>();
+  @Output() noteDeleted = new EventEmitter<Note>();
+
   private editableNote = false;
 
-  constructor(private taskService: TaskService, private pageService: PageService) {
+  constructor() {
   }
 
-  ngOnInit() {
-    this.getTodayPage();
+  ngOnInit() {}
+
+  createTask(addedTask: Task): void {
+    this.taskCreated.emit(addedTask);
   }
 
-  getTodayPage(): void {
-    this.pageService.getTodayCodexPage(this.codex.slug).subscribe(
-      data => {
-        this.page = this.initTodayPage(data);
-        this.taskList = this.page.tasks;
-      }
-    );
+  updateTaskText(taskToUpdate: Task, updatedTaskText: string) {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    taskCopy.text = updatedTaskText;
+    this.taskUpdated.emit(taskCopy);
   }
 
-  initTodayPage(pages: Page[]): Page {
-    let todayPage: Page;
-    if (pages.length > 0) {
-      todayPage = pages[0];
-    } else {
-      todayPage = new Page();
-      todayPage.date = new Date();
-    }
-    return todayPage;
+  updateTaskIsAchieved(taskToUpdate: Task, updatedTaskIsAchieved: boolean) {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    taskCopy.isAchieved = updatedTaskIsAchieved;
+    this.taskUpdated.emit(taskCopy);
   }
 
-  addTask(task: Task): void {
-    this.taskList.unshift(task);
+  deleteTask(deletedTask: Task): void {
+    this.taskDeleted.emit(deletedTask);
   }
 
   switchEditMode() {
@@ -56,7 +55,17 @@ export class TodayPageComponent implements OnInit {
     return item.id;
   }
 
-  taskDelete(taskDeleted: Task) {
-    this.taskList = this.taskService.deleteFromTaskList(this.taskList, taskDeleted);
+  createNote(addedNote: Note) {
+    this.noteCreated.emit(addedNote);
+  }
+
+  updateNoteText(noteToUpdate: Note, updatedNoteText: string) {
+    const noteCopy = Object.assign({}, noteToUpdate);
+    noteCopy.text = updatedNoteText;
+    this.noteUpdated.emit(noteCopy);
+  }
+
+  deleteNote(deletedNote: any) {
+    this.noteDeleted.emit(deletedNote);
   }
 }

@@ -5,16 +5,20 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
-  MatDialogModule, MatDividerModule,
+  MatDialogModule,
+  MatDividerModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatProgressSpinnerModule,
   MatRippleModule,
   MatSidenavModule,
-  MatSnackBarModule, MatTabsModule,
+  MatSnackBarModule,
+  MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 import {LayoutModule} from '@angular/cdk/layout';
 import {WebPageModule} from './web-page/web-page.module';
 import {CommonModule} from '@angular/common';
@@ -43,6 +47,8 @@ import {CommonModule} from '@angular/common';
     MatDividerModule,
     MatTabsModule,
     WebPageModule,
+    ScrollingModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class SharedModule {

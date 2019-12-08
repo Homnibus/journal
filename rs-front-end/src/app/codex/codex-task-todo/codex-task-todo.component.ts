@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {TaskService} from '../../task/task.service';
-import {Observable} from 'rxjs';
 import {Codex, Task} from 'src/app/app.models';
 import {CodexDetailsService} from '../services/codex-details.service';
-import {filter, switchMap} from 'rxjs/operators';
 import {slideTopTransition} from '../../shared/slide-top.animations';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-codex-task-todo',
@@ -14,19 +13,23 @@ import {slideTopTransition} from '../../shared/slide-top.animations';
 })
 export class CodexTaskTodoComponent implements OnInit {
 
-  codex$: Observable<Codex>;
+  codex: Codex;
   taskList: Task[] = [];
   editable = false;
 
-  constructor(private taskService: TaskService, private codexDetailsService: CodexDetailsService) {
+  constructor(private taskService: TaskService,
+              private codexDetailsService: CodexDetailsService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.codex$ = this.codexDetailsService.activeCodex$;
-    this.codex$.pipe(
-      filter(codex => codex !== undefined),
-      switchMap(codex => this.taskService.getCodexToDoTask(codex.slug))
-    ).subscribe(taskList => this.taskList = taskList);
+    this.route.data.subscribe(data => {
+      this.taskList = data.taskList;
+    });
+    this.route.parent.data.subscribe(data => {
+      this.codex = data.codex;
+    });
+
   }
 
   switchEditMode() {
@@ -37,7 +40,26 @@ export class CodexTaskTodoComponent implements OnInit {
     return item.id;
   }
 
-  taskDelete(taskDeleted: Task) {
-    this.taskList = this.taskService.deleteFromTaskList(this.taskList, taskDeleted);
+  updateTaskText(taskToUpdate: Task, updatedTaskText: string): void {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    taskCopy.text = updatedTaskText;
+    this.updateTask(taskCopy);
+  }
+
+  updateTaskIsAchieved(taskToUpdate: Task, updateTaskIsAchieved: boolean) {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    taskCopy.isAchieved = updateTaskIsAchieved;
+    this.updateTask(taskCopy);
+  }
+
+  updateTask(taskToUpdate: Task): void {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    this.taskService.update(taskCopy)
+      .subscribe(task => this.taskList = this.taskService.updateList(this.taskList, task));
+  }
+
+  deleteTask(taskToDelete: Task) {
+    this.taskService.delete(taskToDelete)
+      .subscribe(() => this.taskList = this.taskService.deleteFromList(this.taskList, taskToDelete));
   }
 }

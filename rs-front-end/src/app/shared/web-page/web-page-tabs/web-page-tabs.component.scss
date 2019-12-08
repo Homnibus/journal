@@ -5,17 +5,29 @@
   margin-left: auto;
 }
 
-
 .mat-tab-link {
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
+  opacity: 1;
+  color: rgb(0,0,0,0.5);
+  background-color: white;
 }
 
 .mat-tab-label-active {
-  opacity: .85;
+  color: rgb(0,0,0,0.85);
 }
 
 .mat-tab-nav-bar {
   margin: 0 1em;
+}
+
+.tab-menu-side-deco{
+  position: absolute;
+  right: 0;
+  z-index: -1;
+}
+
+.tab-menu-side-mask {
+  flex-shrink: 0;
 }

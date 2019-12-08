@@ -1,4 +1,28 @@
-<ng-container *ngIf="(codex$|async) as codex">
-  <app-today-page [codex]="codex"></app-today-page>
-  <app-old-page-list [codex]="codex"></app-old-page-list>
+<ng-container *ngIf="todayPage">
+  <app-today-page
+    [page]="todayPage"
+    (taskCreated)="createTaskInTodayPage($event)"
+    (taskUpdated)="updateTaskInTodayPage($event)"
+    (taskDeleted)="deleteTaskInTodayPage($event)"
+    (noteCreated)="createNoteInTodayPage($event)"
+    (noteUpdated)="updateNoteInTodayPage($event)"
+    (noteDeleted)="deleteNoteInTodayPage($event)"
+  ></app-today-page>
 </ng-container>
+
+<div *ngIf="oldPageList"
+     infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="50"
+     [infiniteScrollDisabled]=infiniteScrollDisabled
+     (scrolled)="onScroll()"
+>
+  <app-page-details *ngFor="let page of oldPageList; trackBy: trackByFn"
+                    [page]="page"
+                    (taskUpdated)="updateTask(page, $event)"
+                    (taskDeleted)="deleteTask(page, $event)"
+                    (noteUpdated)="updateNote(page, $event)"
+                    (noteDeleted)="deleteNote(page, $event)"
+  ></app-page-details>
+  <mat-spinner *ngIf=isLoadingNewPages color="accent"></mat-spinner>
+</div>

@@ -18,4 +18,8 @@ export class NoteService extends ModelService<Note> {
       modificationRequestStatusService
     );
   }
+
+  static noteShouldBeDeleted(noteText: string): boolean {
+    return (noteText === '');
+  }
 }

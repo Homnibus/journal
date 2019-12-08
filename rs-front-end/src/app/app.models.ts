@@ -13,12 +13,14 @@ export abstract class Model {
 
   public static lookupField: string;
   public state: ModelState;
+  public id: number;
 }
 
 
 export class BaseModel {
   public static lookupField = 'id';
   public state: ModelState;
+  public id: number;
 }
 
 export class Codex extends BaseModel implements Model {
@@ -26,7 +28,6 @@ export class Codex extends BaseModel implements Model {
   public static modelPlural = 'codex';
 
   public static lookupField = 'slug';
-  public id: number;
   public title: string;
   public slug: string;
   public description: string;
@@ -40,7 +41,6 @@ export class Page extends BaseModel implements Model {
   public static modelName = 'page';
   public static modelPlural = 'pages';
 
-  public id: number;
   public codex: number;
   public date: Date;
   public creationDate: Date;
@@ -53,7 +53,6 @@ export class Note extends BaseModel implements Model {
   public static modelName = 'note';
   public static modelPlural = 'notes';
 
-  public id: number;
   public page: number;
   public text: string;
   public initialHash: string;
@@ -68,7 +67,6 @@ export class Task extends BaseModel implements Model {
   public static modelName = 'task';
   public static modelPlural = 'tasks';
 
-  public id: number;
   public page: number;
   public text: string;
   public isAchieved: boolean;
@@ -84,7 +82,6 @@ export class Information extends BaseModel implements Model {
   public static modelName = 'information';
   public static modelPlural = 'information';
 
-  public id: number;
   public codex: number;
   public text: string;
   public initialHash: string;

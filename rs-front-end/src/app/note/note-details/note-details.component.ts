@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {Codex, Note} from '../../app.models';
+import {Note} from '../../app.models';
 import {FormControl} from '@angular/forms';
-import {Observable, Subscription} from 'rxjs';
-import {concatMap, debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
 import {NoteService} from '../note.service';
 import {ModificationRequestStatusService} from '../../core/services/modification-request-status.service';
 
@@ -14,15 +14,8 @@ import {ModificationRequestStatusService} from '../../core/services/modification
 })
 export class NoteDetailsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('noteField', {static: false}) noteTextarea: ElementRef;
+  @Input() note?: Note;
   @Input() noteLabel = '';
-  @Output() editableChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  private _editable: boolean;
-
-  get editable() {
-    return this._editable;
-  }
-
   @Input()
   set editable(val: boolean) {
     if (this._editable !== undefined) {
@@ -31,10 +24,20 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
     this._editable = val;
   }
 
-  @Input() note?: Note;
+  @Output() editableChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() noteCreated = new EventEmitter<Note>();
+  @Output() noteTextChanged = new EventEmitter<string>();
+  @Output() noteDeleted = new EventEmitter();
+
+  @ViewChild('noteField', {static: false}) noteTextarea: ElementRef;
+
+  private _editable: boolean;
   private noteTextControl: FormControl;
-  @Input() codex?: Codex;
   private noteTextControlOnChange: Subscription;
+
+  get editable() {
+    return this._editable;
+  }
 
   constructor(private noteService: NoteService, private modificationRequestStatus: ModificationRequestStatusService) {
   }
@@ -51,8 +54,7 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       tap(data => this.modificationRequestStatus.inputDataToSave(data)),
       debounceTime(400),
-      concatMap(value => this.createOrUpdateOrDeleteNote(value))
-    ).subscribe(note => this.note = note);
+    ).subscribe(note => this.createOrUpdateOrDeleteNote(note));
   }
 
   ngOnDestroy() {
@@ -66,27 +68,23 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  createOrUpdateOrDeleteNote(noteText: string): Observable<Note> {
-    let httpObservable: Observable<Note>;
+  createOrUpdateOrDeleteNote(noteText: string): void {
+    // let httpObservable: Observable<Note>;
     if (!this.note) { // Create
       // Create a copy of the Note to prevent the update of the markdown part until the server give a 200
       // response
       const newNote = new Note();
       newNote.text = noteText;
-      newNote.codex = this.codex.id;
-      httpObservable = this.noteService.create(newNote);
+      this.noteCreated.emit(newNote);
     } else { // Update or Delete
-      if (noteText !== '') { // Update
+      if (NoteService.noteShouldBeDeleted(noteText)) { // Delete
         // Create a copy of the Note to prevent the update of the markdown part until the server give a 200
         // response
-        const noteCopy = Object.assign({}, this.note);
-        noteCopy.text = noteText;
-        httpObservable = this.noteService.update(noteCopy);
-      } else { // Delete
-        httpObservable = this.noteService.delete(this.note).pipe(map(() => undefined));
+        this.noteDeleted.emit();
+      } else { // Update
+        this.noteTextChanged.emit(noteText);
       }
     }
-    return httpObservable;
   }
 
 }

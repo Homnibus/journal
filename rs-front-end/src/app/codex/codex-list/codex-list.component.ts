@@ -5,6 +5,7 @@ import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import * as seedrandom from 'seedrandom';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class CodexListComponent implements OnInit, OnDestroy {
 
   constructor(
     private codexService: CodexService,
+    private route: ActivatedRoute,
   ) {
   }
 
@@ -39,17 +41,15 @@ export class CodexListComponent implements OnInit, OnDestroy {
   }
 
   fetchCodex(): void {
-    this.codexService.list().subscribe(
-      data => {
-        this.dataSource = data;
-        this.filteredCodexList = Object.assign([], this.dataSource);
-      }
-    );
+    this.route.data.subscribe(data => {
+      this.dataSource = data.codexList;
+      this.filteredCodexList = Object.assign([], this.dataSource);
+    });
   }
 
   getCodexColor(codex: Codex): string {
     const seededRandomNumberGenerator = seedrandom(codex.id.toString());
-    return "hsl(" + Math.floor(seededRandomNumberGenerator() * 360).toString() + ",100%,70%)";
+    return 'hsl(' + Math.floor(seededRandomNumberGenerator() * 360).toString() + ',100%,70%)';
   }
 
   codexSearch(value: string): void {

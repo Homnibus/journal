@@ -7,6 +7,8 @@
      routerLinkActive>
     {{tabLink.label}}
   </a>
+  <img class="tab-menu-side-mask" [src]="tabMenuSideMaskUrl" style="max-height: 20em;">
+  <img class="tab-menu-side-deco" [src]="tabMenuSideDecoUrl" style="max-height: 20em;">
 </nav>
 <app-web-page-content [@routerTransition]="getState(o)">
   <router-outlet #o="outlet"></router-outlet>

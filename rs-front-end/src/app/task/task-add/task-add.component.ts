@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
 import {TaskService} from '../task.service';
-import {Codex, Task} from 'src/app/app.models';
+import {Task} from 'src/app/app.models';
 
 
 @Component({
@@ -9,37 +9,24 @@ import {Codex, Task} from 'src/app/app.models';
   templateUrl: './task-add.component.html',
   styleUrls: ['./task-add.component.scss']
 })
-export class TaskAddComponent implements OnInit {
+export class TaskAddComponent {
 
-  @Input()
-  codex: Codex;
-
-  @Output()
-  taskAdded = new EventEmitter<Task>();
-
-  addTaskFrom = this.fb.group({
-    taskText: ['', Validators.required]
+  @Output() taskCreated = new EventEmitter<Task>();
+  createTaskFrom = this.fb.group({
+    taskText: ['']
   });
 
   constructor(private taskService: TaskService, private fb: FormBuilder) {
   }
 
-  ngOnInit() {
-  }
-
   onSubmit(): void {
-    if (this.addTaskFrom.valid) {
+    if (this.createTaskFrom.get('taskText').value.trim() !== '') {
       const newTask = new Task();
-      newTask.text = this.addTaskFrom.get('taskText').value;
-      newTask.codex = this.codex.id;
-      this.taskService.create(newTask)
-        .subscribe(
-          task => {
-            this.taskAdded.emit(task);
-            this.addTaskFrom.reset();
-          });
+      newTask.text = this.createTaskFrom.get('taskText').value;
+      this.createTaskFrom.get('taskText').reset('');
+      this.taskCreated.emit(newTask);
+    } else {
+      this.createTaskFrom.get('taskText').setErrors({value_empty: true});
     }
   }
-
-
 }

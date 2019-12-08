@@ -1,4 +1,4 @@
-<mat-card *ngIf="page as page">
+<mat-card *ngIf="page">
   <mat-card-header>
     <mat-card-title>
       Note
@@ -18,8 +18,13 @@
     </div>
   </mat-card-header>
   <mat-card-content class="note--of-today">
-    <app-note-details [(editable)]="editableNote" [codex]="codex" [noteLabel]="'Note of the day'"
-                      [note]="page.note"></app-note-details>
+    <app-note-details [(editable)]="editableNote"
+                      [noteLabel]="'Note of the day'"
+                      [note]="page.note"
+                      (noteCreated)="createNote($event)"
+                      (noteTextChanged)="updateNoteText(page.note,$event)"
+                      (noteDeleted)="deleteNote(page.note)"
+    ></app-note-details>
   </mat-card-content>
   <mat-card-header>
     <mat-card-title>
@@ -27,16 +32,18 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <app-task-add (taskAdded)="addTask($event)" [codex]="codex" class="simple-list__row"></app-task-add>
+    <app-task-add (taskCreated)="createTask($event)" class="simple-list__row"></app-task-add>
     <mat-divider></mat-divider>
-    <section *ngIf="taskList.length > 0" class="task-list simple-list">
+    <section *ngIf="page.tasks.length > 0" class="task-list simple-list">
       <mat-list>
-        <ng-container *ngFor="let task of taskList; trackBy: trackByFn">
+        <ng-container *ngFor="let task of page.tasks; trackBy: trackByFn">
           <app-task-details [@slideTopTransition]="task.state"
                             [allowChangeEditable]="false"
                             [editable]="true"
                             [task]="task"
-                            (delete)="taskDelete(task)"
+                            (taskTextChanged)="updateTaskText(task,$event)"
+                            (taskIsAchievedChanged) ="updateTaskIsAchieved(task,$event)"
+                            (taskDeleted)="deleteTask(task)"
           ></app-task-details>
           <mat-divider></mat-divider>
         </ng-container>

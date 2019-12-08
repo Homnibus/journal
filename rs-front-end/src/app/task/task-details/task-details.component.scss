@@ -14,8 +14,13 @@
   }
 }
 
+form {
+  width: 100%;
+}
+
 .mat-form-field {
   margin-left: 0.5em;
+  width: 100%;
 }
 
 .task__enable-edit-button {

@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Page, Task} from '../../app.models';
-import {TaskService} from '../../task/task.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Note, Page, Task} from '../../app.models';
 import {slideTopTransition} from '../../shared/slide-top.animations';
 
 @Component({
@@ -12,15 +11,19 @@ import {slideTopTransition} from '../../shared/slide-top.animations';
 export class PageDetailsComponent implements OnInit {
 
   @Input() page: Page;
-  taskList: Task[] = [];
+
+  @Output() taskUpdated = new EventEmitter<Task>();
+  @Output() taskDeleted = new EventEmitter<Task>();
+  @Output() noteUpdated = new EventEmitter<Note>();
+  @Output() noteDeleted = new EventEmitter<Note>();
+
   private noteEditable = false;
   private taskEditable = false;
 
-  constructor(private taskService: TaskService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.taskList = this.page.tasks;
   }
 
   switchNoteEditMode(): void {
@@ -35,8 +38,30 @@ export class PageDetailsComponent implements OnInit {
     return item.id;
   }
 
-  taskDelete(taskDeleted: Task) {
-    this.taskList = this.taskService.deleteFromTaskList(this.taskList, taskDeleted);
+  updateTaskText(taskToUpdate: Task, updatedTaskText: string) {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    taskCopy.text = updatedTaskText;
+    this.taskUpdated.emit(taskCopy);
   }
 
+  updateTaskIsAchieved(taskToUpdate: Task, updatedTaskIsAchieved: boolean) {
+    const taskCopy = Object.assign({}, taskToUpdate);
+    taskCopy.isAchieved = updatedTaskIsAchieved;
+    this.taskUpdated.emit(taskCopy);
+  }
+
+  deleteTask(deletedTask: Task): void {
+    this.taskDeleted.emit(deletedTask);
+  }
+
+
+  updateNoteText(noteToUpdate: Note, updatedNoteText: string) {
+    const noteCopy = Object.assign({}, noteToUpdate);
+    noteCopy.text = updatedNoteText;
+    this.noteUpdated.emit(noteCopy);
+  }
+
+  deleteNote(deletedNote: Note) {
+    this.noteDeleted.emit(deletedNote);
+  }
 }

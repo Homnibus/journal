@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {routerTransition} from './wep-page-tabs.animations';
+import {environment} from '../../../../environments/environment';
 
 export class TabLink {
   constructor(
@@ -20,6 +21,8 @@ export class WebPageTabsComponent {
 
   @Input()
   tabLinkList: TabLink[];
+  tabMenuSideMaskUrl = `${environment.staticUrl}img/tab_menu_side_mask.svg`;
+  tabMenuSideDecoUrl = `${environment.staticUrl}img/tab_menu_side_deco.svg`;
 
   constructor() {
   }

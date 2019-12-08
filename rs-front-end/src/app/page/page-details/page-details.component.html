@@ -19,7 +19,11 @@
       </div>
     </mat-card-header>
     <mat-card-content class="note__mat-card-content">
-      <app-note-details [editable]="noteEditable" [note]="page.note"></app-note-details>
+      <app-note-details [(editable)]="noteEditable"
+                        [note]="page.note"
+                        (noteTextChanged)="updateNoteText(page.note,$event)"
+                        (noteDeleted)="deleteNote(page.note)"
+      ></app-note-details>
     </mat-card-content>
   </ng-container>
   <ng-container *ngIf="page.tasks.length > 0">
@@ -43,12 +47,14 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list>
-        <ng-container *ngFor="let task of taskList; trackBy: trackByFn">
+        <ng-container *ngFor="let task of page.tasks; trackBy: trackByFn">
           <app-task-details [@slideTopTransition]="task.state"
                             [allowChangeEditable]="false"
                             [editable]="taskEditable"
                             [task]="task"
-                            (delete)="taskDelete(task)"
+                            (taskTextChanged)="updateTaskText(task,$event)"
+                            (taskIsAchievedChanged) ="updateTaskIsAchieved(task,$event)"
+                            (taskDeleted)="deleteTask(task)"
           ></app-task-details>
           <mat-divider></mat-divider>
         </ng-container>

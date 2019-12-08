@@ -1,17 +1,14 @@
 <mat-list-item *ngIf="task" class="task">
-  <mat-checkbox (change)="onCheckBoxChange($event)" [checked]="task.isAchieved" [id]="task.id.toString()">
+
+  <mat-checkbox (change)="updateTaskIsAchieved($event)" [checked]="task.isAchieved" [id]="task.id.toString()">
     <pre *ngIf="!editable" class="task__disable-text">{{ task.text }}</pre>
   </mat-checkbox>
-  <mat-form-field *ngIf="editable" appearance="outline" color="primary">
-    <mat-label></mat-label>
-    <textarea #autosize="cdkTextareaAutosize"
-              [formControl]="taskTextControl"
-              cdkAutosizeMaxRows="19"
-              cdkAutosizeMinRows="1"
-              cdkTextareaAutosize
-              matInput
-    ></textarea>
-  </mat-form-field>
+  <form *ngIf="editable" [formGroup]="taskTextControl">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label></mat-label>
+      <input formControlName="taskText" matInput type="text">
+    </mat-form-field>
+  </form>
   <button (click)="switchTaskEditableMode()" *ngIf="allowChangeEditable" class="task__enable-edit-button"
           color="accent"
           mat-icon-button

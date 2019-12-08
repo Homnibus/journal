@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Codex, Information} from '../../app.models';
 import {InformationService} from '../../information/information.service';
 import {CodexDetailsService} from '../services/codex-details.service';
-import {switchMap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-codex-information',
@@ -13,17 +12,21 @@ import {Observable} from 'rxjs';
 export class CodexInformationComponent implements OnInit {
 
   private informationEditable = false;
-  codex$: Observable<Codex>;
-  private information$: Observable<Information[]>;
+  codex: Codex;
+  private information: Information[];
 
-  constructor(private informationService: InformationService, private codexDetailsService: CodexDetailsService) {
+  constructor(private informationService: InformationService,
+              private codexDetailsService: CodexDetailsService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.codex$ = this.codexDetailsService.activeCodex$;
-    this.information$ = this.codex$.pipe(
-      switchMap(codex => this.informationService.getCodexInformation(codex.slug)),
-    );
+    this.route.parent.data.subscribe(data => {
+      this.codex = data.codex;
+    });
+    this.route.data.subscribe(data => {
+      this.information = data.information;
+    });
   }
 
   switchEditMode(): void {

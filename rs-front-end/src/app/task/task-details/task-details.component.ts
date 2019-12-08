@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Task} from '../../app.models';
-import {FormControl} from '@angular/forms';
-import {Observable, Subscription} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
 import {TaskService} from '../task.service';
-import {concatMap, debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
 import {MatCheckboxChange} from '@angular/material';
 import {ModificationRequestStatusService} from '../../core/services/modification-request-status.service';
 
@@ -18,25 +18,28 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   @Input() task: Task;
   @Input() allowChangeEditable = true;
   @Input() editable = true;
-  @Output() delete = new EventEmitter();
 
-  taskTextControl: FormControl;
+  @Output() taskTextChanged = new EventEmitter<string>();
+  @Output() taskIsAchievedChanged = new EventEmitter<boolean>();
+  @Output() taskDeleted = new EventEmitter();
+
+  taskTextControl: FormGroup;
   private taskTextControlOnChange: Subscription;
 
-  constructor(private taskService: TaskService, private modificationRequestStatus: ModificationRequestStatusService) {
+  constructor(private modificationRequestStatus: ModificationRequestStatusService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    this.taskTextControl = new FormControl(this.task.text);
+    this.taskTextControl = this.fb.group({
+      taskText: [this.task.text, Validators.required]
+    });
 
-    this.taskTextControlOnChange = this.taskTextControl.valueChanges.pipe(
+    this.taskTextControlOnChange = this.taskTextControl.get('taskText').valueChanges.pipe(
       map(value => value.trim()),
       distinctUntilChanged(),
       tap(data => this.modificationRequestStatus.inputDataToSave(data)),
       debounceTime(400),
-      concatMap(value => this.updateOrDeleteTaskText(value))
-    ).subscribe(task => this.task = task);
-
+    ).subscribe(value => this.updateOrDeleteTaskText(value));
   }
 
   ngOnDestroy() {
@@ -47,30 +50,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.editable = !this.editable;
   }
 
-  onCheckBoxChange(matCheckboxChange: MatCheckboxChange) {
-    this.updateTaskIsAchieved(matCheckboxChange.checked).subscribe(task => this.task = task);
-  }
-
-  updateOrDeleteTaskText(taskText: string): Observable<Task> {
-    let httpObservable: Observable<Task>;
-    if (taskText !== '') { // Update
-      // Create a copy of the Task to prevent the update of the markdown part until the server give a 200
-      // response
-      const taskCopy = Object.assign({}, this.task);
-      taskCopy.text = taskText;
-      httpObservable = this.taskService.update(taskCopy);
-    } else { // Delete
-      httpObservable = this.taskService.delete(this.task).pipe(tap(() => this.delete.emit()));
+  updateOrDeleteTaskText(taskText: string): void {
+    if (TaskService.taskShouldBeDeleted(taskText)) {
+      this.taskDeleted.emit();
+    } else {
+      this.taskTextChanged.emit(taskText);
     }
-    return httpObservable;
   }
 
-  updateTaskIsAchieved(taskIsAchieved: boolean): Observable<Task> {
-    // Create a copy of the Task to prevent the update of the markdown part until the server give a 200
-    // response
-    const taskCopy = Object.assign({}, this.task);
-    taskCopy.isAchieved = taskIsAchieved;
-    return this.taskService.update(taskCopy);
+  updateTaskIsAchieved(matCheckboxChange: MatCheckboxChange) {
+    this.taskIsAchievedChanged.emit(matCheckboxChange.checked);
   }
-
 }

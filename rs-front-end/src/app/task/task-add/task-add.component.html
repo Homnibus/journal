@@ -1,14 +1,8 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="addTaskFrom" class="task task--new">
+<form (ngSubmit)="onSubmit()" [formGroup]="createTaskFrom" class="task task--new">
   <mat-form-field appearance="outline" color="primary">
     <mat-label>New task</mat-label>
-    <textarea #autosize="cdkTextareaAutosize"
-              (keydown.control.enter)="onSubmit()"
-              cdkAutosizeMaxRows="19"
-              cdkAutosizeMinRows="1"
-              cdkTextareaAutosize
-              formControlName="taskText"
-              matInput
-    ></textarea>
+    <input (keydown.control.enter)="onSubmit()" formControlName="taskText" matInput type="text">
+    <mat-error *ngIf="createTaskFrom.get('taskText').hasError('value_empty')"></mat-error>
   </mat-form-field>
   <button class="task__add-button" color="primary" mat-raised-button type="submit">
     Add

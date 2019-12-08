@@ -20,12 +20,12 @@ export class TaskService extends ModelService<Task> {
     );
   }
 
+  static taskShouldBeDeleted(taskText: string): boolean {
+    return (taskText === '');
+  }
+
   getCodexToDoTask(codexSlug: string): Observable<Task[]> {
     const filter = `page__codex__slug=${codexSlug}&is_achieved=false`;
     return this.filteredList(filter);
-  }
-
-  deleteFromTaskList(taskList: Task[], taskToDelete: Task): Task[] {
-    return taskList.filter(task => task.id !== taskToDelete.id);
   }
 }
