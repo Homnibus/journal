@@ -29,7 +29,7 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
   @Output() noteTextChanged = new EventEmitter<string>();
   @Output() noteDeleted = new EventEmitter();
 
-  @ViewChild('noteField', {static: false}) noteTextarea: ElementRef;
+  @ViewChild('noteField') noteTextarea: ElementRef;
 
   private _editable: boolean;
   private noteTextControl: FormControl;

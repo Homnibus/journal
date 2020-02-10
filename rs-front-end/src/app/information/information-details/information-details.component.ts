@@ -14,7 +14,7 @@ import {ModificationRequestStatusService} from '../../core/services/modification
 })
 export class InformationDetailsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('informationField', {static: false}) informationTextarea: ElementRef;
+  @ViewChild('informationField') informationTextarea: ElementRef;
   @Input() information?: Information;
   @Input() codex?: Codex;
   @Output() editableChange = new EventEmitter<boolean>();
