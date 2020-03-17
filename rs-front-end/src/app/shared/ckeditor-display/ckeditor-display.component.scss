@@ -1,0 +1,141 @@
+/*
+ * CKEditor 5 (v16.0.0) content styles.
+ * Generated on Thu, 13 Feb 2020 14:40:38 GMT.
+ * For more information, check out https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html
+ */
+
+:host{
+  width:100%;
+  padding: 28px 32px;
+}
+
+::ng-deep .ck-content{
+  h2 {
+    font-size: 2em;
+    border-bottom: 1px solid #cad5da;
+    padding-bottom: .3em;
+  }
+  h2, h3, h4 {
+    &:not(:first-child) {
+      margin-top: 24px;
+    }
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  blockquote {
+    overflow: hidden;
+    padding-right: 1.5em;
+    padding-left: 1.5em;
+    margin: 2rem 0;
+    font-style: italic;
+    border-left: solid 5px #cad5da;
+  }
+
+  /* ckeditor5-table/theme/table.css */
+  .table {
+    margin: 1em auto;
+    display: table;
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px double hsl(0, 0%, 70%);
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table table td,
+  .table table th {
+    min-width: 2em;
+    padding: .4em;
+    border: 1px solid #d9d9d9;
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table table th {
+    font-weight: bold;
+    background: hsl(0, 0%, 98%);
+  }
+
+  /* ckeditor5-image/theme/image.css */
+  .image {
+    display: table;
+    clear: both;
+    text-align: center;
+    margin: 1em auto;
+  }
+  /* ckeditor5-image/theme/image.css */
+  .image > img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    min-width: 50px;
+  }
+  /* ckeditor5-image/theme/imageresize.css */
+  .image.image_resized {
+    max-width: 100%;
+    display: block;
+    box-sizing: border-box;
+  }
+  /* ckeditor5-image/theme/imageresize.css */
+  .image.image_resized img {
+    width: 100%;
+  }
+
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-side,
+  .image-style-align-left,
+  .image-style-align-center,
+  .image-style-align-right {
+    max-width: 50%;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-side {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-left {
+    float: left;
+    margin-right: var(--ck-image-style-spacing);
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-right {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+  }
+
+  /* ckeditor5-horizontal-line/theme/horizontalline.css */
+  hr {
+    border-width: 1px 0 0;
+    border-style: solid;
+    border-color: hsl(0, 0%, 37%);
+    margin: 0;
+  }
+  /* ckeditor5-code-block/theme/codeblock.css */
+  pre {
+    padding: 1em;
+    color: #353535;
+    background: hsla(0, 0%, 78%, 0.3);
+    border: 1px solid hsl(0, 0%, 77%);
+    border-radius: 2px;
+    text-align: left;
+    direction: ltr;
+    tab-size: 4;
+    white-space: pre-wrap;
+    font-style: normal;
+    min-width: 200px;
+  }
+
+  ul {
+    margin: 1rem 0;
+  }
+}
+

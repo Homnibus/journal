@@ -1,10 +1,11 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Note} from '../../app.models';
-import {FormControl} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, map, tap} from 'rxjs/operators';
 import {NoteService} from '../note.service';
 import {ModificationRequestStatusService} from '../../core/services/modification-request-status.service';
+import * as CustomEditor from 'ckeditor5-build-rescodex';
 
 @Component({
   selector: 'app-note-details',
@@ -16,13 +17,6 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
 
   @Input() note?: Note;
   @Input() noteLabel = '';
-  @Input()
-  set editable(val: boolean) {
-    if (this._editable !== undefined) {
-      this.editableChange.emit(val);
-    }
-    this._editable = val;
-  }
 
   @Output() editableChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() noteCreated = new EventEmitter<Note>();
@@ -31,26 +25,35 @@ export class NoteDetailsComponent implements OnInit, OnDestroy {
 
   @ViewChild('noteField') noteTextarea: ElementRef;
 
-  private _editable: boolean;
-  private noteTextControl: FormControl;
+  private noteTextControl: FormGroup;
   private noteTextControlOnChange: Subscription;
+  public Editor = CustomEditor;
 
+  private _editable: boolean;
   get editable() {
     return this._editable;
   }
+  @Input()
+  set editable(val: boolean) {
+    if (this._editable !== undefined) {
+      this.editableChange.emit(val);
+    }
+    this._editable = val;
+  }
 
-  constructor(private noteService: NoteService, private modificationRequestStatus: ModificationRequestStatusService) {
+  constructor(private noteService: NoteService,
+              private modificationRequestStatus: ModificationRequestStatusService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    let formInitialValue = '';
-    if (this.note) {
-      formInitialValue = this.note.text;
-    }
-    this.noteTextControl = new FormControl(formInitialValue);
+    this.noteTextControl = this.fb.group({
+      noteText: [this.note ? this.note.text : '']
+    });
 
-    this.noteTextControlOnChange = this.noteTextControl.valueChanges.pipe(
+    this.noteTextControlOnChange = this.noteTextControl.get('noteText').valueChanges.pipe(
       map(value => value.trim()),
+      filter( value => value !== '' || !!this.note),
       distinctUntilChanged(),
       tap(data => this.modificationRequestStatus.inputDataToSave(data)),
       debounceTime(400),

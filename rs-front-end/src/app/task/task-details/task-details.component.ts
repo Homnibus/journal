@@ -4,8 +4,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {TaskService} from '../task.service';
 import {debounceTime, distinctUntilChanged, map, tap} from 'rxjs/operators';
-import {MatCheckboxChange} from '@angular/material';
 import {ModificationRequestStatusService} from '../../core/services/modification-request-status.service';
+import {MatCheckboxChange} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-task-details',

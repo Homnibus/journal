@@ -1,3 +1,5 @@
+<mat-icon *ngIf="iconStatus!==iconStatusEnum.hide" [@saveIconTransition]="iconStatus" class="floppy-shadow" >save</mat-icon>
+<div *ngIf="iconStatus!==iconStatusEnum.hide" [@saveIconTransition]="iconStatus" class="floppy-shadow-square"></div>
 <mat-icon *ngIf="iconStatus!==iconStatusEnum.hide" [@saveIconTransition]="iconStatus" class="floppy" >save</mat-icon>
 <mat-icon *ngIf="iconStatus===iconStatusEnum.toBeSaved" [@saveIconTransition]="iconStatus" color="warn" class="close">close</mat-icon>
 <mat-icon *ngIf="iconStatus===iconStatusEnum.saving" color="accent" class="saving">refresh</mat-icon>

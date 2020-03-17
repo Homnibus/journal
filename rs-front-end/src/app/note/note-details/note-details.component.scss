@@ -19,3 +19,12 @@
   flex: 999;
   margin: 16px;
 }
+
+form,
+ckeditor {
+  width: 100%
+}
+
+::ng-deep mat-card mat-card-content.mat-card-content[class]{
+  padding: 0;
+}

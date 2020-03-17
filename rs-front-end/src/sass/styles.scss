@@ -1,6 +1,7 @@
 @import "base/reset";
 @import "theme/rescodex-theme.scss";
 @import "base/base";
+@import "ckeditor/content";
 
 .rescodex {
   @import "mat-components/mat-list";
@@ -8,6 +9,7 @@
   @import "mat-components/mat-card";
   @import "mat-components/mat-button";
   @import "mat-components/mat-textarea";
+  @import "ckeditor/theme";
 }
 
 

@@ -1,7 +1,14 @@
 <div class="information">
-  <ng-container *ngIf="!editable; else informationTextarea">
-    <markdown *ngIf="information; else newInformation" [data]="information.text"
-              class="information__disable-text markdown-body"></markdown>
+  <ng-container *ngIf="editable; else displayInformation">
+    <form [formGroup]="informationTextControl">
+      <ckeditor #informationEditorField
+                [editor]="Editor"
+                formControlName="informationText"
+      ></ckeditor>
+    </form>
+  </ng-container>
+  <ng-template #displayInformation>
+    <app-ckeditor-display *ngIf="information; else newInformation"  [content]="informationTextControl.get('informationText').value" ></app-ckeditor-display>
     <ng-template #newInformation>
       <div class="information-placeholder">
         <button (click)="switchInformationEditableMode()" mat-button>
@@ -9,18 +16,5 @@
         </button>
       </div>
     </ng-template>
-  </ng-container>
-  <ng-template #informationTextarea>
-    <mat-form-field appearance="outline" color="primary">
-      <mat-label></mat-label>
-      <textarea #informationField
-                #autosize="cdkTextareaAutosize"
-                [formControl]="informationTextControl"
-                cdkAutosizeMaxRows="18"
-                cdkAutosizeMinRows="5"
-                cdkTextareaAutosize
-                matInput
-      ></textarea>
-    </mat-form-field>
   </ng-template>
 </div>

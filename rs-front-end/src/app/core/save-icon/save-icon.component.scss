@@ -1,11 +1,31 @@
 :host {
   display: inline-flex;
   align-items: center;
-  position:relative;
+  position: fixed;
+  z-index: 999;
+  bottom: 1.5em;
+  right: 2em;
 }
 
 .floppy{
   position: absolute;
+  color: #79b4d0;
+}
+.floppy-shadow{
+  position: absolute;
+  color: #2b414a;
+  font-size: 26px;
+  top: -13px;
+  left: -1px;
+}
+
+.floppy-shadow-square{
+  position: absolute;
+  top: -8px;
+  left: 4px;
+  background-color: #f6f8fa;
+  width: 13px;
+  height: 17px;
 }
 
 .close, .saving, .saved {
@@ -34,7 +54,7 @@
   top: -5px;
   left: 10px;
   font-size: 20px;
-  color: #38d61d;
+  color: #00ff00;
   opacity: 0;
 }
 

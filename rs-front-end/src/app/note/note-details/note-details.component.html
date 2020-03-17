@@ -1,6 +1,14 @@
 <div class="note">
-  <ng-container *ngIf="!editable; else noteTextarea">
-    <markdown *ngIf="note; else newNote" [data]="note.text" class="note__disable-text markdown-body"></markdown>
+  <ng-container *ngIf="editable; else displayNote">
+    <form [formGroup]="noteTextControl">
+      <ckeditor #noteEditorField
+                [editor]="Editor"
+                formControlName="noteText"
+      ></ckeditor>
+    </form>
+  </ng-container>
+  <ng-template #displayNote>
+    <app-ckeditor-display *ngIf="note; else newNote"  [content]="noteTextControl.get('noteText').value" ></app-ckeditor-display>
     <ng-template #newNote>
       <div class="note-placeholder">
         <button (click)="switchNoteEditableMode()" mat-button>
@@ -8,18 +16,5 @@
         </button>
       </div>
     </ng-template>
-  </ng-container>
-  <ng-template #noteTextarea>
-    <mat-form-field *ngIf="editable" appearance="outline" color="primary">
-      <mat-label>{{noteLabel}}</mat-label>
-      <textarea #noteField
-                #autosize="cdkTextareaAutosize"
-                [formControl]="noteTextControl"
-                cdkAutosizeMaxRows="18"
-                cdkAutosizeMinRows="5"
-                cdkTextareaAutosize
-                matInput
-      ></textarea>
-    </mat-form-field>
   </ng-template>
 </div>

@@ -4,7 +4,8 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {CodexService} from '../services/codex.service';
 import {Codex} from '../../app.models';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-codex-edit',
@@ -59,7 +60,7 @@ export class CodexEditComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
-        this.codexService.delete(this.codex).subscribe(next => {
+        this.codexService.delete(this.codex).subscribe(() => {
             const codexDetailsUrl = this.router.createUrlTree(['/codex']);
             this.snackBar.open('Codex Deleted !', 'Close', {duration: 2000, });
             this.router.navigateByUrl(codexDetailsUrl);

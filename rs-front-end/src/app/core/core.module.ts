@@ -7,7 +7,8 @@ import {LogoutComponent} from './logout/logout.component';
 import {SharedModule} from '../shared/shared.module';
 import {NavigationComponent} from './navigation/navigation.component';
 import {ErrorModule} from './error/error.module';
-import {MatProgressBarModule} from '@angular/material';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 @NgModule({
   declarations: [

@@ -1,0 +1,27 @@
+.disable .ck.ck-editor__top {
+  visibility: hidden;
+  height: 0;
+}
+
+.ck.ck-content {
+  border: none;
+}
+
+.ck.ck-editor__top .ck-sticky-panel .ck-toolbar {
+  border: 0;
+  border-bottom: 1px solid rgb(196, 196, 196);
+}
+.ck.ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-toolbar,
+.ck.ck.ck-editor__top .ck-sticky-panel .ck-toolbar.ck-rounded-corners{
+   border-radius: 0;
+}
+.ck.ck-editor__editable_inline {
+  min-height: 10em;
+  padding: 15px 31px;
+  border: 1px solid;
+}
+
+.ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-blurred,
+.ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-blurred{
+  border-color: white;
+}
