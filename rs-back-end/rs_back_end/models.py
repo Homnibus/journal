@@ -11,7 +11,7 @@ class Codex(models.Model):
   """
   A codex is like a diary book. It regroup information on a given subject.
   """
-
+  id = models.AutoField(primary_key=True)
   title = models.CharField(
     "title", max_length=50, blank=False, null=False, help_text=gettext("Title of the codex")
   )
@@ -102,6 +102,7 @@ class Page(models.Model):
   """
 
   # TODO: delete the page if there is no note and task on it anymore
+  id = models.AutoField(primary_key=True)
   codex = models.ForeignKey(
     Codex,
     related_name="pages",
@@ -164,6 +165,7 @@ class Note(models.Model):
   A note record general information for a given page.
   """
 
+  id = models.AutoField(primary_key=True)
   page = models.OneToOneField(
     Page,
     related_name="note",
@@ -215,6 +217,7 @@ class Task(models.Model):
   A task record things to do for a given codex.
   """
 
+  id = models.AutoField(primary_key=True)
   page = models.ForeignKey(
     Page,
     related_name="tasks",
@@ -290,6 +293,7 @@ class Information(models.Model):
   General information of a given codex
   """
 
+  id = models.AutoField(primary_key=True)
   codex = models.OneToOneField(
     Codex,
     related_name="information",

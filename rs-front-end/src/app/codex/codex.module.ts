@@ -16,26 +16,25 @@ import {NoteModule} from '../note/note.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 @NgModule({
-  declarations: [
-    CodexListComponent,
-    CodexDetailsComponent,
-    CodexTaskTodoComponent,
-    CodexAddComponent,
-    CodexDetailsTabsComponent,
-    CodexInformationComponent,
-    CodexEditComponent,
-    CodexEditDeleteDialogComponent,
-  ],
-  imports: [
-    SharedModule,
-    CodexRoutingModule,
-    PageModule,
-    NoteModule,
-    TaskModule,
-    InformationModule,
-    InfiniteScrollModule,
-  ],
-  entryComponents: [CodexEditDeleteDialogComponent],
+    declarations: [
+        CodexListComponent,
+        CodexDetailsComponent,
+        CodexTaskTodoComponent,
+        CodexAddComponent,
+        CodexDetailsTabsComponent,
+        CodexInformationComponent,
+        CodexEditComponent,
+        CodexEditDeleteDialogComponent,
+    ],
+    imports: [
+        SharedModule,
+        CodexRoutingModule,
+        PageModule,
+        NoteModule,
+        TaskModule,
+        InformationModule,
+        InfiniteScrollModule,
+    ]
 })
 export class CodexModule {
 }
